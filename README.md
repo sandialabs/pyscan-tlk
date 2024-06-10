@@ -1,7 +1,5 @@
 # tlk
-Python wrappers for Thorlabs Kinesis dlls
+Python wrappers for Thorlabs Kinesis dlls, still in initial testing
 
 # Installation
-
-Install thorlabs Kinesis
-Open Thorlabs Kinesis once
+Don't yet!
