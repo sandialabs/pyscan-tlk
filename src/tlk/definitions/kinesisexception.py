@@ -1,4 +1,9 @@
+
+
 class KinesisException(Exception):
+    def __init__(self, error):
+
+        super().__init__(self.error_codes[error])
 
     error_codes = {
         1: 'FT_InvalidHandle - The FTDI functions have not been initialized.',
@@ -26,13 +31,14 @@ class KinesisException(Exception):
         37: '''TL_UNHOMED - The device cannot perform this function until it has been Homed.''',
         38: '''TL_INVALID_POSITION - The function cannot be performed as it would result in an illegal position.''',
         39: '''TL_INVALID_VELOCITY_PARAMETER - An invalid velocity parameter was supplied. The velocity
- must be greater than zero.''',
+must be greater than zero.''',
         40: '''TL_DISCONNECTING - The function could not be completed because the device is disconnected.''',
         41: '''TL_FIRMWARE_BUG - The firmware has thrown an error.''',
         42: '''TL_INVALID_CHANNEL - An Invalid channel address was supplied.''',
         43: '''TL_INVALID_CHANNEL - An Invalid channel address was supplied.''',
         44: '''TL_CANNOT_HOME_DEVICE - This device does not support Homing. Check the Limit switch parameters are
- correct.''',
+correct.''',
         45: '''TL_JOG_CONTINOUS_MODE - An invalid jog mode was supplied for the jog function.''',
         46: '''TL_NO_MOTOR_INFO - There is no Motor Parameters available to convert Real World Units.''',
-        47: '''TL_CMD_TEMP_UNAVAILABLE - Command temporarily unavailable, Device may be busy.'''}
+        47: '''TL_CMD_TEMP_UNAVAILABLE - Command temporarily unavailable, Device may be busy.'''
+        }

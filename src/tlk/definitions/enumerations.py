@@ -683,7 +683,7 @@ Dim = c_short(0x02)
 Off = c_short(0x03)
 
 PPC_FeedbackPolarity = c_long
-Inverted = c_long((c_ushort) - 1)
+# Inverted = c_long((c_ushort) - 1)
 Inverted = c_long(-1)
 NonInverted = c_long(0)
 
