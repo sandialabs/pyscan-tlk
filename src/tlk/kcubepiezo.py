@@ -1,14 +1,17 @@
 from ctypes import (
     POINTER,
+    pointer,
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_int,
     c_int16,
     c_int32,
     c_int64,
     c_long,
     c_short,
+    c_ushort,
     c_ulong,
     c_void_p,
     cdll)
@@ -32,6 +35,9 @@ from .definitions.structures import (
     TPZ_IOSettings)
 from .definitions.kinesisexception import KinesisException
 
+# CUSTOM TYPES
+c_short_p = type(pointer(c_short()))
+                 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -48,7 +54,7 @@ PCC_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
 def can_device_lock_front_panel(serial_number):
     # Determine if the device front panel can be locked.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_CanDeviceLockFrontPanel(serial_number)
 
@@ -63,8 +69,7 @@ PCC_CheckConnection.argtypes = [POINTER(c_char)]
 def check_connection(serial_number):
     # Check connection.
 
-    serial_number = POINTER(c_char)
-
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     output = PCC_CheckConnection(serial_number)
 
     return output
@@ -78,7 +83,7 @@ PCC_ClearMessageQueue.argtypes = [POINTER(c_char)]
 def clear_message_queue(serial_number):
     # Clears the device message queue.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_ClearMessageQueue(serial_number)
     if output != 0:
@@ -93,7 +98,7 @@ PCC_Close.argtypes = [POINTER(c_char)]
 def close_device(serial_number):
     # Disconnect and close the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_Close(serial_number)
     if output != 0:
@@ -108,7 +113,7 @@ PCC_Disable.argtypes = [POINTER(c_char)]
 def disable(serial_number):
     # Disable the cube.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_Disable(serial_number)
     if output != 0:
@@ -123,7 +128,7 @@ PCC_Disconnect.argtypes = [POINTER(c_char)]
 def disconnect(serial_number):
     # Tells the device that it is being disconnected.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_Disconnect(serial_number)
     if output != 0:
@@ -138,7 +143,7 @@ PCC_Enable.argtypes = [POINTER(c_char)]
 def enable(serial_number):
     # Enable cube for computer control.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_Enable(serial_number)
     if output != 0:
@@ -153,7 +158,7 @@ PCC_EnableLastMsgTimer.argtypes = [POINTER(c_char), c_bool, c_int32]
 def enable_last_msg_timer(serial_number):
     # Enables the last message monitoring timer.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     enable = c_bool()
     lastMsgTimeout = c_int32()
 
@@ -170,7 +175,7 @@ PCC_GetDigitalOutputs.argtypes = [POINTER(c_char)]
 def get_digital_outputs(serial_number):
     # Gets the digital output bits.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetDigitalOutputs(serial_number)
     if output != 0:
@@ -179,20 +184,20 @@ def get_digital_outputs(serial_number):
 
 PCC_GetFeedbackLoopPIconsts = lib.PCC_GetFeedbackLoopPIconsts
 PCC_GetFeedbackLoopPIconsts.restype = c_short
-PCC_GetFeedbackLoopPIconsts.argtypes = [POINTER(c_char), c_short, c_short]
+PCC_GetFeedbackLoopPIconsts.argtypes = [POINTER(c_char), c_short_p, c_short_p]
 
 
 def get_feedback_loop_p_iconsts(serial_number):
-    # Gets the feedback loop parameters.
+    # Gets the feedback loop parameters and returns a tuple
 
-    serial_number = POINTER(c_char)
-    proportionalTerm = c_short()
-    integralTerm = c_short()
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    proportionalTerm = pointer(c_short())
+    integralTerm = pointer(c_short())
 
     output = PCC_GetFeedbackLoopPIconsts(serial_number, proportionalTerm, integralTerm)
     if output != 0:
         raise KinesisException(output)
-
+    return proportionalTerm.contents.value, integralTerm.contents.value
 
 PCC_GetFeedbackLoopPIconstsBlock = lib.PCC_GetFeedbackLoopPIconstsBlock
 PCC_GetFeedbackLoopPIconstsBlock.restype = c_short
@@ -202,12 +207,13 @@ PCC_GetFeedbackLoopPIconstsBlock.argtypes = [POINTER(c_char), PZ_FeedbackLoopCon
 def get_feedback_loop_p_iconsts_block(serial_number):
     # Gets the feedback loop constants in a block.
 
-    serial_number = POINTER(c_char)
-    proportionalAndIntegralConstants = PZ_FeedbackLoopConstants()
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    proportionalAndIntegralConstants = PZ_FeedbackLoopConstants(serial_number)
 
     output = PCC_GetFeedbackLoopPIconstsBlock(serial_number, proportionalAndIntegralConstants)
     if output != 0:
         raise KinesisException(output)
+    return proportionalAndIntegralConstants
 
 
 PCC_GetFirmwareVersion = lib.PCC_GetFirmwareVersion
@@ -218,7 +224,7 @@ PCC_GetFirmwareVersion.argtypes = [POINTER(c_char)]
 def get_firmware_version(serial_number):
     # Gets version number of the device firmware.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetFirmwareVersion(serial_number)
     if output != 0:
@@ -233,7 +239,7 @@ PCC_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
 def get_front_panel_locked(serial_number):
     # Query if the device front panel locked.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetFrontPanelLocked(serial_number)
 
@@ -258,7 +264,7 @@ PCC_GetHardwareInfo.argtypes = [
 def get_hardware_info(serial_number):
     # Gets the hardware information from the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     modelNo = POINTER(c_char)
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -292,7 +298,7 @@ PCC_GetHardwareInfoBlock.argtypes = [POINTER(c_char), TLI_HardwareInformation]
 def get_hardware_info_block(serial_number):
     # Gets the hardware information in a block.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     hardwareInfo = TLI_HardwareInformation()
 
     output = PCC_GetHardwareInfoBlock(serial_number, hardwareInfo)
@@ -308,7 +314,7 @@ PCC_GetHubAnalogInput.argtypes = [POINTER(c_char)]
 def get_hub_analog_input(serial_number):
     # Gets the Hub Analog Input.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetHubAnalogInput(serial_number)
     if output != 0:
@@ -323,7 +329,7 @@ PCC_GetIOSettings.argtypes = [POINTER(c_char)]
 def get_i_o_settings(serial_number):
     # Gets the IO settings.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetIOSettings(serial_number)
     if output != 0:
@@ -338,7 +344,7 @@ PCC_GetLEDBrightness.argtypes = [POINTER(c_char)]
 def get_l_e_d_brightness(serial_number):
     # Gets the LED brightness.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetLEDBrightness(serial_number)
     if output != 0:
@@ -361,7 +367,7 @@ PCC_GetMMIParams.argtypes = [
 def get_m_m_i_params(serial_number):
     # Get the MMI Parameters for the KCube Display Interface.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     wheelMode = KPZ_WheelMode()
     voltageAdjustRate = KPZ_WheelChangeRate()
     voltageStep = c_int32()
@@ -391,7 +397,7 @@ PCC_GetMMIParamsBlock.argtypes = [POINTER(c_char), KPZ_MMIParams]
 def get_m_m_i_params_block(serial_number):
     # Gets the MMI parameters for the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     mmiParams = KPZ_MMIParams()
 
     output = PCC_GetMMIParamsBlock(serial_number, mmiParams)
@@ -417,7 +423,7 @@ PCC_GetMMIParamsExt.argtypes = [
 def get_m_m_i_params_ext(serial_number):
     # Get the MMI Parameters for the KCube Display Interface.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     wheelMode = KPZ_WheelMode()
     voltageAdjustRate = KPZ_WheelChangeRate()
     voltageStep = c_int32()
@@ -451,11 +457,10 @@ PCC_GetMaxOutputVoltage.argtypes = [POINTER(c_char)]
 def get_max_output_voltage(serial_number):
     # Gets the maximum output voltage.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetMaxOutputVoltage(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+    return output
 
 
 PCC_GetNextMessage = lib.PCC_GetNextMessage
@@ -466,7 +471,7 @@ PCC_GetNextMessage.argtypes = [POINTER(c_char), c_long, c_long, c_ulong]
 def get_next_message(serial_number):
     # Get the next MessageQueue item.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -484,11 +489,10 @@ PCC_GetOutputVoltage.argtypes = [POINTER(c_char)]
 def get_output_voltage(serial_number):
     # Gets the set Output Voltage.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetOutputVoltage(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+    return output
 
 
 PCC_GetPosition = lib.PCC_GetPosition
@@ -499,11 +503,10 @@ PCC_GetPosition.argtypes = [POINTER(c_char)]
 def get_position(serial_number):
     # Gets the position when in closed loop mode.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetPosition(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+    return output
 
 
 PCC_GetPositionControlMode = lib.PCC_GetPositionControlMode
@@ -514,11 +517,10 @@ PCC_GetPositionControlMode.argtypes = [POINTER(c_char)]
 def get_position_control_mode(serial_number):
     # Gets the Position Control Mode.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetPositionControlMode(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+    return output
 
 
 PCC_GetSoftwareVersion = lib.PCC_GetSoftwareVersion
@@ -529,7 +531,7 @@ PCC_GetSoftwareVersion.argtypes = [POINTER(c_char)]
 def get_software_version(serial_number):
     # Gets version number of the device software.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetSoftwareVersion(serial_number)
     if output != 0:
@@ -544,7 +546,7 @@ PCC_GetStatusBits.argtypes = [POINTER(c_char)]
 def get_status_bits(serial_number):
     # Get the current status bits.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetStatusBits(serial_number)
     if output != 0:
@@ -564,7 +566,7 @@ PCC_GetTriggerConfigParams.argtypes = [
 def get_trigger_config_params(serial_number):
     # Get the Trigger Configuration Parameters.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     trigger1Mode = KPZ_TriggerPortMode()
     trigger1Polarity = KPZ_TriggerPortPolarity()
     trigger2Mode = KPZ_TriggerPortMode()
@@ -583,7 +585,7 @@ PCC_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KPZ_TriggerConfig]
 def get_trigger_config_params_block(serial_number):
     # Gets the trigger configuration parameters block.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     triggerConfigParams = KPZ_TriggerConfig()
 
     output = PCC_GetTriggerConfigParamsBlock(serial_number, triggerConfigParams)
@@ -599,7 +601,7 @@ PCC_GetVoltageSource.argtypes = [POINTER(c_char)]
 def get_voltage_source(serial_number):
     # Gets the control voltage source.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetVoltageSource(serial_number)
     if output != 0:
@@ -616,7 +618,7 @@ def has_last_msg_timer_overrun(serial_number):
     # lastMsgTimeout set by PCC_EnableLastMsgTimer(char const * serialNo, bool
     # enable, __int32 lastMsgTimeout ).
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_HasLastMsgTimerOverrun(serial_number)
 
@@ -631,7 +633,7 @@ PCC_Identify.argtypes = [POINTER(c_char)]
 def identify(serial_number):
     # Sends a command to the device to make it identify iteself.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_Identify(serial_number)
     if output != 0:
@@ -646,7 +648,7 @@ PCC_LoadNamedSettings.argtypes = [POINTER(c_char), POINTER(c_char)]
 def load_named_settings(serial_number):
     # Update device with named settings.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     settingsName = POINTER(c_char)
 
     output = PCC_LoadNamedSettings(serial_number, settingsName)
@@ -662,7 +664,7 @@ PCC_LoadSettings.argtypes = [POINTER(c_char)]
 def load_settings(serial_number):
     # Update device with stored settings.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_LoadSettings(serial_number)
 
@@ -677,7 +679,7 @@ PCC_MessageQueueSize.argtypes = [POINTER(c_char)]
 def message_queue_size(serial_number):
     # Gets the MessageQueue size.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_MessageQueueSize(serial_number)
     if output != 0:
@@ -692,7 +694,7 @@ PCC_Open.argtypes = [POINTER(c_char)]
 def open_device(serial_number):
     # Open the device for communications.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_Open(serial_number)
     if output != 0:
@@ -707,7 +709,7 @@ PCC_PersistSettings.argtypes = [POINTER(c_char)]
 def persist_settings(serial_number):
     # persist the devices current settings.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_PersistSettings(serial_number)
 
@@ -722,7 +724,7 @@ PCC_PollingDuration.argtypes = [POINTER(c_char)]
 def polling_duration(serial_number):
     # Gets the polling loop duration.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_PollingDuration(serial_number)
     if output != 0:
@@ -737,7 +739,7 @@ PCC_RegisterMessageCallback.argtypes = [POINTER(c_char), c_void_p]
 def register_message_callback(serial_number):
     # Registers a callback on the message queue.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     void = c_void_p()
 
     output = PCC_RegisterMessageCallback(serial_number, void)
@@ -753,7 +755,7 @@ PCC_RequestActualPosition.argtypes = [POINTER(c_char)]
 def request_actual_position(serial_number):
     # Requests the position index.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestActualPosition(serial_number)
     if output != 0:
@@ -768,7 +770,7 @@ PCC_RequestDigitalOutputs.argtypes = [POINTER(c_char)]
 def request_digital_outputs(serial_number):
     # Requests the digital output bits.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestDigitalOutputs(serial_number)
     if output != 0:
@@ -783,10 +785,11 @@ PCC_RequestFeedbackLoopPIconsts.argtypes = [POINTER(c_char)]
 def request_feedback_loop_p_iconsts(serial_number):
     # Requests that the feedback loop constants be read from the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestFeedbackLoopPIconsts(serial_number)
-
+    if output != 1:
+        raise KinesisException(output)
     return output
 
 
@@ -798,7 +801,7 @@ PCC_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
 def request_front_panel_locked(serial_number):
     # Ask the device if its front panel is locked.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestFrontPanelLocked(serial_number)
     if output != 0:
@@ -813,7 +816,7 @@ PCC_RequestIOSettings.argtypes = [POINTER(c_char)]
 def request_i_o_settings(serial_number):
     # Requests that the IO settings are read from the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestIOSettings(serial_number)
 
@@ -828,7 +831,7 @@ PCC_RequestLEDBrightness.argtypes = [POINTER(c_char)]
 def request_l_e_d_brightness(serial_number):
     # Requests that the LED brightness be read from the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestLEDBrightness(serial_number)
 
@@ -843,7 +846,7 @@ PCC_RequestMMIParams.argtypes = [POINTER(c_char)]
 def request_m_m_i_params(serial_number):
     # Request that the MMI Parameters for the KCube Display Interface be read from the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestMMIParams(serial_number)
 
@@ -858,7 +861,7 @@ PCC_RequestMaxOutputVoltage.argtypes = [POINTER(c_char)]
 def request_max_output_voltage(serial_number):
     # Requests the maximum output voltage be read from the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestMaxOutputVoltage(serial_number)
 
@@ -873,7 +876,7 @@ PCC_RequestOutputVoltage.argtypes = [POINTER(c_char)]
 def request_output_voltage(serial_number):
     # Requests output voltage.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestOutputVoltage(serial_number)
     if output != 0:
@@ -888,7 +891,7 @@ PCC_RequestPosition.argtypes = [POINTER(c_char)]
 def request_position(serial_number):
     # Requests the current output voltage or position depending on current mode.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestPosition(serial_number)
     if output != 0:
@@ -902,11 +905,11 @@ PCC_RequestPositionControlMode.argtypes = [POINTER(c_char)]
 
 def request_position_control_mode(serial_number):
     # Requests that the Position Control Mode be read from the device.
-
-    serial_number = POINTER(c_char)
+    # Must be called before get_position_control_mode
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestPositionControlMode(serial_number)
-    if output != 0:
+    if output != 1: #returns true upon success
         raise KinesisException(output)
 
 
@@ -918,7 +921,7 @@ PCC_RequestSettings.argtypes = [POINTER(c_char)]
 def request_settings(serial_number):
     # Requests that all settings are download from device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestSettings(serial_number)
     if output != 0:
@@ -933,7 +936,7 @@ PCC_RequestStatus.argtypes = [POINTER(c_char)]
 def request_status(serial_number):
     # Requests the status and position from the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestStatus(serial_number)
     if output != 0:
@@ -948,7 +951,7 @@ PCC_RequestStatusBits.argtypes = [POINTER(c_char)]
 def request_status_bits(serial_number):
     # Request the status bits which identify the current device state.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestStatusBits(serial_number)
     if output != 0:
@@ -963,7 +966,7 @@ PCC_RequestTriggerConfigParams.argtypes = [POINTER(c_char)]
 def request_trigger_config_params(serial_number):
     # Requests that the trigger config parameters are read from the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestTriggerConfigParams(serial_number)
 
@@ -978,7 +981,7 @@ PCC_RequestVoltageSource.argtypes = [POINTER(c_char)]
 def request_voltage_source(serial_number):
     # Requests that the current input voltage source be read from the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestVoltageSource(serial_number)
 
@@ -993,7 +996,7 @@ PCC_SetDigitalOutputs.argtypes = [POINTER(c_char), c_byte]
 def set_digital_outputs(serial_number):
     # Sets the digital output bits.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     outputsBits = c_byte()
 
     output = PCC_SetDigitalOutputs(serial_number, outputsBits)
@@ -1006,12 +1009,12 @@ PCC_SetFeedbackLoopPIconsts.restype = c_short
 PCC_SetFeedbackLoopPIconsts.argtypes = [POINTER(c_char), c_short, c_short]
 
 
-def set_feedback_loop_p_iconsts(serial_number):
+def set_feedback_loop_p_iconsts(serial_number, proportional, integral):
     # Sets the feedback loop constants.
 
-    serial_number = POINTER(c_char)
-    proportionalTerm = c_short()
-    integralTerm = c_short()
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    proportionalTerm = c_short(proportional)
+    integralTerm = c_short(integral)
 
     output = PCC_SetFeedbackLoopPIconsts(serial_number, proportionalTerm, integralTerm)
     if output != 0:
@@ -1026,7 +1029,7 @@ PCC_SetFeedbackLoopPIconstsBlock.argtypes = [POINTER(c_char), PZ_FeedbackLoopCon
 def set_feedback_loop_p_iconsts_block(serial_number):
     # Sets the feedback loop constants in a block.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     proportionalAndIntegralConstants = PZ_FeedbackLoopConstants()
 
     output = PCC_SetFeedbackLoopPIconstsBlock(serial_number, proportionalAndIntegralConstants)
@@ -1042,7 +1045,7 @@ PCC_SetFrontPanelLock.argtypes = [POINTER(c_char), c_bool]
 def set_front_panel_lock(serial_number):
     # Sets the device front panel lock state.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     locked = c_bool()
 
     output = PCC_SetFrontPanelLock(serial_number, locked)
@@ -1058,7 +1061,7 @@ PCC_SetHubAnalogInput.argtypes = [POINTER(c_char), HubAnalogueModes]
 def set_hub_analog_input(serial_number):
     # Sets the Hub Analog Input.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     hubAnalogInput = HubAnalogueModes()
 
     output = PCC_SetHubAnalogInput(serial_number, hubAnalogInput)
@@ -1074,7 +1077,7 @@ PCC_SetIOSettings.argtypes = [POINTER(c_char), TPZ_IOSettings]
 def set_i_o_settings(serial_number):
     # Sets the IO settings.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     ioSettings = TPZ_IOSettings()
 
     output = PCC_SetIOSettings(serial_number, ioSettings)
@@ -1090,7 +1093,7 @@ PCC_SetLEDBrightness.argtypes = [POINTER(c_char), c_short]
 def set_l_e_d_brightness(serial_number):
     # Sets the LED brightness.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     brightness = c_short()
 
     output = PCC_SetLEDBrightness(serial_number, brightness)
@@ -1106,7 +1109,7 @@ PCC_SetLUTwaveParams.argtypes = [POINTER(c_char), PZ_LUTWaveParameters]
 def set_l_u_twave_params(serial_number):
     # Sets the LUT output wave parameters.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     LUTwaveParams = PZ_LUTWaveParameters()
 
     output = PCC_SetLUTwaveParams(serial_number, LUTwaveParams)
@@ -1122,7 +1125,7 @@ PCC_SetLUTwaveSample.argtypes = [POINTER(c_char), c_short, c_long]
 def set_l_u_twave_sample(serial_number):
     # Sets a waveform sample.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     index = c_short()
     value = c_long()
 
@@ -1147,7 +1150,7 @@ PCC_SetMMIParams.argtypes = [
 def set_m_m_i_params(serial_number):
     # Set the MMI Parameters for the KCube Display Interface.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     wheelMode = KPZ_WheelMode()
     voltageAdjustRate = KPZ_WheelChangeRate()
     voltageStep = c_int32()
@@ -1177,7 +1180,7 @@ PCC_SetMMIParamsBlock.argtypes = [POINTER(c_char), KPZ_MMIParams]
 def set_m_m_i_params_block(serial_number):
     # Sets the MMI parameters for the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     mmiParams = KPZ_MMIParams()
 
     output = PCC_SetMMIParamsBlock(serial_number, mmiParams)
@@ -1203,7 +1206,7 @@ PCC_SetMMIParamsExt.argtypes = [
 def set_m_m_i_params_ext(serial_number):
     # Set the MMI Parameters for the KCube Display Interface.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     wheelMode = KPZ_WheelMode()
     voltageAdjustRate = KPZ_WheelChangeRate()
     voltageStep = c_int32()
@@ -1234,11 +1237,11 @@ PCC_SetMaxOutputVoltage.restype = c_short
 PCC_SetMaxOutputVoltage.argtypes = [POINTER(c_char), c_short]
 
 
-def set_max_output_voltage(serial_number):
+def set_max_output_voltage(serial_number, voltage):
     # Sets the maximum output voltage.
 
-    serial_number = POINTER(c_char)
-    maxVoltage = c_short()
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    maxVoltage = c_short(voltage)
 
     output = PCC_SetMaxOutputVoltage(serial_number, maxVoltage)
     if output != 0:
@@ -1250,11 +1253,11 @@ PCC_SetOutputVoltage.restype = c_short
 PCC_SetOutputVoltage.argtypes = [POINTER(c_char), c_short]
 
 
-def set_output_voltage(serial_number):
+def set_output_voltage(serial_number, volts):
     # Sets the output voltage.
 
-    serial_number = POINTER(c_char)
-    volts = c_short()
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    volts = c_short(volts)
 
     output = PCC_SetOutputVoltage(serial_number, volts)
     if output != 0:
@@ -1262,15 +1265,15 @@ def set_output_voltage(serial_number):
 
 
 PCC_SetPosition = lib.PCC_SetPosition
-PCC_SetPosition.restype = c_short
+PCC_SetPosition.restype = c_ushort
 PCC_SetPosition.argtypes = [POINTER(c_char), c_long]
 
 
-def set_position(serial_number):
+def set_position(serial_number, position):
     # Sets the position when in closed loop mode.
 
-    serial_number = POINTER(c_char)
-    position = c_long()
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    position = c_long(position)
 
     output = PCC_SetPosition(serial_number, position)
     if output != 0:
@@ -1282,13 +1285,14 @@ PCC_SetPositionControlMode.restype = c_short
 PCC_SetPositionControlMode.argtypes = [POINTER(c_char), PZ_ControlModeTypes]
 
 
-def set_position_control_mode(serial_number):
+def set_position_control_mode(serial_number, mode):
     # Sets the Position Control Mode.
+    # 1 - open, 2 - closed, 3 - open smooth, 4 - closed smooth
 
-    serial_number = POINTER(c_char)
-    mode = PZ_ControlModeTypes()
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    mode_char = PZ_ControlModeTypes(mode)
 
-    output = PCC_SetPositionControlMode(serial_number, mode)
+    output = PCC_SetPositionControlMode(serial_number, mode_char)
     if output != 0:
         raise KinesisException(output)
 
@@ -1298,12 +1302,12 @@ PCC_SetPositionToTolerance.restype = c_short
 PCC_SetPositionToTolerance.argtypes = [POINTER(c_char), c_long, c_long]
 
 
-def set_position_to_tolerance(serial_number):
+def set_position_to_tolerance(serial_number, position, tolerance):
     # Sets the position when in closed loop mode.
 
-    serial_number = POINTER(c_char)
-    position = c_long()
-    tolerance = c_long()
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    position = c_long(position)
+    tolerance = c_long(tolerance)
 
     output = PCC_SetPositionToTolerance(serial_number, position, tolerance)
     if output != 0:
@@ -1323,7 +1327,7 @@ PCC_SetTriggerConfigParams.argtypes = [
 def set_trigger_config_params(serial_number):
     # Set the Trigger Configuration Parameters.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     trigger1Mode = KPZ_TriggerPortMode()
     trigger1Polarity = KPZ_TriggerPortPolarity()
     trigger2Mode = KPZ_TriggerPortMode()
@@ -1342,7 +1346,7 @@ PCC_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KPZ_TriggerConfig]
 def set_trigger_config_params_block(serial_number):
     # Sets the trigger configuration parameters block.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     triggerConfigParams = KPZ_TriggerConfig()
 
     output = PCC_SetTriggerConfigParamsBlock(serial_number, triggerConfigParams)
@@ -1358,7 +1362,7 @@ PCC_SetVoltageSource.argtypes = [POINTER(c_char), PZ_InputSourceFlags]
 def set_voltage_source(serial_number):
     # Sets the control voltage source.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     source = PZ_InputSourceFlags()
 
     output = PCC_SetVoltageSource(serial_number, source)
@@ -1374,7 +1378,7 @@ PCC_SetZero.argtypes = [POINTER(c_char)]
 def set_zero(serial_number):
     # Set zero reference voltage.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_SetZero(serial_number)
 
@@ -1389,7 +1393,7 @@ PCC_StartLUTwave.argtypes = [POINTER(c_char)]
 def start_l_u_twave(serial_number):
     # Starts the LUT waveform output.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_StartLUTwave(serial_number)
     if output != 0:
@@ -1404,7 +1408,7 @@ PCC_StartPolling.argtypes = [POINTER(c_char), c_int]
 def start_polling(serial_number):
     # Starts the internal polling loop which continuously requests position and status.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     milliseconds = c_int()
 
     output = PCC_StartPolling(serial_number, milliseconds)
@@ -1420,7 +1424,7 @@ PCC_StopLUTwave.argtypes = [POINTER(c_char)]
 def stop_l_u_twave(serial_number):
     # Stops the LUT waveform output.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_StopLUTwave(serial_number)
     if output != 0:
@@ -1435,7 +1439,7 @@ PCC_StopPolling.argtypes = [POINTER(c_char)]
 def stop_polling(serial_number):
     # Stops the internal polling loop.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_StopPolling(serial_number)
     if output != 0:
@@ -1450,7 +1454,7 @@ PCC_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char), c_int64]
 def time_since_last_msg_received(serial_number):
     # Gets the time in milliseconds since tha last message was received from the device.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     lastUpdateTimeMS = c_int64()
 
     output = PCC_TimeSinceLastMsgReceived(serial_number, lastUpdateTimeMS)
@@ -1466,7 +1470,7 @@ PCC_WaitForMessage.argtypes = [POINTER(c_char), c_long, c_long, c_ulong]
 def wait_for_message(serial_number):
     # Wait for next MessageQueue item.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -1477,14 +1481,16 @@ def wait_for_message(serial_number):
 
 
 TLI_BuildDeviceList = lib.TLI_BuildDeviceList
-TLI_BuildDeviceList.restype = c_short
-TLI_BuildDeviceList.argtypes = [c_void_p]
+# TLI_BuildDeviceList.restype = c_short
+# TLI_BuildDeviceList.argtypes = [c_void_p]
 
 
 def build_device_list():
     # Build the DeviceList.
 
     output = TLI_BuildDeviceList()
+
+    print(output)
     if output != 0:
         raise KinesisException(output)
 
@@ -1497,7 +1503,7 @@ TLI_GetDeviceInfo.argtypes = [POINTER(c_char), POINTER(c_char), TLI_DeviceInfo]
 def get_device_info(serial_number):
     # Get the device information from the USB port.
 
-    serial_number = POINTER(c_char)
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     serialNumber = POINTER(c_char)
     info = TLI_DeviceInfo()
 
