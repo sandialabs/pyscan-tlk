@@ -1,6 +1,6 @@
-from ctypes import (POINTER, c_bool, c_char, c_int, c_int32,
+from ctypes import (POINTER, pointer, c_bool, c_char, c_char_p, c_int, c_int32,
                     c_int64, c_long, c_short, c_ulong, c_void_p,
-                    cdll, c_char_p)
+                    cdll)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (HubAnalogueModes, PZ_ControlModeTypes, PZ_InputSourceFlags)
 from .definitions.structures import (
@@ -10,6 +10,9 @@ from .definitions.structures import (
     TLI_HardwareInformation,
     TPZ_IOSettings)
 from .definitions.kinesisexception import KinesisException
+
+# CUSTOM TYPES
+c_short_p = type(pointer(c_short()))
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -401,8 +404,7 @@ def get_position(serial_number):
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetPosition(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+    return output
 
 
 PCC_GetPositionControlMode = lib.PCC_GetPositionControlMode
@@ -416,8 +418,7 @@ def get_position_control_mode(serial_number):
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetPositionControlMode(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+    return output
 
 
 PCC_GetSoftwareVersion = lib.PCC_GetSoftwareVersion
@@ -656,11 +657,11 @@ PCC_RequestPositionControlMode.argtypes = [POINTER(c_char)]
 
 def request_position_control_mode(serial_number):
     # Requests that the Position Control Mode be read from the device.
-
+    # Must be called before get_position_control_mode
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestPositionControlMode(serial_number)
-    if output != 0:
+    if output != 1: #returns true upon success
         raise KinesisException(output)
 
 
@@ -729,12 +730,12 @@ PCC_SetFeedbackLoopPIconsts.restype = c_short
 PCC_SetFeedbackLoopPIconsts.argtypes = [POINTER(c_char), c_short, c_short]
 
 
-def set_feedback_loop_pi_consts(serial_number):
+def set_feedback_loop_p_iconsts(serial_number, proportional, integral):
     # Sets the feedback loop constants.
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    proportionalTerm = c_short()
-    integralTerm = c_short()
+    proportionalTerm = c_short(proportional)
+    integralTerm = c_short(integral)
 
     output = PCC_SetFeedbackLoopPIconsts(serial_number, proportionalTerm, integralTerm)
     if output != 0:
@@ -843,11 +844,11 @@ PCC_SetPosition.restype = c_short
 PCC_SetPosition.argtypes = [POINTER(c_char), c_long]
 
 
-def set_position(serial_number):
+def set_position(serial_number, position):
     # Sets the position when in closed loop mode.
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    position = c_long()
+    position = c_long(position)
 
     output = PCC_SetPosition(serial_number, position)
     if output != 0:
@@ -859,13 +860,14 @@ PCC_SetPositionControlMode.restype = c_short
 PCC_SetPositionControlMode.argtypes = [POINTER(c_char), PZ_ControlModeTypes]
 
 
-def set_position_control_mode(serial_number):
+def set_position_control_mode(serial_number, mode):
     # Sets the Position Control Mode.
+    # 1 - open, 2 - closed, 3 - open smooth, 4 - closed smooth
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    mode = PZ_ControlModeTypes()
+    mode_char = PZ_ControlModeTypes(mode)
 
-    output = PCC_SetPositionControlMode(serial_number, mode)
+    output = PCC_SetPositionControlMode(serial_number, mode_char)
     if output != 0:
         raise KinesisException(output)
 
@@ -875,12 +877,12 @@ PCC_SetPositionToTolerance.restype = c_short
 PCC_SetPositionToTolerance.argtypes = [POINTER(c_char), c_long, c_long]
 
 
-def set_position_to_tolerance(serial_number):
+def set_position_to_tolerance(serial_number, position, tolerance):
     # Sets the position when in closed loop mode.
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    position = c_long()
-    tolerance = c_long()
+    position = c_long(position)
+    tolerance = c_long(tolerance)
 
     output = PCC_SetPositionToTolerance(serial_number, position, tolerance)
     if output != 0:
@@ -1035,7 +1037,7 @@ TLI_GetDeviceInfo.argtypes = [POINTER(c_char), POINTER(c_char), TLI_DeviceInfo]
 def get_device_info(serial_number):
     # Get the device information from the USB port.
 
-    serial_number = POINTER[c_char]
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     serialNumber = POINTER(c_char)
     info = TLI_DeviceInfo()
 
