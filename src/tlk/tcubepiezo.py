@@ -13,6 +13,8 @@ from .definitions.kinesisexception import KinesisException
 
 # CUSTOM TYPES
 c_short_p = type(pointer(c_short()))
+c_ulong_p = type(pointer(c_ulong()))
+c_long_p = type(pointer(c_long()))
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -171,6 +173,7 @@ PCC_GetOutputVoltage.argtypes = [POINTER(c_char)]
 def get_output_voltage(serial_number):
     # Gets the set Output Voltage.
     # Returns the voltage as a percentage of MaxOutputVoltage, range -32767 to 32767 equivalent to -100% to 100%. 
+    # Tested and working 8/16/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
@@ -188,6 +191,7 @@ def set_output_voltage(serial_number, volts):
     # Sets the output voltage.
     # volts is a percentage of MaxOutputVoltage, range -32767 to 32767 equivalent to -100% to 100%. 
     # Returns None; raises exception upon error
+    # Tested and working 8/16/2024. Sometimes has to be run twice?
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     volts = c_short(volts)
@@ -238,7 +242,7 @@ PCC_GetFeedbackLoopPIconsts.argtypes = [POINTER(c_char), c_short_p, c_short_p]
 
 def get_feedback_loop_pi_consts(serial_number):
     # Gets the feedback loop parameters and returns a tuple
-    # Untested
+    # Tested and working 8/16/2024
     
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     proportionalTerm = pointer(c_short())
@@ -275,6 +279,7 @@ PCC_GetFirmwareVersion.argtypes = [POINTER(c_char)]
 
 def get_firmware_version(serial_number):
     # Gets version number of the device firmware.
+    # Tested and working 8/16/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
@@ -285,37 +290,38 @@ def get_firmware_version(serial_number):
 PCC_GetHardwareInfo = lib.PCC_GetHardwareInfo
 PCC_GetHardwareInfo.restype = c_short
 PCC_GetHardwareInfo.argtypes = [
-    POINTER(c_char),
-    POINTER(c_char),
+    c_char_p,
+    c_char_p,
     c_ulong,
-    c_long,
-    c_long,
-    POINTER(c_char),
+    c_long_p,
+    c_long_p,
+    c_char_p,
     c_ulong,
-    c_ulong,
-    c_long,
-    c_long]
+    c_ulong_p,
+    c_long_p,
+    c_long_p]
 
-
+from time import sleep
 def get_hardware_info(serial_number):
     # Gets the hardware information from the device.
+    # Tested and working 8/16/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    modelNo = POINTER(c_char)
-    sizeOfModelNo = c_ulong()
-    type = c_long()
-    numChannels = c_long()
-    notes = POINTER(c_char)
-    sizeOfNotes = c_ulong()
-    firmwareVersion = c_ulong()
-    hardwareVersion = c_long()
-    modificationState = c_long()
+    modelNo = c_char_p()
+    sizeOfModelNo = c_ulong(8)
+    hardware_type = pointer(c_long())
+    numChannels = pointer(c_long())
+    notes = c_char_p()
+    sizeOfNotes = c_ulong(48)
+    firmwareVersion = pointer(c_ulong())
+    hardwareVersion = pointer(c_long())
+    modificationState = pointer(c_long())
 
     output = PCC_GetHardwareInfo(
         serial_number,
         modelNo,
         sizeOfModelNo,
-        type,
+        hardware_type,
         numChannels,
         notes,
         sizeOfNotes,
@@ -324,6 +330,17 @@ def get_hardware_info(serial_number):
         modificationState)
     if output != 0:
         raise KinesisException(output)
+    
+    sleep(0.5)
+    return {"serial_number": int(serial_number.value),
+            "modelNo": modelNo.value,
+            "type": hardware_type.contents.value,
+            "numChannels": numChannels.contents.value,
+            "notes": notes.value,
+            "firmwareVersion": firmwareVersion.contents.value,
+            "hardwareVersion": hardwareVersion.contents.value,
+            "modificationState": modificationState.contents.value
+            }
 
 
 PCC_GetHardwareInfoBlock = lib.PCC_GetHardwareInfoBlock
@@ -333,6 +350,7 @@ PCC_GetHardwareInfoBlock.argtypes = [POINTER(c_char), TLI_HardwareInformation]
 
 def get_hardware_info_block(serial_number):
     # Gets the hardware information in a block.
+    # Not implemented
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     hardwareInfo = TLI_HardwareInformation()
@@ -349,12 +367,15 @@ PCC_GetHubAnalogInput.argtypes = [POINTER(c_char)]
 
 def get_hub_analog_input(serial_number):
     # Gets the Hub Analog Input.
+    # Returns Hub Analogue Input Mode. 
+    # Input applied to all Hub bays 1  
+    # Input applied to adjacent Hub bays 2  
+    # Input is from external SMA 3  
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetHubAnalogInput(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+    return output
 
 
 PCC_GetIOSettings = lib.PCC_GetIOSettings
@@ -364,12 +385,13 @@ PCC_GetIOSettings.argtypes = [POINTER(c_char)]
 
 def get_i_o_settings(serial_number):
     # Gets the IO settings.
-
+    # Returns The settings as a TPZ_IOSettings structure
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetIOSettings(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+    return {"hubAnalogueInput": output.hubAnalogueInput,
+            "maximumOutputVoltage": output.maximumOutputVoltage
+            }
 
 
 PCC_GetLEDBrightness = lib.PCC_GetLEDBrightness
@@ -379,30 +401,40 @@ PCC_GetLEDBrightness.argtypes = [POINTER(c_char)]
 
 def get_led_brightness(serial_number):
     # Gets the LED brightness.
+    # Returns Intensity from 0 (off) to 255. 
+    # Tested and working 8/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetLEDBrightness(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+    return output
 
 
 PCC_GetNextMessage = lib.PCC_GetNextMessage
 PCC_GetNextMessage.restype = c_bool
-PCC_GetNextMessage.argtypes = [POINTER(c_char), c_long, c_long, c_ulong]
+PCC_GetNextMessage.argtypes = [POINTER(c_char), c_long_p, c_long_p, c_ulong_p]
 
 
 def get_next_message(serial_number):
     # Get the next MessageQueue item.
-
+    # Tested and working 08/19/2024
+    # Future feature: link the messageType codes and ID to 
+    # words (table is in kinesis docs)
+    
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    messageType = c_long()
-    messageID = c_long()
-    messageData = c_ulong()
+    messageType = pointer(c_long())
+    messageID = pointer(c_long())
+    messageData = pointer(c_ulong())
 
     output = PCC_GetNextMessage(serial_number, messageType, messageID, messageData)
+    # output is true if successful, false if not
 
-    return output
+    if output:
+        return {
+            "messageType": messageType.contents.value,
+            "messageID": messageID.contents.value,
+            "messageData": messageData.contents.value
+        }
 
 
 PCC_GetPosition = lib.PCC_GetPosition
@@ -412,12 +444,14 @@ PCC_GetPosition.argtypes = [POINTER(c_char)]
 
 def get_position(serial_number):
     # Gets the position when in closed loop mode.
+    # ReturnsThe position as a percentage of maximum travel,
+    # range 0 to 65535, equivalent to 0 to 100%.
+    # Tested and working 08/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetPosition(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+    return output
 
 
 PCC_GetPositionControlMode = lib.PCC_GetPositionControlMode
@@ -427,13 +461,17 @@ PCC_GetPositionControlMode.argtypes = [POINTER(c_char)]
 
 def get_position_control_mode(serial_number):
     # Gets the Position Control Mode.
+    # ReturnsThe control mode 
+    #  Open Loop 1  
+    #  Closed Loop 2  
+    #  Open Loop smoothed 3  
+    #  Closed Loop smoothed 4  
+    # Tested and wroking 08/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetPositionControlMode(serial_number)
-    if output != 0:
-        raise KinesisException(output)
-
+    return output
 
 PCC_GetSoftwareVersion = lib.PCC_GetSoftwareVersion
 PCC_GetSoftwareVersion.restype = c_ulong
@@ -442,13 +480,13 @@ PCC_GetSoftwareVersion.argtypes = [POINTER(c_char)]
 
 def get_software_version(serial_number):
     # Gets version number of the device software.
+    # ReturnsThe device software version number made up of 4 byte parts. 
+    # Tested and working 08/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetSoftwareVersion(serial_number)
-    if output != 0:
-        raise KinesisException(output)
-
+    return output
 
 PCC_GetStatusBits = lib.PCC_GetStatusBits
 PCC_GetStatusBits.restype = c_ulong
@@ -457,13 +495,41 @@ PCC_GetStatusBits.argtypes = [POINTER(c_char)]
 
 def get_status_bits(serial_number):
     # Get the current status bits.
+    # 0x00000001 Piezo actuator connected (1=Connected, 0=Not connected).  
+    # 0x00000002 For Future Use.  
+    # 0x00000004 For Future Use.  
+    # 0x00000008 For Future Use.  
+    # 0x00000010 Piezo channel has been zeroed (1=Zeroed, 0=Not zeroed).  
+    # 0x00000020 Piezo channel is zeroing (1=Zeroing, 0=Not zeroing).  
+    # 0x00000040 For Future Use.  
+    # 0x00000080 For Future Use.  
+    # 0x00000100 Strain gauge feedback connected (1=Connected, 0=Not connected).  
+    # 0x00000200 For Future Use.  
+    # 0x00000400 Position control mode (1=Closed loop, 0=Open loop).  
+    # 0x00000800 For Future Use.  
+    # 0x00001000  
+    # ...  
+    # 0x00080000  
+    # 0x00100000 Digital input 1 state (1=Logic High, 0=Logic Low).  
+    # 0x00200000 Digital input 2 state (1=Logic High, 0=Logic Low).  
+    # 0x00400000 Digital input 3 state (1=Logic High, 0=Logic Low).  
+    # 0x00800000 Digital input 4 state (1=Logic High, 0=Logic Low).  
+    # 0x01000000 Digital input 5 state (1=Logic High, 0=Logic Low).  
+    # 0x02000000 Digital input 6 state (1=Logic High, 0=Logic Low).  
+    # 0x04000000 Digital input 7 state (1=Logic High, 0=Logic Low).  
+    # 0x08000000 Digital input 8 state (1=Logic High, 0=Logic Low).  
+    # 0x10000000 For Future Use.  
+    # 0x20000000 Active (1=Indicates Unit Is Active, 0=Not Active).  
+    # 0x40000000 For Future Use.  
+    # 0x80000000 Channel enabled (1=Enabled, 0=Disabled).  
+
+    # Bits 21 to 28 (Digital Input States) are only applicable if the associated digital input is fitted to your controller - see the relevant handbook for more details. 
+    # Tested and working, but output is not in hex
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetStatusBits(serial_number)
-    if output != 0:
-        raise KinesisException(output)
-
+    return output
 
 PCC_GetVoltageSource = lib.PCC_GetVoltageSource
 PCC_GetVoltageSource.restype = PZ_InputSourceFlags
@@ -472,13 +538,17 @@ PCC_GetVoltageSource.argtypes = [POINTER(c_char)]
 
 def get_voltage_source(serial_number):
     # Gets the control voltage source.
+    # ReturnsThe voltage source. 
+    # Software Only 0  
+    # Software and External 1  
+    # Software and Potentiometer 2  
+    # Software, External and Potentiometer 3  
+    # Tested and working 08/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_GetVoltageSource(serial_number)
-    if output != 0:
-        raise KinesisException(output)
-
+    return output
 
 PCC_HasLastMsgTimerOverrun = lib.PCC_HasLastMsgTimerOverrun
 PCC_HasLastMsgTimerOverrun.restype = c_bool
@@ -489,6 +559,9 @@ def has_last_msg_timer_overrun(serial_number):
     # Queries if the time since the last message has exceeded the
     # lastMsgTimeout set by PCC_EnableLastMsgTimer(char const * serialNo, bool
     # enable, __int32 lastMsgTimeout ).
+    # Returns True if last message timer has elapsed, False if monitoring is not 
+    # enabled or if time of last message received is less than lastMsgTimeout.
+    # Tested and working 08/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
@@ -507,9 +580,7 @@ def identify(serial_number):
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
-    output = PCC_Identify(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+    _ = PCC_Identify(serial_number)
 
 
 PCC_LoadNamedSettings = lib.PCC_LoadNamedSettings
@@ -519,12 +590,12 @@ PCC_LoadNamedSettings.argtypes = [POINTER(c_char), POINTER(c_char)]
 
 def load_named_settings(serial_number):
     # Update device with named settings.
+    # Not fully implemented
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     settingsName = POINTER(c_char)
 
     output = PCC_LoadNamedSettings(serial_number, settingsName)
-
     return output
 
 
@@ -535,6 +606,7 @@ PCC_LoadSettings.argtypes = [POINTER(c_char)]
 
 def load_settings(serial_number):
     # Update device with stored settings.
+    # Returns true if successful, false if not
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
@@ -550,13 +622,13 @@ PCC_MessageQueueSize.argtypes = [POINTER(c_char)]
 
 def message_queue_size(serial_number):
     # Gets the MessageQueue size.
+    # Returns number of messages in the queue. 
+    # Tested and working 08/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_MessageQueueSize(serial_number)
-    if output != 0:
-        raise KinesisException(output)
-
+    return output
 
 PCC_PersistSettings = lib.PCC_PersistSettings
 PCC_PersistSettings.restype = c_bool
@@ -565,6 +637,7 @@ PCC_PersistSettings.argtypes = [POINTER(c_char)]
 
 def persist_settings(serial_number):
     # persist the devices current settings.
+    # Returnstrue if successful, false if not. 
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
@@ -580,13 +653,12 @@ PCC_PollingDuration.argtypes = [POINTER(c_char)]
 
 def polling_duration(serial_number):
     # Gets the polling loop duration.
-
+    # Returns The time between polls in milliseconds or 0 if polling is not active. 
+    # Tested and working 08/19/2024
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_PollingDuration(serial_number)
-    if output != 0:
-        raise KinesisException(output)
-
+    return output
 
 PCC_RegisterMessageCallback = lib.PCC_RegisterMessageCallback
 PCC_RegisterMessageCallback.restype = c_void_p
@@ -595,6 +667,7 @@ PCC_RegisterMessageCallback.argtypes = [POINTER(c_char), c_void_p]
 
 def register_message_callback(serial_number):
     # Registers a callback on the message queue.
+    # Not implemented
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     void = c_void_p()
@@ -611,6 +684,8 @@ PCC_RequestFeedbackLoopPIconsts.argtypes = [POINTER(c_char)]
 
 def request_feedback_loop_pi_consts(serial_number):
     # Requests that the feedback loop constants be read from the device.
+    # ReturnsTrue if it succeeds, false if it fails. 
+    # Tested and working 08/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
@@ -626,6 +701,8 @@ PCC_RequestIOSettings.argtypes = [POINTER(c_char)]
 
 def request_i_o_settings(serial_number):
     # Requests that the IO settings are read from the device.
+    # Returns True if it succeeds, false if it fails
+    # Tested and working 08/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
@@ -641,6 +718,8 @@ PCC_RequestLEDBrightness.argtypes = [POINTER(c_char)]
 
 def request_led_brightness(serial_number):
     # Requests that the LED brightness be read from the device.
+    # Returns True if it succeeds, false if it fails. 
+    # Tested and working 08/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
@@ -656,6 +735,8 @@ PCC_RequestPosition.argtypes = [POINTER(c_char)]
 
 def request_position(serial_number):
     # Requests the current output voltage or position depending on current mode.
+    # Returns None, raises exception upon error
+    # Tested and working 08/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
@@ -665,19 +746,19 @@ def request_position(serial_number):
 
 
 PCC_RequestPositionControlMode = lib.PCC_RequestPositionControlMode
-PCC_RequestPositionControlMode.restype = c_short
+PCC_RequestPositionControlMode.restype = c_bool
 PCC_RequestPositionControlMode.argtypes = [POINTER(c_char)]
 
 
 def request_position_control_mode(serial_number):
     # Requests that the Position Control Mode be read from the device.
+    # Returns True if it succeeds, false if it fails.
+    # Tested and working 08/19/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestPositionControlMode(serial_number)
-    if output != 0:
-        raise KinesisException(output)
-
+    return output
 
 PCC_RequestSettings = lib.PCC_RequestSettings
 PCC_RequestSettings.restype = c_short
@@ -686,6 +767,7 @@ PCC_RequestSettings.argtypes = [POINTER(c_char)]
 
 def request_settings(serial_number):
     # Requests that all settings are download from device.
+    # Returns None, raises exception upon error
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
@@ -701,7 +783,10 @@ PCC_RequestStatus.argtypes = [POINTER(c_char)]
 
 def request_status(serial_number):
     # Requests the status and position from the device.
-
+    # This needs to be called to get the device to send it's 
+    # current status bits and position.
+    # NOTE this is called automatically if Polling is enabled 
+    # for the device using PCC_StartPolling(char const * serialNo, int milliseconds). 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestStatus(serial_number)
@@ -716,7 +801,9 @@ PCC_RequestStatusBits.argtypes = [POINTER(c_char)]
 
 def request_status_bits(serial_number):
     # Request the status bits which identify the current device state.
-
+    # This needs to be called to get the device to send it's current status bits.
+    # NOTE this is called automatically if Polling is enabled for the device using 
+    # PCC_StartPolling(char const * serialNo, int milliseconds). 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestStatusBits(serial_number)
@@ -731,7 +818,7 @@ PCC_RequestVoltageSource.argtypes = [POINTER(c_char)]
 
 def request_voltage_source(serial_number):
     # Requests that the current input voltage source be read from the device.
-
+    # Returns True if it succeeds, false if it fails. 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = PCC_RequestVoltageSource(serial_number)
@@ -744,12 +831,13 @@ PCC_SetFeedbackLoopPIconsts.restype = c_short
 PCC_SetFeedbackLoopPIconsts.argtypes = [POINTER(c_char), c_short, c_short]
 
 
-def set_feedback_loop_pi_consts(serial_number):
+def set_feedback_loop_pi_consts(serial_number, proportionalTerm, integralTerm):
     # Sets the feedback loop constants.
+    # Fully Implemented; not tested
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    proportionalTerm = c_short()
-    integralTerm = c_short()
+    proportionalTerm = c_short(proportionalTerm)
+    integralTerm = c_short(integralTerm)
 
     output = PCC_SetFeedbackLoopPIconsts(serial_number, proportionalTerm, integralTerm)
     if output != 0:
@@ -763,6 +851,7 @@ PCC_SetFeedbackLoopPIconstsBlock.argtypes = [POINTER(c_char), PZ_FeedbackLoopCon
 
 def set_feedback_loop_pi_consts_block(serial_number):
     # Sets the feedback loop constants in a block.
+    # Not implemented
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     proportionalAndIntegralConstants = PZ_FeedbackLoopConstants()
@@ -777,11 +866,15 @@ PCC_SetHubAnalogInput.restype = c_short
 PCC_SetHubAnalogInput.argtypes = [POINTER(c_char), HubAnalogueModes]
 
 
-def set_hub_analog_input(serial_number):
+def set_hub_analog_input(serial_number, hubAnalogueInputMode):
     # Sets the Hub Analog Input.
+    # Hub Analogue Input Mode. 
+    #   Input applied to all Hub bays 1  
+    #   Input applied to adjacent Hub bays 2  
+    #   Input is from external SMA 3  
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    hubAnalogInput = HubAnalogueModes()
+    hubAnalogInput = HubAnalogueModes(hubAnalogueInputMode)
 
     output = PCC_SetHubAnalogInput(serial_number, hubAnalogInput)
     if output != 0:
