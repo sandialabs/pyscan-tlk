@@ -872,6 +872,7 @@ def set_hub_analog_input(serial_number, hubAnalogueInputMode):
     #   Input applied to all Hub bays 1  
     #   Input applied to adjacent Hub bays 2  
     #   Input is from external SMA 3  
+    # Tested and working 08/20/2024
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     hubAnalogInput = HubAnalogueModes(hubAnalogueInputMode)
@@ -886,11 +887,14 @@ PCC_SetIOSettings.restype = c_short
 PCC_SetIOSettings.argtypes = [POINTER(c_char), TPZ_IOSettings]
 
 
-def set_i_o_settings(serial_number):
+def set_i_o_settings(serial_number, hubAnalogInputMode, maximumOutputVoltage):
     # Sets the IO settings.
+    # Not working
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     ioSettings = TPZ_IOSettings()
+    ioSettings.hubAnalogInput = HubAnalogueModes(hubAnalogInputMode)
+    ioSettings.maximumOutputVoltage = c_short(maximumOutputVoltage)
 
     output = PCC_SetIOSettings(serial_number, ioSettings)
     if output != 0:
@@ -902,11 +906,13 @@ PCC_SetLEDBrightness.restype = c_short
 PCC_SetLEDBrightness.argtypes = [POINTER(c_char), c_short]
 
 
-def set_led_brightness(serial_number):
+def set_led_brightness(serial_number, brightness):
     # Sets the LED brightness.
+    # brightness Intensity from 0 (off) to 255.  
+    # Returns None, raises exception upon error
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    brightness = c_short()
+    brightness = c_short(brightness)
 
     output = PCC_SetLEDBrightness(serial_number, brightness)
     if output != 0:
@@ -951,11 +957,11 @@ PCC_SetPosition.restype = c_short
 PCC_SetPosition.argtypes = [POINTER(c_char), c_long]
 
 
-def set_position(serial_number):
+def set_position(serial_number, position):
     # Sets the position when in closed loop mode.
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    position = c_long()
+    position = c_long(position)
 
     output = PCC_SetPosition(serial_number, position)
     if output != 0:
@@ -967,13 +973,14 @@ PCC_SetPositionControlMode.restype = c_short
 PCC_SetPositionControlMode.argtypes = [POINTER(c_char), PZ_ControlModeTypes]
 
 
-def set_position_control_mode(serial_number):
+def set_position_control_mode(serial_number, mode):
     # Sets the Position Control Mode.
+    # 1 - open, 2 - closed, 3 - open smooth, 4 - closed smooth
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    mode = PZ_ControlModeTypes()
+    mode_char = PZ_ControlModeTypes(mode)
 
-    output = PCC_SetPositionControlMode(serial_number, mode)
+    output = PCC_SetPositionControlMode(serial_number, mode_char)
     if output != 0:
         raise KinesisException(output)
 
@@ -983,12 +990,12 @@ PCC_SetPositionToTolerance.restype = c_short
 PCC_SetPositionToTolerance.argtypes = [POINTER(c_char), c_long, c_long]
 
 
-def set_position_to_tolerance(serial_number):
+def set_position_to_tolerance(serial_number, position, tolerance):
     # Sets the position when in closed loop mode.
-
+    
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    position = c_long()
-    tolerance = c_long()
+    position = c_long(position)
+    tolerance = c_long(tolerance)
 
     output = PCC_SetPositionToTolerance(serial_number, position, tolerance)
     if output != 0:
@@ -1000,11 +1007,11 @@ PCC_SetVoltageSource.restype = c_short
 PCC_SetVoltageSource.argtypes = [POINTER(c_char), PZ_InputSourceFlags]
 
 
-def set_voltage_source(serial_number):
+def set_voltage_source(serial_number, source):
     # Sets the control voltage source.
 
     serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
-    source = PZ_InputSourceFlags()
+    source = PZ_InputSourceFlags(source)
 
     output = PCC_SetVoltageSource(serial_number, source)
     if output != 0:
