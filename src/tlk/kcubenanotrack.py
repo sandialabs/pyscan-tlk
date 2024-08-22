@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_float,
     c_int,
     c_int16,
@@ -12,7 +13,8 @@ from ctypes import (
     c_short,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KNA_Channels,
@@ -28,7 +30,6 @@ from .definitions.enumerations import (
     NT_Mode,
     NT_OddOrEven,
     NT_OutputVoltageRoute,
-    NT_SignalState,
     NT_TIARange,
     NT_TIARangeMode,
     NT_VoltageRange)
@@ -64,9 +65,19 @@ NT_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
 
 
 def can_device_lock_front_panel(serial_number):
-    # Determine if the device front panel can be locked.
+    '''
+    Determine if the device front panel can be locked.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_CanDeviceLockFrontPanel(serial_number)
 
@@ -79,9 +90,19 @@ NT_CheckConnection.argtypes = [POINTER(c_char)]
 
 
 def check_connection(serial_number):
-    # Check connection.
+    '''
+    Check connection.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_CheckConnection(serial_number)
 
@@ -94,13 +115,23 @@ NT_ClearMessageQueue.argtypes = [POINTER(c_char)]
 
 
 def clear_message_queue(serial_number):
-    # clears the message queue.
+    '''
+    clears the message queue.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_void_p
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_ClearMessageQueue(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_Close = lib.NT_Close
@@ -109,13 +140,23 @@ NT_Close.argtypes = [POINTER(c_char)]
 
 
 def close_device(serial_number):
-    # Disconnect and close the device.
+    '''
+    Disconnect and close the device.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_void_p
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_Close(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_Disconnect = lib.NT_Disconnect
@@ -124,30 +165,52 @@ NT_Disconnect.argtypes = [POINTER(c_char)]
 
 
 def disconnect(serial_number):
-    # Tells the device that it is being disconnected.
+    '''
+    Tells the device that it is being disconnected.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_Disconnect(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_EnableLastMsgTimer = lib.NT_EnableLastMsgTimer
 NT_EnableLastMsgTimer.restype = c_void_p
-NT_EnableLastMsgTimer.argtypes = [POINTER(c_char), c_bool, c_int32]
+NT_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
 
 
 def enable_last_msg_timer(serial_number):
-    # Enables the last message monitoring timer.
+    '''
+    Enables the last message monitoring timer.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        enable: c_bool
+        lastMsgTimeout: c_int32
+
+    Returns
+    -------
+        c_void_p
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     enable = c_bool()
     lastMsgTimeout = c_int32()
 
-    output = NT_EnableLastMsgTimer(serial_number, enable, lastMsgTimeout)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_EnableLastMsgTimer(serial_number)
+
+    return output
 
 
 NT_GetCircleDiameter = lib.NT_GetCircleDiameter
@@ -156,128 +219,218 @@ NT_GetCircleDiameter.argtypes = [POINTER(c_char)]
 
 
 def get_circle_diameter(serial_number):
-    # Gets the scan circle diameter.
+    '''
+    Gets the scan circle diameter.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_long
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetCircleDiameter(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_GetCircleDiameterLUT = lib.NT_GetCircleDiameterLUT
 NT_GetCircleDiameterLUT.restype = c_short
-NT_GetCircleDiameterLUT.argtypes = [POINTER(c_char), NT_CircleDiameterLUT]
+NT_GetCircleDiameterLUT.argtypes = [POINTER(c_char)]
 
 
 def get_circle_diameter_l_u_t(serial_number):
-    # Gets the scan circle diameter Lookup Table (LUT).
+    '''
+    Gets the scan circle diameter Lookup Table (LUT).
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        LUT: NT_CircleDiameterLUT
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     LUT = NT_CircleDiameterLUT()
 
-    output = NT_GetCircleDiameterLUT(serial_number, LUT)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetCircleDiameterLUT(serial_number)
+
+    return output
 
 
 NT_GetCircleHomePosition = lib.NT_GetCircleHomePosition
 NT_GetCircleHomePosition.restype = c_short
-NT_GetCircleHomePosition.argtypes = [POINTER(c_char), NT_HVComponent]
+NT_GetCircleHomePosition.argtypes = [POINTER(c_char)]
 
 
 def get_circle_home_position(serial_number):
-    # Gets the home position of the scan circle.
+    '''
+    Gets the home position of the scan circle.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        position: NT_HVComponent
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     position = NT_HVComponent()
 
-    output = NT_GetCircleHomePosition(serial_number, position)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetCircleHomePosition(serial_number)
+
+    return output
 
 
 NT_GetCircleParams = lib.NT_GetCircleParams
 NT_GetCircleParams.restype = c_short
-NT_GetCircleParams.argtypes = [POINTER(c_char), NT_CircleParameters]
+NT_GetCircleParams.argtypes = [POINTER(c_char)]
 
 
 def get_circle_params(serial_number):
-    # Gets the scanning circle parameters.
+    '''
+    Gets the scanning circle parameters.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        params: NT_CircleParameters
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     params = NT_CircleParameters()
 
-    output = NT_GetCircleParams(serial_number, params)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetCircleParams(serial_number)
+
+    return output
 
 
 NT_GetCirclePosition = lib.NT_GetCirclePosition
 NT_GetCirclePosition.restype = c_short
-NT_GetCirclePosition.argtypes = [POINTER(c_char), NT_HVComponent]
+NT_GetCirclePosition.argtypes = [POINTER(c_char)]
 
 
 def get_circle_position(serial_number):
-    # Gets the current scan circle centre position.
+    '''
+    Gets the current scan circle centre position.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        position: NT_HVComponent
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     position = NT_HVComponent()
 
-    output = NT_GetCirclePosition(serial_number, position)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetCirclePosition(serial_number)
+
+    return output
 
 
 NT_GetFeedbackLoopPIconsts = lib.NT_GetFeedbackLoopPIconsts
 NT_GetFeedbackLoopPIconsts.restype = c_short
-NT_GetFeedbackLoopPIconsts.argtypes = [POINTER(c_char), KNA_Channels, c_short, c_short]
+NT_GetFeedbackLoopPIconsts.argtypes = [POINTER(c_char)]
 
 
-def get_feedback_loop_p_iconsts(serial_number, channel):
-    # Gets the feedback loop constants.
+def get_feedback_loop_p_iconsts(serial_number):
+    '''
+    Gets the feedback loop constants.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        channel: KNA_Channels
+        proportionalTerm: c_short
+        integralTerm: c_short
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     channel = KNA_Channels()
     proportionalTerm = c_short()
     integralTerm = c_short()
 
-    output = NT_GetFeedbackLoopPIconsts(serial_number, channel, proportionalTerm, integralTerm)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetFeedbackLoopPIconsts(serial_number)
+
+    return output
 
 
 NT_GetFeedbackLoopPIconstsBlock = lib.NT_GetFeedbackLoopPIconstsBlock
 NT_GetFeedbackLoopPIconstsBlock.restype = c_short
-NT_GetFeedbackLoopPIconstsBlock.argtypes = [POINTER(c_char), KNA_Channels, KNA_FeedbackLoopConstants]
+NT_GetFeedbackLoopPIconstsBlock.argtypes = [POINTER(c_char)]
 
 
-def get_feedback_loop_p_iconsts_block(serial_number, channel):
-    # Gets the feedback loop constants in a block.
+def get_feedback_loop_p_iconsts_block(serial_number):
+    '''
+    Gets the feedback loop constants in a block.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        channel: KNA_Channels
+        proportionalAndIntegralConstants: KNA_FeedbackLoopConstants
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     channel = KNA_Channels()
     proportionalAndIntegralConstants = KNA_FeedbackLoopConstants()
 
-    output = NT_GetFeedbackLoopPIconstsBlock(serial_number, channel, proportionalAndIntegralConstants)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetFeedbackLoopPIconstsBlock(serial_number)
+
+    return output
 
 
 NT_GetFeedbackMode = lib.NT_GetFeedbackMode
 NT_GetFeedbackMode.restype = KNA_FeedbackModeTypes
-NT_GetFeedbackMode.argtypes = [POINTER(c_char), KNA_Channels]
+NT_GetFeedbackMode.argtypes = [POINTER(c_char)]
 
 
-def get_feedback_mode(serial_number, channel):
-    # Gets the feedback mode.
+def get_feedback_mode(serial_number):
+    '''
+    Gets the feedback mode.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        channel: KNA_Channels
+
+    Returns
+    -------
+        KNA_FeedbackModeTypes
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     channel = KNA_Channels()
 
-    output = NT_GetFeedbackMode(serial_number, channel)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetFeedbackMode(serial_number)
+
+    return output
 
 
 NT_GetFeedbackSource = lib.NT_GetFeedbackSource
@@ -286,13 +439,23 @@ NT_GetFeedbackSource.argtypes = [POINTER(c_char)]
 
 
 def get_feedback_source(serial_number):
-    # Gets the NanoTrak feedback source.
+    '''
+    Gets the NanoTrak feedback source.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        NT_FeedbackSource
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetFeedbackSource(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_GetFirmwareVersion = lib.NT_GetFirmwareVersion
@@ -301,13 +464,23 @@ NT_GetFirmwareVersion.argtypes = [POINTER(c_char)]
 
 
 def get_firmware_version(serial_number):
-    # Gets version number of the device firmware.
+    '''
+    Gets version number of the device firmware.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_ulong
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetFirmwareVersion(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_GetFrontPanelLocked = lib.NT_GetFrontPanelLocked
@@ -316,9 +489,19 @@ NT_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
 
 
 def get_front_panel_locked(serial_number):
-    # Query if the device front panel locked.
+    '''
+    Query if the device front panel locked.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetFrontPanelLocked(serial_number)
 
@@ -331,121 +514,159 @@ NT_GetGain.argtypes = [POINTER(c_char)]
 
 
 def get_gain(serial_number):
-    # Gets the control loop gain.
+    '''
+    Gets the control loop gain.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetGain(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_GetHardwareInfo = lib.NT_GetHardwareInfo
 NT_GetHardwareInfo.restype = c_short
-NT_GetHardwareInfo.argtypes = [
-    POINTER(c_char),
-    POINTER(c_char),
-    c_ulong,
-    c_long,
-    c_long,
-    POINTER(c_char),
-    c_ulong,
-    c_ulong,
-    c_long,
-    c_long]
+NT_GetHardwareInfo.argtypes = [POINTER(c_char)]
 
 
 def get_hardware_info(serial_number):
-    # Gets the hardware information from the device.
+    '''
+    Gets the hardware information from the device.
 
-    serial_number = POINTER(c_char)
-    modelNo = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        modelNo: POINTER(c_char)
+        sizeOfModelNo: c_ulong
+        type: c_long
+        numChannels: c_long
+        notes: POINTER(c_char)
+        sizeOfNotes: c_ulong
+        firmwareVersion: c_ulong
+        hardwareVersion: c_long
+        modificationState: c_long
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
     numChannels = c_long()
-    notes = POINTER(c_char)
+    notes = POINTER(c_char)()
     sizeOfNotes = c_ulong()
     firmwareVersion = c_ulong()
     hardwareVersion = c_long()
     modificationState = c_long()
 
-    output = NT_GetHardwareInfo(
-        serial_number,
-        modelNo,
-        sizeOfModelNo,
-        type,
-        numChannels,
-        notes,
-        sizeOfNotes,
-        firmwareVersion,
-        hardwareVersion,
-        modificationState)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetHardwareInfo(serial_number)
+
+    return output
 
 
 NT_GetHardwareInfoBlock = lib.NT_GetHardwareInfoBlock
 NT_GetHardwareInfoBlock.restype = c_short
-NT_GetHardwareInfoBlock.argtypes = [POINTER(c_char), TLI_HardwareInformation]
+NT_GetHardwareInfoBlock.argtypes = [POINTER(c_char)]
 
 
 def get_hardware_info_block(serial_number):
-    # Gets the hardware information in a block.
+    '''
+    Gets the hardware information in a block.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        hardwareInfo: TLI_HardwareInformation
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     hardwareInfo = TLI_HardwareInformation()
 
-    output = NT_GetHardwareInfoBlock(serial_number, hardwareInfo)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetHardwareInfoBlock(serial_number)
+
+    return output
 
 
 NT_GetIOsettings = lib.NT_GetIOsettings
 NT_GetIOsettings.restype = c_short
-NT_GetIOsettings.argtypes = [
-    POINTER(c_char),
-    KNA_HighVoltageRange,
-    NT_VoltageRange,
-    KNA_HighOutputVoltageRoute,
-    NT_OutputVoltageRoute]
+NT_GetIOsettings.argtypes = [POINTER(c_char)]
 
 
 def get_i_osettings(serial_number):
-    # Gets the input/output options.
+    '''
+    Gets the input/output options.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        highVoltageOutRange: KNA_HighVoltageRange
+        lowVoltageOutRange: NT_VoltageRange
+        highVoltageOutputRoute: KNA_HighOutputVoltageRoute
+        lowVoltageOutputRoute: NT_OutputVoltageRoute
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     highVoltageOutRange = KNA_HighVoltageRange()
     lowVoltageOutRange = NT_VoltageRange()
     highVoltageOutputRoute = KNA_HighOutputVoltageRoute()
     lowVoltageOutputRoute = NT_OutputVoltageRoute()
 
-    output = NT_GetIOsettings(
-        serial_number,
-        highVoltageOutRange,
-        lowVoltageOutRange,
-        highVoltageOutputRoute,
-        lowVoltageOutputRoute)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetIOsettings(serial_number)
+
+    return output
 
 
 NT_GetIOsettingsBlock = lib.NT_GetIOsettingsBlock
 NT_GetIOsettingsBlock.restype = c_short
-NT_GetIOsettingsBlock.argtypes = [POINTER(c_char), BNT_IO_Settings, KNA_IOSettings, NT_IOSettings, c_long]
+NT_GetIOsettingsBlock.argtypes = [POINTER(c_char)]
 
 
-def get_i_osettings_block(serial_number, channel):
-    # Gets the input/output settings in a block.
+def get_i_osettings_block(serial_number):
+    '''
+    Gets the input/output settings in a block.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        IOsettings: BNT_IO_Settings
+        IOsettings: KNA_IOSettings
+        IOsettings: NT_IOSettings
+        channel: c_long
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     IOsettings = BNT_IO_Settings()
     IOsettings = KNA_IOSettings()
     IOsettings = NT_IOSettings()
     channel = c_long()
 
-    output = NT_GetIOsettingsBlock(serial_number, IOsettings, IOsettings, IOsettings, channel)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetIOsettingsBlock(serial_number)
+
+    return output
 
 
 NT_GetLEDBrightness = lib.NT_GetLEDBrightness
@@ -454,46 +675,79 @@ NT_GetLEDBrightness.argtypes = [POINTER(c_char)]
 
 
 def get_l_e_d_brightness(serial_number):
-    # Gets the LED brightness.
+    '''
+    Gets the LED brightness.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetLEDBrightness(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_GetMMIParams = lib.NT_GetMMIParams
 NT_GetMMIParams.restype = c_short
-NT_GetMMIParams.argtypes = [POINTER(c_char), KNA_WheelAdjustRate, c_int16]
+NT_GetMMIParams.argtypes = [POINTER(c_char)]
 
 
 def get_m_m_i_params(serial_number):
-    # Get the MMI Parameters for the KCube Display Interface.
+    '''
+    Get the MMI Parameters for the KCube Display Interface.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        wheelAdjustRate: KNA_WheelAdjustRate
+        displayIntensity: c_int16
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     wheelAdjustRate = KNA_WheelAdjustRate()
     displayIntensity = c_int16()
 
-    output = NT_GetMMIParams(serial_number, wheelAdjustRate, displayIntensity)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetMMIParams(serial_number)
+
+    return output
 
 
 NT_GetMMIParamsBlock = lib.NT_GetMMIParamsBlock
 NT_GetMMIParamsBlock.restype = c_short
-NT_GetMMIParamsBlock.argtypes = [POINTER(c_char), KNA_MMIParams]
+NT_GetMMIParamsBlock.argtypes = [POINTER(c_char)]
 
 
 def get_m_m_i_params_block(serial_number):
-    # Gets the MMI parameters for the device.
+    '''
+    Gets the MMI parameters for the device.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        mmiParams: KNA_MMIParams
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     mmiParams = KNA_MMIParams()
 
-    output = NT_GetMMIParamsBlock(serial_number, mmiParams)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetMMIParamsBlock(serial_number)
+
+    return output
 
 
 NT_GetMode = lib.NT_GetMode
@@ -502,81 +756,139 @@ NT_GetMode.argtypes = [POINTER(c_char)]
 
 
 def get_mode(serial_number):
-    # Gets the nanoTrak operating mode.
+    '''
+    Gets the nanoTrak operating mode.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        NT_Mode
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetMode(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_GetNextMessage = lib.NT_GetNextMessage
 NT_GetNextMessage.restype = c_bool
-NT_GetNextMessage.argtypes = [POINTER(c_char), c_long, c_long, c_ulong]
+NT_GetNextMessage.argtypes = [POINTER(c_char)]
 
 
 def get_next_message(serial_number):
-    # Get the next MessageQueue item.
+    '''
+    Get the next MessageQueue item.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        messageType: c_long
+        messageID: c_long
+        messageData: c_ulong
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
 
-    output = NT_GetNextMessage(serial_number, messageType, messageID, messageData)
+    output = NT_GetNextMessage(serial_number)
 
     return output
 
 
 NT_GetPhaseCompensationParams = lib.NT_GetPhaseCompensationParams
 NT_GetPhaseCompensationParams.restype = c_short
-NT_GetPhaseCompensationParams.argtypes = [POINTER(c_char), NT_HVComponent]
+NT_GetPhaseCompensationParams.argtypes = [POINTER(c_char)]
 
 
 def get_phase_compensation_params(serial_number):
-    # Gets the phase compensation parameters.
+    '''
+    Gets the phase compensation parameters.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        params: NT_HVComponent
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     params = NT_HVComponent()
 
-    output = NT_GetPhaseCompensationParams(serial_number, params)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetPhaseCompensationParams(serial_number)
+
+    return output
 
 
 NT_GetRangeMode = lib.NT_GetRangeMode
 NT_GetRangeMode.restype = c_short
-NT_GetRangeMode.argtypes = [POINTER(c_char), NT_TIARangeMode, NT_OddOrEven]
+NT_GetRangeMode.argtypes = [POINTER(c_char)]
 
 
 def get_range_mode(serial_number):
-    # Get the TIA Range Mode and OddEven mode.
+    '''
+    Get the TIA Range Mode and OddEven mode.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        mode: NT_TIARangeMode
+        oddOrEven: NT_OddOrEven
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     mode = NT_TIARangeMode()
     oddOrEven = NT_OddOrEven()
 
-    output = NT_GetRangeMode(serial_number, mode, oddOrEven)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetRangeMode(serial_number)
+
+    return output
 
 
 NT_GetReading = lib.NT_GetReading
 NT_GetReading.restype = c_short
-NT_GetReading.argtypes = [POINTER(c_char), NT_TIAReading, KNA_TIAReading]
+NT_GetReading.argtypes = [POINTER(c_char)]
 
 
 def get_reading(serial_number):
-    # Gets a reading.
+    '''
+    Gets a reading.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        reading: NT_TIAReading
+        reading: KNA_TIAReading
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     reading = NT_TIAReading()
     reading = KNA_TIAReading()
 
-    output = NT_GetReading(serial_number, reading, reading)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetReading(serial_number)
+
+    return output
 
 
 NT_GetSignalState = lib.NT_GetSignalState
@@ -585,13 +897,23 @@ NT_GetSignalState.argtypes = [POINTER(c_char)]
 
 
 def get_signal_state(serial_number):
-    # Gets the NanoTrak signal state.
+    '''
+    Gets the NanoTrak signal state.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        NT_SignalState
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetSignalState(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_GetSoftwareVersion = lib.NT_GetSoftwareVersion
@@ -600,13 +922,23 @@ NT_GetSoftwareVersion.argtypes = [POINTER(c_char)]
 
 
 def get_software_version(serial_number):
-    # Gets version number of the device software.
+    '''
+    Gets version number of the device software.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_ulong
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetSoftwareVersion(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_GetStatusBits = lib.NT_GetStatusBits
@@ -615,13 +947,23 @@ NT_GetStatusBits.argtypes = [POINTER(c_char)]
 
 
 def get_status_bits(serial_number):
-    # Get the current status bits.
+    '''
+    Get the current status bits.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_ulong
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetStatusBits(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_GetTIARange = lib.NT_GetTIARange
@@ -630,30 +972,52 @@ NT_GetTIARange.argtypes = [POINTER(c_char)]
 
 
 def get_t_i_a_range(serial_number):
-    # Gets the TIA range.
+    '''
+    Gets the TIA range.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        NT_TIARange
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetTIARange(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_GetTIArangeParams = lib.NT_GetTIArangeParams
 NT_GetTIArangeParams.restype = c_short
-NT_GetTIArangeParams.argtypes = [POINTER(c_char), NT_TIARangeParameters, KNA_TIARangeParameters]
+NT_GetTIArangeParams.argtypes = [POINTER(c_char)]
 
 
 def get_t_i_arange_params(serial_number):
-    # Gets the TIA range parameters.
+    '''
+    Gets the TIA range parameters.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        params: NT_TIARangeParameters
+        params: KNA_TIARangeParameters
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     params = NT_TIARangeParameters()
     params = KNA_TIARangeParameters()
 
-    output = NT_GetTIArangeParams(serial_number, params, params)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetTIArangeParams(serial_number)
+
+    return output
 
 
 NT_GetTrackingThresholdSignal = lib.NT_GetTrackingThresholdSignal
@@ -662,71 +1026,114 @@ NT_GetTrackingThresholdSignal.argtypes = [POINTER(c_char)]
 
 
 def get_tracking_threshold_signal(serial_number):
-    # Gets the tracking threshold signal.
+    '''
+    Gets the tracking threshold signal.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_float
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetTrackingThresholdSignal(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_GetTriggerConfigParams = lib.NT_GetTriggerConfigParams
 NT_GetTriggerConfigParams.restype = c_short
-NT_GetTriggerConfigParams.argtypes = [
-    POINTER(c_char),
-    KNA_TriggerPortMode,
-    KNA_TriggerPortPolarity,
-    KNA_TriggerPortMode,
-    KNA_TriggerPortPolarity]
+NT_GetTriggerConfigParams.argtypes = [POINTER(c_char)]
 
 
 def get_trigger_config_params(serial_number):
-    # Get the Trigger Configuration Parameters.
+    '''
+    Get the Trigger Configuration Parameters.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        trigger1Mode: KNA_TriggerPortMode
+        trigger1Polarity: KNA_TriggerPortPolarity
+        trigger2Mode: KNA_TriggerPortMode
+        trigger2Polarity: KNA_TriggerPortPolarity
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     trigger1Mode = KNA_TriggerPortMode()
     trigger1Polarity = KNA_TriggerPortPolarity()
     trigger2Mode = KNA_TriggerPortMode()
     trigger2Polarity = KNA_TriggerPortPolarity()
 
-    output = NT_GetTriggerConfigParams(serial_number, trigger1Mode, trigger1Polarity, trigger2Mode, trigger2Polarity)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetTriggerConfigParams(serial_number)
+
+    return output
 
 
 NT_GetTriggerConfigParamsBlock = lib.NT_GetTriggerConfigParamsBlock
 NT_GetTriggerConfigParamsBlock.restype = c_short
-NT_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KNA_TriggerConfig]
+NT_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
 
 
 def get_trigger_config_params_block(serial_number):
-    # Gets the trigger configuration parameters block.
+    '''
+    Gets the trigger configuration parameters block.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        triggerConfigParams: KNA_TriggerConfig
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     triggerConfigParams = KNA_TriggerConfig()
 
-    output = NT_GetTriggerConfigParamsBlock(serial_number, triggerConfigParams)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetTriggerConfigParamsBlock(serial_number)
+
+    return output
 
 
 NT_GetXYScanLine = lib.NT_GetXYScanLine
 NT_GetXYScanLine.restype = c_short
-NT_GetXYScanLine.argtypes = [POINTER(c_char), c_int, c_byte, c_int]
+NT_GetXYScanLine.argtypes = [POINTER(c_char)]
 
 
 def get_x_y_scan_line(serial_number):
-    # Gets XY scan line.
+    '''
+    Gets XY scan line.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        lineNo: c_int
+        line: c_byte
+        bufferSize: c_int
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     lineNo = c_int()
     line = c_byte()
     bufferSize = c_int()
 
-    output = NT_GetXYScanLine(serial_number, lineNo, line, bufferSize)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_GetXYScanLine(serial_number)
+
+    return output
 
 
 NT_GetXYScanRange = lib.NT_GetXYScanRange
@@ -735,13 +1142,23 @@ NT_GetXYScanRange.argtypes = [POINTER(c_char)]
 
 
 def get_x_y_scan_range(serial_number):
-    # Gets XY scan range.
+    '''
+    Gets XY scan range.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        KNA_TIARange
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_GetXYScanRange(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_HasLastMsgTimerOverrun = lib.NT_HasLastMsgTimerOverrun
@@ -750,11 +1167,19 @@ NT_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
 
 
 def has_last_msg_timer_overrun(serial_number):
-    # Queries if the time since the last message has exceeded the
-    # lastMsgTimeout set by NT_EnableLastMsgTimer(char const * serialNo, bool
-    # enable, __int32 lastMsgTimeout ).
+    '''
+    Queries if the time since the last message has exceeded the lastMsgTimeout set by NT_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_HasLastMsgTimerOverrun(serial_number)
 
@@ -767,13 +1192,23 @@ NT_HomeCircle.argtypes = [POINTER(c_char)]
 
 
 def home_circle(serial_number):
-    # Move the scan circle to the home position.
+    '''
+    Move the scan circle to the home position.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_HomeCircle(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_Identify = lib.NT_Identify
@@ -782,13 +1217,23 @@ NT_Identify.argtypes = [POINTER(c_char)]
 
 
 def identify(serial_number):
-    # Sends a command to the device to make it identify iteself.
+    '''
+    Sends a command to the device to make it identify iteself.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_void_p
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_Identify(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_IsXYScanAvailable = lib.NT_IsXYScanAvailable
@@ -797,9 +1242,19 @@ NT_IsXYScanAvailable.argtypes = [POINTER(c_char)]
 
 
 def is_x_y_scan_available(serial_number):
-    # Queries if the XY scan is available.
+    '''
+    Queries if the XY scan is available.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_IsXYScanAvailable(serial_number)
 
@@ -808,16 +1263,27 @@ def is_x_y_scan_available(serial_number):
 
 NT_IsXYScanLineAvailable = lib.NT_IsXYScanLineAvailable
 NT_IsXYScanLineAvailable.restype = c_bool
-NT_IsXYScanLineAvailable.argtypes = [POINTER(c_char), c_int]
+NT_IsXYScanLineAvailable.argtypes = [POINTER(c_char)]
 
 
 def is_x_y_scan_line_available(serial_number):
-    # Queries if an XY scan line is available.
+    '''
+    Queries if an XY scan line is available.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        lineNo: c_int
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     lineNo = c_int()
 
-    output = NT_IsXYScanLineAvailable(serial_number, lineNo)
+    output = NT_IsXYScanLineAvailable(serial_number)
 
     return output
 
@@ -828,9 +1294,19 @@ NT_IsXYScanning.argtypes = [POINTER(c_char)]
 
 
 def is_x_y_scanning(serial_number):
-    # Query if the device is XY scanning.
+    '''
+    Query if the device is XY scanning.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_IsXYScanning(serial_number)
 
@@ -839,16 +1315,27 @@ def is_x_y_scanning(serial_number):
 
 NT_LoadNamedSettings = lib.NT_LoadNamedSettings
 NT_LoadNamedSettings.restype = c_bool
-NT_LoadNamedSettings.argtypes = [POINTER(c_char), POINTER(c_char)]
+NT_LoadNamedSettings.argtypes = [POINTER(c_char)]
 
 
 def load_named_settings(serial_number):
-    # Update device with named settings.
+    '''
+    Update device with named settings.
 
-    serial_number = POINTER(c_char)
-    settingsName = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        settingsName: POINTER(c_char)
 
-    output = NT_LoadNamedSettings(serial_number, settingsName)
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    settingsName = POINTER(c_char)()
+
+    output = NT_LoadNamedSettings(serial_number)
 
     return output
 
@@ -859,9 +1346,19 @@ NT_LoadSettings.argtypes = [POINTER(c_char)]
 
 
 def load_settings(serial_number):
-    # Update device with stored settings.
+    '''
+    Update device with stored settings.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_LoadSettings(serial_number)
 
@@ -874,13 +1371,23 @@ NT_MessageQueueSize.argtypes = [POINTER(c_char)]
 
 
 def message_queue_size(serial_number):
-    # Gets the MessageQueue size.
+    '''
+    Gets the MessageQueue size.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_int
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_MessageQueueSize(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_Open = lib.NT_Open
@@ -889,13 +1396,23 @@ NT_Open.argtypes = [POINTER(c_char)]
 
 
 def open_device(serial_number):
-    # Open the device for communications.
+    '''
+    Open the device for communications.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_Open(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_PersistSettings = lib.NT_PersistSettings
@@ -904,9 +1421,19 @@ NT_PersistSettings.argtypes = [POINTER(c_char)]
 
 
 def persist_settings(serial_number):
-    # persist the devices current settings.
+    '''
+    persist the devices current settings.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_PersistSettings(serial_number)
 
@@ -919,29 +1446,49 @@ NT_PollingDuration.argtypes = [POINTER(c_char)]
 
 
 def polling_duration(serial_number):
-    # Gets the polling loop duration.
+    '''
+    Gets the polling loop duration.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_long
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_PollingDuration(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RegisterMessageCallback = lib.NT_RegisterMessageCallback
 NT_RegisterMessageCallback.restype = c_void_p
-NT_RegisterMessageCallback.argtypes = [POINTER(c_char), c_void_p]
+NT_RegisterMessageCallback.argtypes = [POINTER(c_char)]
 
 
 def register_message_callback(serial_number):
-    # Registers a callback on the message queue.
+    '''
+    Registers a callback on the message queue.
 
-    serial_number = POINTER(c_char)
-    void = c_void_p()
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        None
 
-    output = NT_RegisterMessageCallback(serial_number, void)
-    if output != 0:
-        raise KinesisException(output)
+    Returns
+    -------
+        c_void_p
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+
+    output = NT_RegisterMessageCallback(serial_number)
+
+    return output
 
 
 NT_RequestCircleDiameterLUT = lib.NT_RequestCircleDiameterLUT
@@ -950,13 +1497,23 @@ NT_RequestCircleDiameterLUT.argtypes = [POINTER(c_char)]
 
 
 def request_circle_diameter_l_u_t(serial_number):
-    # Requests the scan circle diameter Lookup Table (LUT).
+    '''
+    Requests the scan circle diameter Lookup Table (LUT).
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestCircleDiameterLUT(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestCircleHomePosition = lib.NT_RequestCircleHomePosition
@@ -965,13 +1522,23 @@ NT_RequestCircleHomePosition.argtypes = [POINTER(c_char)]
 
 
 def request_circle_home_position(serial_number):
-    # Requests the home position of the scan circle.
+    '''
+    Requests the home position of the scan circle.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestCircleHomePosition(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestCircleParams = lib.NT_RequestCircleParams
@@ -980,13 +1547,23 @@ NT_RequestCircleParams.argtypes = [POINTER(c_char)]
 
 
 def request_circle_params(serial_number):
-    # Requests the scanning circle parameters.
+    '''
+    Requests the scanning circle parameters.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestCircleParams(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestCirclePosition = lib.NT_RequestCirclePosition
@@ -995,43 +1572,75 @@ NT_RequestCirclePosition.argtypes = [POINTER(c_char)]
 
 
 def request_circle_position(serial_number):
-    # Requests the current scan circle centre position.
+    '''
+    Requests the current scan circle centre position.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestCirclePosition(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestFeedbackLoopPIconsts = lib.NT_RequestFeedbackLoopPIconsts
 NT_RequestFeedbackLoopPIconsts.restype = c_bool
-NT_RequestFeedbackLoopPIconsts.argtypes = [POINTER(c_char), KNA_Channels]
+NT_RequestFeedbackLoopPIconsts.argtypes = [POINTER(c_char)]
 
 
-def request_feedback_loop_p_iconsts(serial_number, channel):
-    # Requests that the feedback loop constants be read from the device.
+def request_feedback_loop_p_iconsts(serial_number):
+    '''
+    Requests that the feedback loop constants be read from the device.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        channel: KNA_Channels
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     channel = KNA_Channels()
 
-    output = NT_RequestFeedbackLoopPIconsts(serial_number, channel)
+    output = NT_RequestFeedbackLoopPIconsts(serial_number)
 
     return output
 
 
 NT_RequestFeedbackMode = lib.NT_RequestFeedbackMode
 NT_RequestFeedbackMode.restype = c_bool
-NT_RequestFeedbackMode.argtypes = [POINTER(c_char), KNA_Channels]
+NT_RequestFeedbackMode.argtypes = [POINTER(c_char)]
 
 
-def request_feedback_mode(serial_number, channel):
-    # Requests the feedback mode from the device.
+def request_feedback_mode(serial_number):
+    '''
+    Requests the feedback mode from the device.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        channel: KNA_Channels
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     channel = KNA_Channels()
 
-    output = NT_RequestFeedbackMode(serial_number, channel)
+    output = NT_RequestFeedbackMode(serial_number)
 
     return output
 
@@ -1042,13 +1651,23 @@ NT_RequestFeedbackSource.argtypes = [POINTER(c_char)]
 
 
 def request_feedback_source(serial_number):
-    # Requests the NanoTrak Feedback Source.
+    '''
+    Requests the NanoTrak Feedback Source.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestFeedbackSource(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestFrontPanelLocked = lib.NT_RequestFrontPanelLocked
@@ -1057,13 +1676,23 @@ NT_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
 
 
 def request_front_panel_locked(serial_number):
-    # Ask the device if its front panel is locked.
+    '''
+    Ask the device if its front panel is locked.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestFrontPanelLocked(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestGain = lib.NT_RequestGain
@@ -1072,13 +1701,23 @@ NT_RequestGain.argtypes = [POINTER(c_char)]
 
 
 def request_gain(serial_number):
-    # Requests the control loop gain.
+    '''
+    Requests the control loop gain.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestGain(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestIOsettings = lib.NT_RequestIOsettings
@@ -1087,13 +1726,23 @@ NT_RequestIOsettings.argtypes = [POINTER(c_char)]
 
 
 def request_i_osettings(serial_number):
-    # Requests the input/output options.
+    '''
+    Requests the input/output options.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestIOsettings(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestMMIParams = lib.NT_RequestMMIParams
@@ -1102,9 +1751,19 @@ NT_RequestMMIParams.argtypes = [POINTER(c_char)]
 
 
 def request_m_m_i_params(serial_number):
-    # Request that the MMI Parameters for the KCube Display Interface be read from the device.
+    '''
+    Request that the MMI Parameters for the KCube Display Interface be read from the device.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestMMIParams(serial_number)
 
@@ -1117,13 +1776,23 @@ NT_RequestMode.argtypes = [POINTER(c_char)]
 
 
 def request_mode(serial_number):
-    # Requests the NanoTrak mode.
+    '''
+    Requests the NanoTrak mode.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestMode(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestPhaseCompensationParams = lib.NT_RequestPhaseCompensationParams
@@ -1132,13 +1801,23 @@ NT_RequestPhaseCompensationParams.argtypes = [POINTER(c_char)]
 
 
 def request_phase_compensation_params(serial_number):
-    # Requests the phase compensation parameters.
+    '''
+    Requests the phase compensation parameters.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestPhaseCompensationParams(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestReading = lib.NT_RequestReading
@@ -1147,13 +1826,23 @@ NT_RequestReading.argtypes = [POINTER(c_char)]
 
 
 def request_reading(serial_number):
-    # Requests a TIA reading.
+    '''
+    Requests a TIA reading.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestReading(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestSettings = lib.NT_RequestSettings
@@ -1162,13 +1851,23 @@ NT_RequestSettings.argtypes = [POINTER(c_char)]
 
 
 def request_settings(serial_number):
-    # Requests that all settings are download from device.
+    '''
+    Requests that all settings are download from device.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestSettings(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestSignalState = lib.NT_RequestSignalState
@@ -1177,13 +1876,23 @@ NT_RequestSignalState.argtypes = [POINTER(c_char)]
 
 
 def request_signal_state(serial_number):
-    # Requests the NanoTrak signal state.
+    '''
+    Requests the NanoTrak signal state.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestSignalState(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestStatus = lib.NT_RequestStatus
@@ -1192,13 +1901,23 @@ NT_RequestStatus.argtypes = [POINTER(c_char)]
 
 
 def request_status(serial_number):
-    # Requests the status bits and reading.
+    '''
+    Requests the status bits and reading.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestStatus(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestStatusBits = lib.NT_RequestStatusBits
@@ -1207,13 +1926,23 @@ NT_RequestStatusBits.argtypes = [POINTER(c_char)]
 
 
 def request_status_bits(serial_number):
-    # Request the status bits which identify the current device state.
+    '''
+    Request the status bits which identify the current device state.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestStatusBits(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestTIArangeParams = lib.NT_RequestTIArangeParams
@@ -1222,13 +1951,23 @@ NT_RequestTIArangeParams.argtypes = [POINTER(c_char)]
 
 
 def request_t_i_arange_params(serial_number):
-    # Requests the TIA range parameters.
+    '''
+    Requests the TIA range parameters.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestTIArangeParams(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestTrackingThresholdSignal = lib.NT_RequestTrackingThresholdSignal
@@ -1237,13 +1976,23 @@ NT_RequestTrackingThresholdSignal.argtypes = [POINTER(c_char)]
 
 
 def request_tracking_threshold_signal(serial_number):
-    # Requests the NanoTrak tracking threshold signal.
+    '''
+    Requests the NanoTrak tracking threshold signal.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestTrackingThresholdSignal(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_RequestTriggerConfigParams = lib.NT_RequestTriggerConfigParams
@@ -1252,9 +2001,19 @@ NT_RequestTriggerConfigParams.argtypes = [POINTER(c_char)]
 
 
 def request_trigger_config_params(serial_number):
-    # Requests that the trigger config parameters are read from the device.
+    '''
+    Requests that the trigger config parameters are read from the device.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestTriggerConfigParams(serial_number)
 
@@ -1267,428 +2026,705 @@ NT_RequestXYScan.argtypes = [POINTER(c_char)]
 
 
 def request_x_y_scan(serial_number):
-    # Request an XY scan.
+    '''
+    Request an XY scan.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_RequestXYScan(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_SetCircleDiameter = lib.NT_SetCircleDiameter
 NT_SetCircleDiameter.restype = c_short
-NT_SetCircleDiameter.argtypes = [POINTER(c_char), c_long]
+NT_SetCircleDiameter.argtypes = [POINTER(c_char)]
 
 
 def set_circle_diameter(serial_number):
-    # Sets the scan circle diameter.
+    '''
+    Sets the scan circle diameter.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        diameter: c_long
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     diameter = c_long()
 
-    output = NT_SetCircleDiameter(serial_number, diameter)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetCircleDiameter(serial_number)
+
+    return output
 
 
 NT_SetCircleDiameterLUT = lib.NT_SetCircleDiameterLUT
 NT_SetCircleDiameterLUT.restype = c_short
-NT_SetCircleDiameterLUT.argtypes = [POINTER(c_char), NT_CircleDiameterLUT]
+NT_SetCircleDiameterLUT.argtypes = [POINTER(c_char)]
 
 
 def set_circle_diameter_l_u_t(serial_number):
-    # Sets the scan circle diameter Lookup Table (LUT).
+    '''
+    Sets the scan circle diameter Lookup Table (LUT).
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        LUT: NT_CircleDiameterLUT
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     LUT = NT_CircleDiameterLUT()
 
-    output = NT_SetCircleDiameterLUT(serial_number, LUT)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetCircleDiameterLUT(serial_number)
+
+    return output
 
 
 NT_SetCircleHomePosition = lib.NT_SetCircleHomePosition
 NT_SetCircleHomePosition.restype = c_short
-NT_SetCircleHomePosition.argtypes = [POINTER(c_char), NT_HVComponent]
+NT_SetCircleHomePosition.argtypes = [POINTER(c_char)]
 
 
 def set_circle_home_position(serial_number):
-    # Sets the home position of the scan circle.
+    '''
+    Sets the home position of the scan circle.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        position: NT_HVComponent
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     position = NT_HVComponent()
 
-    output = NT_SetCircleHomePosition(serial_number, position)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetCircleHomePosition(serial_number)
+
+    return output
 
 
 NT_SetCircleParams = lib.NT_SetCircleParams
 NT_SetCircleParams.restype = c_short
-NT_SetCircleParams.argtypes = [POINTER(c_char), NT_CircleParameters]
+NT_SetCircleParams.argtypes = [POINTER(c_char)]
 
 
 def set_circle_params(serial_number):
-    # Sets the scanning circle parameters.
+    '''
+    Sets the scanning circle parameters.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        params: NT_CircleParameters
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     params = NT_CircleParameters()
 
-    output = NT_SetCircleParams(serial_number, params)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetCircleParams(serial_number)
+
+    return output
 
 
 NT_SetFeedbackLoopPIconsts = lib.NT_SetFeedbackLoopPIconsts
 NT_SetFeedbackLoopPIconsts.restype = c_short
-NT_SetFeedbackLoopPIconsts.argtypes = [POINTER(c_char), KNA_Channels, c_short, c_short]
+NT_SetFeedbackLoopPIconsts.argtypes = [POINTER(c_char)]
 
 
-def set_feedback_loop_p_iconsts(serial_number, channel):
-    # Sets the feedback loop constants.
+def set_feedback_loop_p_iconsts(serial_number):
+    '''
+    Sets the feedback loop constants.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        channel: KNA_Channels
+        proportionalTerm: c_short
+        integralTerm: c_short
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     channel = KNA_Channels()
     proportionalTerm = c_short()
     integralTerm = c_short()
 
-    output = NT_SetFeedbackLoopPIconsts(serial_number, channel, proportionalTerm, integralTerm)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetFeedbackLoopPIconsts(serial_number)
+
+    return output
 
 
 NT_SetFeedbackLoopPIconstsBlock = lib.NT_SetFeedbackLoopPIconstsBlock
 NT_SetFeedbackLoopPIconstsBlock.restype = c_short
-NT_SetFeedbackLoopPIconstsBlock.argtypes = [POINTER(c_char), KNA_Channels, KNA_FeedbackLoopConstants]
+NT_SetFeedbackLoopPIconstsBlock.argtypes = [POINTER(c_char)]
 
 
-def set_feedback_loop_p_iconsts_block(serial_number, channel):
-    # Sets the feedback loop constants in a block.
+def set_feedback_loop_p_iconsts_block(serial_number):
+    '''
+    Sets the feedback loop constants in a block.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        channel: KNA_Channels
+        proportionalAndIntegralConstants: KNA_FeedbackLoopConstants
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     channel = KNA_Channels()
     proportionalAndIntegralConstants = KNA_FeedbackLoopConstants()
 
-    output = NT_SetFeedbackLoopPIconstsBlock(serial_number, channel, proportionalAndIntegralConstants)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetFeedbackLoopPIconstsBlock(serial_number)
+
+    return output
 
 
 NT_SetFeedbackMode = lib.NT_SetFeedbackMode
 NT_SetFeedbackMode.restype = c_short
-NT_SetFeedbackMode.argtypes = [POINTER(c_char), KNA_Channels, KNA_FeedbackModeTypes]
+NT_SetFeedbackMode.argtypes = [POINTER(c_char)]
 
 
-def set_feedback_mode(serial_number, channel):
-    # Sets the feedback mode.
+def set_feedback_mode(serial_number):
+    '''
+    Sets the feedback mode.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        channel: KNA_Channels
+        mode: KNA_FeedbackModeTypes
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     channel = KNA_Channels()
     mode = KNA_FeedbackModeTypes()
 
-    output = NT_SetFeedbackMode(serial_number, channel, mode)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetFeedbackMode(serial_number)
+
+    return output
 
 
 NT_SetFeedbackSource = lib.NT_SetFeedbackSource
 NT_SetFeedbackSource.restype = c_short
-NT_SetFeedbackSource.argtypes = [POINTER(c_char), NT_FeedbackSource, KNA_FeedbackSource]
+NT_SetFeedbackSource.argtypes = [POINTER(c_char)]
 
 
 def set_feedback_source(serial_number):
-    # Sets the NanoTrak feedback source.
+    '''
+    Sets the NanoTrak feedback source.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        input: NT_FeedbackSource
+        input: KNA_FeedbackSource
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     input = NT_FeedbackSource()
     input = KNA_FeedbackSource()
 
-    output = NT_SetFeedbackSource(serial_number, input, input)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetFeedbackSource(serial_number)
+
+    return output
 
 
 NT_SetFrontPanelLock = lib.NT_SetFrontPanelLock
 NT_SetFrontPanelLock.restype = c_short
-NT_SetFrontPanelLock.argtypes = [POINTER(c_char), c_bool]
+NT_SetFrontPanelLock.argtypes = [POINTER(c_char)]
 
 
 def set_front_panel_lock(serial_number):
-    # Sets the device front panel lock state.
+    '''
+    Sets the device front panel lock state.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        locked: c_bool
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     locked = c_bool()
 
-    output = NT_SetFrontPanelLock(serial_number, locked)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetFrontPanelLock(serial_number)
+
+    return output
 
 
 NT_SetGain = lib.NT_SetGain
 NT_SetGain.restype = c_short
-NT_SetGain.argtypes = [POINTER(c_char), c_short]
+NT_SetGain.argtypes = [POINTER(c_char)]
 
 
 def set_gain(serial_number):
-    # Sets the control loop gain.
+    '''
+    Sets the control loop gain.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        gain: c_short
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     gain = c_short()
 
-    output = NT_SetGain(serial_number, gain)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetGain(serial_number)
+
+    return output
 
 
 NT_SetIOsettings = lib.NT_SetIOsettings
 NT_SetIOsettings.restype = c_short
-NT_SetIOsettings.argtypes = [
-    POINTER(c_char),
-    KNA_HighVoltageRange,
-    NT_VoltageRange,
-    KNA_HighOutputVoltageRoute,
-    NT_OutputVoltageRoute]
+NT_SetIOsettings.argtypes = [POINTER(c_char)]
 
 
 def set_i_osettings(serial_number):
-    # Sets the input/output options.
+    '''
+    Sets the input/output options.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        highVoltageOutRange: KNA_HighVoltageRange
+        lowVoltageOutRange: NT_VoltageRange
+        highVoltageOutputRoute: KNA_HighOutputVoltageRoute
+        lowVoltageOutputRoute: NT_OutputVoltageRoute
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     highVoltageOutRange = KNA_HighVoltageRange()
     lowVoltageOutRange = NT_VoltageRange()
     highVoltageOutputRoute = KNA_HighOutputVoltageRoute()
     lowVoltageOutputRoute = NT_OutputVoltageRoute()
 
-    output = NT_SetIOsettings(
-        serial_number,
-        highVoltageOutRange,
-        lowVoltageOutRange,
-        highVoltageOutputRoute,
-        lowVoltageOutputRoute)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetIOsettings(serial_number)
+
+    return output
 
 
 NT_SetIOsettingsBlock = lib.NT_SetIOsettingsBlock
 NT_SetIOsettingsBlock.restype = c_short
-NT_SetIOsettingsBlock.argtypes = [POINTER(c_char), BNT_IO_Settings, KNA_IOSettings, NT_IOSettings, c_long]
+NT_SetIOsettingsBlock.argtypes = [POINTER(c_char)]
 
 
-def set_i_osettings_block(serial_number, channel):
-    # Sets the input/output options in a block.
+def set_i_osettings_block(serial_number):
+    '''
+    Sets the input/output options in a block.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        IOsettings: BNT_IO_Settings
+        IOsettings: KNA_IOSettings
+        IOsettings: NT_IOSettings
+        channel: c_long
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     IOsettings = BNT_IO_Settings()
     IOsettings = KNA_IOSettings()
     IOsettings = NT_IOSettings()
     channel = c_long()
 
-    output = NT_SetIOsettingsBlock(serial_number, IOsettings, IOsettings, IOsettings, channel)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetIOsettingsBlock(serial_number)
+
+    return output
 
 
 NT_SetLEDBrightness = lib.NT_SetLEDBrightness
 NT_SetLEDBrightness.restype = c_short
-NT_SetLEDBrightness.argtypes = [POINTER(c_char), c_short]
+NT_SetLEDBrightness.argtypes = [POINTER(c_char)]
 
 
 def set_l_e_d_brightness(serial_number):
-    # Sets the LED brightness.
+    '''
+    Sets the LED brightness.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        brightness: c_short
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     brightness = c_short()
 
-    output = NT_SetLEDBrightness(serial_number, brightness)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetLEDBrightness(serial_number)
+
+    return output
 
 
 NT_SetMMIParams = lib.NT_SetMMIParams
 NT_SetMMIParams.restype = c_short
-NT_SetMMIParams.argtypes = [POINTER(c_char), KNA_WheelAdjustRate, c_int16]
+NT_SetMMIParams.argtypes = [POINTER(c_char)]
 
 
 def set_m_m_i_params(serial_number):
-    # Set the MMI Parameters for the KCube Display Interface.
+    '''
+    Set the MMI Parameters for the KCube Display Interface.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        wheelAdjustRate: KNA_WheelAdjustRate
+        displayIntensity: c_int16
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     wheelAdjustRate = KNA_WheelAdjustRate()
     displayIntensity = c_int16()
 
-    output = NT_SetMMIParams(serial_number, wheelAdjustRate, displayIntensity)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetMMIParams(serial_number)
+
+    return output
 
 
 NT_SetMMIParamsBlock = lib.NT_SetMMIParamsBlock
 NT_SetMMIParamsBlock.restype = c_short
-NT_SetMMIParamsBlock.argtypes = [POINTER(c_char), KNA_MMIParams]
+NT_SetMMIParamsBlock.argtypes = [POINTER(c_char)]
 
 
 def set_m_m_i_params_block(serial_number):
-    # Sets the MMI parameters for the device.
+    '''
+    Sets the MMI parameters for the device.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        mmiParams: KNA_MMIParams
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     mmiParams = KNA_MMIParams()
 
-    output = NT_SetMMIParamsBlock(serial_number, mmiParams)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetMMIParamsBlock(serial_number)
+
+    return output
 
 
 NT_SetMode = lib.NT_SetMode
 NT_SetMode.restype = c_short
-NT_SetMode.argtypes = [POINTER(c_char), NT_Mode]
+NT_SetMode.argtypes = [POINTER(c_char)]
 
 
 def set_mode(serial_number):
-    # Setsthe nanoTrak operating mode.
+    '''
+    Setsthe nanoTrak operating mode.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        mode: NT_Mode
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     mode = NT_Mode()
 
-    output = NT_SetMode(serial_number, mode)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetMode(serial_number)
+
+    return output
 
 
 NT_SetPhaseCompensationParams = lib.NT_SetPhaseCompensationParams
 NT_SetPhaseCompensationParams.restype = c_short
-NT_SetPhaseCompensationParams.argtypes = [POINTER(c_char), NT_HVComponent]
+NT_SetPhaseCompensationParams.argtypes = [POINTER(c_char)]
 
 
 def set_phase_compensation_params(serial_number):
-    # Sets the phase compensation parameters.
+    '''
+    Sets the phase compensation parameters.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        params: NT_HVComponent
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     params = NT_HVComponent()
 
-    output = NT_SetPhaseCompensationParams(serial_number, params)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetPhaseCompensationParams(serial_number)
+
+    return output
 
 
 NT_SetRangeMode = lib.NT_SetRangeMode
 NT_SetRangeMode.restype = c_short
-NT_SetRangeMode.argtypes = [POINTER(c_char), NT_TIARangeMode, NT_OddOrEven]
+NT_SetRangeMode.argtypes = [POINTER(c_char)]
 
 
 def set_range_mode(serial_number):
-    # Get the TIA Range Mode and OddEven mode.
+    '''
+    Get the TIA Range Mode and OddEven mode.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        mode: NT_TIARangeMode
+        oddOrEven: NT_OddOrEven
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     mode = NT_TIARangeMode()
     oddOrEven = NT_OddOrEven()
 
-    output = NT_SetRangeMode(serial_number, mode, oddOrEven)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetRangeMode(serial_number)
+
+    return output
 
 
 NT_SetTIARange = lib.NT_SetTIARange
 NT_SetTIARange.restype = c_short
-NT_SetTIARange.argtypes = [POINTER(c_char), NT_TIARange, KNA_TIARange]
+NT_SetTIARange.argtypes = [POINTER(c_char)]
 
 
 def set_t_i_a_range(serial_number):
-    # Sets TIA range.
+    '''
+    Sets TIA range.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        range: NT_TIARange
+        range: KNA_TIARange
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     range = NT_TIARange()
     range = KNA_TIARange()
 
-    output = NT_SetTIARange(serial_number, range, range)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetTIARange(serial_number)
+
+    return output
 
 
 NT_SetTIArangeParams = lib.NT_SetTIArangeParams
 NT_SetTIArangeParams.restype = c_short
-NT_SetTIArangeParams.argtypes = [POINTER(c_char), NT_TIARangeParameters, KNA_TIARangeParameters]
+NT_SetTIArangeParams.argtypes = [POINTER(c_char)]
 
 
 def set_t_i_arange_params(serial_number):
-    # Sets the TIA range parameters.
+    '''
+    Sets the TIA range parameters.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        params: NT_TIARangeParameters
+        params: KNA_TIARangeParameters
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     params = NT_TIARangeParameters()
     params = KNA_TIARangeParameters()
 
-    output = NT_SetTIArangeParams(serial_number, params, params)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetTIArangeParams(serial_number)
+
+    return output
 
 
 NT_SetTrackingThresholdSignal = lib.NT_SetTrackingThresholdSignal
 NT_SetTrackingThresholdSignal.restype = c_short
-NT_SetTrackingThresholdSignal.argtypes = [POINTER(c_char), c_float]
+NT_SetTrackingThresholdSignal.argtypes = [POINTER(c_char)]
 
 
 def set_tracking_threshold_signal(serial_number):
-    # Sets the tracking threshold signal.
+    '''
+    Sets the tracking threshold signal.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        threshold: c_float
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     threshold = c_float()
 
-    output = NT_SetTrackingThresholdSignal(serial_number, threshold)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetTrackingThresholdSignal(serial_number)
+
+    return output
 
 
 NT_SetTriggerConfigParams = lib.NT_SetTriggerConfigParams
 NT_SetTriggerConfigParams.restype = c_short
-NT_SetTriggerConfigParams.argtypes = [
-    POINTER(c_char),
-    KNA_TriggerPortMode,
-    KNA_TriggerPortPolarity,
-    KNA_TriggerPortMode,
-    KNA_TriggerPortPolarity]
+NT_SetTriggerConfigParams.argtypes = [POINTER(c_char)]
 
 
 def set_trigger_config_params(serial_number):
-    # Set the Trigger Configuration Parameters.
+    '''
+    Set the Trigger Configuration Parameters.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        trigger1Mode: KNA_TriggerPortMode
+        trigger1Polarity: KNA_TriggerPortPolarity
+        trigger2Mode: KNA_TriggerPortMode
+        trigger2Polarity: KNA_TriggerPortPolarity
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     trigger1Mode = KNA_TriggerPortMode()
     trigger1Polarity = KNA_TriggerPortPolarity()
     trigger2Mode = KNA_TriggerPortMode()
     trigger2Polarity = KNA_TriggerPortPolarity()
 
-    output = NT_SetTriggerConfigParams(serial_number, trigger1Mode, trigger1Polarity, trigger2Mode, trigger2Polarity)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetTriggerConfigParams(serial_number)
+
+    return output
 
 
 NT_SetTriggerConfigParamsBlock = lib.NT_SetTriggerConfigParamsBlock
 NT_SetTriggerConfigParamsBlock.restype = c_short
-NT_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KNA_TriggerConfig]
+NT_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
 
 
 def set_trigger_config_params_block(serial_number):
-    # Sets the trigger configuration parameters block.
+    '''
+    Sets the trigger configuration parameters block.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        triggerConfigParams: KNA_TriggerConfig
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     triggerConfigParams = KNA_TriggerConfig()
 
-    output = NT_SetTriggerConfigParamsBlock(serial_number, triggerConfigParams)
-    if output != 0:
-        raise KinesisException(output)
+    output = NT_SetTriggerConfigParamsBlock(serial_number)
+
+    return output
 
 
 NT_StartPolling = lib.NT_StartPolling
 NT_StartPolling.restype = c_bool
-NT_StartPolling.argtypes = [POINTER(c_char), c_int]
+NT_StartPolling.argtypes = [POINTER(c_char)]
 
 
 def start_polling(serial_number):
-    # Starts the internal polling loop which continuously requests position and status.
+    '''
+    Starts the internal polling loop which continuously requests position and status.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        milliseconds: c_int
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     milliseconds = c_int()
 
-    output = NT_StartPolling(serial_number, milliseconds)
+    output = NT_StartPolling(serial_number)
 
     return output
 
@@ -1699,13 +2735,23 @@ NT_StopPolling.argtypes = [POINTER(c_char)]
 
 
 def stop_polling(serial_number):
-    # Stops the internal polling loop.
+    '''
+    Stops the internal polling loop.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_void_p
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_StopPolling(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_StopXYScan = lib.NT_StopXYScan
@@ -1714,77 +2760,136 @@ NT_StopXYScan.argtypes = [POINTER(c_char)]
 
 
 def stop_x_y_scan(serial_number):
-    # Stops an XY scan.
+    '''
+    Stops an XY scan.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
 
     output = NT_StopXYScan(serial_number)
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 NT_TimeSinceLastMsgReceived = lib.NT_TimeSinceLastMsgReceived
 NT_TimeSinceLastMsgReceived.restype = c_bool
-NT_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char), c_int64]
+NT_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
 
 
 def time_since_last_msg_received(serial_number):
-    # Gets the time in milliseconds since tha last message was received from the device.
+    '''
+    Gets the time in milliseconds since tha last message was received from the device.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        lastUpdateTimeMS: c_int64
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     lastUpdateTimeMS = c_int64()
 
-    output = NT_TimeSinceLastMsgReceived(serial_number, lastUpdateTimeMS)
+    output = NT_TimeSinceLastMsgReceived(serial_number)
 
     return output
 
 
 NT_WaitForMessage = lib.NT_WaitForMessage
 NT_WaitForMessage.restype = c_bool
-NT_WaitForMessage.argtypes = [POINTER(c_char), c_long, c_long, c_ulong]
+NT_WaitForMessage.argtypes = [POINTER(c_char)]
 
 
 def wait_for_message(serial_number):
-    # Wait for next MessageQueue item.
+    '''
+    Wait for next MessageQueue item.
 
-    serial_number = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        messageType: c_long
+        messageID: c_long
+        messageData: c_ulong
+
+    Returns
+    -------
+        c_bool
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
 
-    output = NT_WaitForMessage(serial_number, messageType, messageID, messageData)
+    output = NT_WaitForMessage(serial_number)
 
     return output
 
 
 TLI_BuildDeviceList = lib.TLI_BuildDeviceList
 TLI_BuildDeviceList.restype = c_short
-TLI_BuildDeviceList.argtypes = [c_void_p]
+TLI_BuildDeviceList.argtypes = []
 
 
 def build_device_list():
-    # Build the DeviceList.
+    '''
+    Build the DeviceList.
+
+    Parameters
+    ----------
+        None
+
+    Returns
+    -------
+        c_short
+    '''
+
 
     output = TLI_BuildDeviceList()
+
     if output != 0:
         raise KinesisException(output)
+
 
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char), POINTER(c_char), TLI_DeviceInfo]
+TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
 
 
 def get_device_info(serial_number):
-    # Get the device information from the USB port.
+    '''
+    Get the device information from the USB port.
 
-    serial_number = POINTER(c_char)
-    serialNumber = POINTER(c_char)
+    Parameters
+    ----------
+        serial_number: POINTER(c_char)
+        serialNumber: POINTER(c_char)
+        info: TLI_DeviceInfo
+
+    Returns
+    -------
+        c_short
+    '''
+
+    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
-    output = TLI_GetDeviceInfo(serial_number, serialNumber, info)
-    if output != 0:
-        raise KinesisException(output)
+    output = TLI_GetDeviceInfo(serial_number)
+
+    return output
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
@@ -1792,98 +2897,214 @@ TLI_GetDeviceList.restype = c_short
 TLI_GetDeviceList.argtypes = [SafeArray]
 
 
-def get_device_list():
-    # Get the entire contents of the device list.
+def get_device_list(stringsReceiver):
+    '''
+    Get the entire contents of the device list.
 
-    output = TLI_GetDeviceList()
+    Parameters
+    ----------
+        stringsReceiver: SafeArray
+
+    Returns
+    -------
+        c_short
+    '''
+
+    stringsReceiver = SafeArray()
+
+    output = TLI_GetDeviceList(stringsReceiver)
+
     if output != 0:
         raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray, c_int]
+TLI_GetDeviceListByType.argtypes = [SafeArray]
 
 
-def get_device_list_by_type():
-    # Get the contents of the device list which match the supplied typeID.
+def get_device_list_by_type(stringsReceiver):
+    '''
+    Get the contents of the device list which match the supplied typeID.
 
-    output = TLI_GetDeviceListByType()
-    if output != 0:
-        raise KinesisException(output)
+    Parameters
+    ----------
+        stringsReceiver: SafeArray
+        typeID: c_int
+
+    Returns
+    -------
+        c_short
+    '''
+
+    stringsReceiver = SafeArray()
+    typeID = c_int()
+
+    output = TLI_GetDeviceListByType(stringsReceiver)
+
+    return output
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char), c_ulong, c_int]
+TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
 
 
-def get_device_list_by_type_ext():
-    # Get the contents of the device list which match the supplied typeID.
+def get_device_list_by_type_ext(receiveBuffer):
+    '''
+    Get the contents of the device list which match the supplied typeID.
 
-    output = TLI_GetDeviceListByTypeExt()
-    if output != 0:
-        raise KinesisException(output)
+    Parameters
+    ----------
+        receiveBuffer: POINTER(c_char)
+        sizeOfBuffer: c_ulong
+        typeID: c_int
+
+    Returns
+    -------
+        c_short
+    '''
+
+    receiveBuffer = POINTER(c_char)()
+    sizeOfBuffer = c_ulong()
+    typeID = c_int()
+
+    output = TLI_GetDeviceListByTypeExt(receiveBuffer)
+
+    return output
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray, c_int, c_int]
+TLI_GetDeviceListByTypes.argtypes = [SafeArray]
 
 
-def get_device_list_by_types():
-    # Get the contents of the device list which match the supplied typeIDs.
+def get_device_list_by_types(stringsReceiver):
+    '''
+    Get the contents of the device list which match the supplied typeIDs.
 
-    output = TLI_GetDeviceListByTypes()
-    if output != 0:
-        raise KinesisException(output)
+    Parameters
+    ----------
+        stringsReceiver: SafeArray
+        typeIDs: c_int
+        length: c_int
+
+    Returns
+    -------
+        c_short
+    '''
+
+    stringsReceiver = SafeArray()
+    typeIDs = c_int()
+    length = c_int()
+
+    output = TLI_GetDeviceListByTypes(stringsReceiver)
+
+    return output
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char), c_ulong, c_int, c_int]
+TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
 
 
-def get_device_list_by_types_ext():
-    # Get the contents of the device list which match the supplied typeIDs.
+def get_device_list_by_types_ext(receiveBuffer):
+    '''
+    Get the contents of the device list which match the supplied typeIDs.
 
-    output = TLI_GetDeviceListByTypesExt()
-    if output != 0:
-        raise KinesisException(output)
+    Parameters
+    ----------
+        receiveBuffer: POINTER(c_char)
+        sizeOfBuffer: c_ulong
+        typeIDs: c_int
+        length: c_int
+
+    Returns
+    -------
+        c_short
+    '''
+
+    receiveBuffer = POINTER(c_char)()
+    sizeOfBuffer = c_ulong()
+    typeIDs = c_int()
+    length = c_int()
+
+    output = TLI_GetDeviceListByTypesExt(receiveBuffer)
+
+    return output
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
+TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
 
 
-def get_device_list_ext():
-    # Get the entire contents of the device list.
+def get_device_list_ext(receiveBuffer):
+    '''
+    Get the entire contents of the device list.
 
-    output = TLI_GetDeviceListExt()
-    if output != 0:
-        raise KinesisException(output)
+    Parameters
+    ----------
+        receiveBuffer: POINTER(c_char)
+        sizeOfBuffer: c_ulong
+
+    Returns
+    -------
+        c_short
+    '''
+
+    receiveBuffer = POINTER(c_char)()
+    sizeOfBuffer = c_ulong()
+
+    output = TLI_GetDeviceListExt(receiveBuffer)
+
+    return output
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
+TLI_GetDeviceListSize.argtypes = []
 
 
 def get_device_list_size():
-    # Gets the device list size.
+    '''
+    Gets the device list size.
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+        c_short
+    '''
+
 
     output = TLI_GetDeviceListSize()
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations
 TLI_InitializeSimulations.restype = c_void_p
+TLI_InitializeSimulations.argtypes = []
 
 
 def initialize_simulations():
-    # Initialize a connection to the Simulation Manager, which must already be running.
+    '''
+    Initialize a connection to the Simulation Manager, which must already be running.
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+        c_void_p
+    '''
+
 
     output = TLI_InitializeSimulations()
-    if output != 0:
-        raise KinesisException(output)
+
+    return output
+
+
