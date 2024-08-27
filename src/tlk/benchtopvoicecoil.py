@@ -45,6 +45,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -55,7 +59,7 @@ lib = cdll.LoadLibrary(
 
 BVC_CanDeviceLockFrontPanel = lib.BVC_CanDeviceLockFrontPanel
 BVC_CanDeviceLockFrontPanel.restype = c_bool
-BVC_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
+BVC_CanDeviceLockFrontPanel.argtypes = []
 
 
 def can_device_lock_front_panel(serial_number):
@@ -71,7 +75,7 @@ def can_device_lock_front_panel(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_CanDeviceLockFrontPanel(serial_number)
 
@@ -80,7 +84,7 @@ def can_device_lock_front_panel(serial_number):
 
 BVC_CanHome = lib.BVC_CanHome
 BVC_CanHome.restype = c_bool
-BVC_CanHome.argtypes = [POINTER(c_char)]
+BVC_CanHome.argtypes = []
 
 
 def can_home(serial_number):
@@ -96,7 +100,7 @@ def can_home(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_CanHome(serial_number)
 
@@ -105,7 +109,7 @@ def can_home(serial_number):
 
 BVC_CanMoveWithoutHomingFirst = lib.BVC_CanMoveWithoutHomingFirst
 BVC_CanMoveWithoutHomingFirst.restype = c_bool
-BVC_CanMoveWithoutHomingFirst.argtypes = [POINTER(c_char)]
+BVC_CanMoveWithoutHomingFirst.argtypes = []
 
 
 def can_move_without_homing_first(serial_number):
@@ -121,7 +125,7 @@ def can_move_without_homing_first(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_CanMoveWithoutHomingFirst(serial_number)
 
@@ -139,14 +143,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_CheckConnection(serial_number)
 
@@ -155,7 +160,7 @@ def check_connection(serial_number):
 
 BVC_ClearMessageQueue = lib.BVC_ClearMessageQueue
 BVC_ClearMessageQueue.restype = c_void_p
-BVC_ClearMessageQueue.argtypes = [POINTER(c_char)]
+BVC_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -171,7 +176,7 @@ def clear_message_queue(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_ClearMessageQueue(serial_number)
 
@@ -180,7 +185,7 @@ def clear_message_queue(serial_number):
 
 BVC_Close = lib.BVC_Close
 BVC_Close.restype = c_void_p
-BVC_Close.argtypes = [POINTER(c_char)]
+BVC_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -196,7 +201,7 @@ def close_device(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_Close(serial_number)
 
@@ -205,7 +210,7 @@ def close_device(serial_number):
 
 BVC_DisableChannel = lib.BVC_DisableChannel
 BVC_DisableChannel.restype = c_short
-BVC_DisableChannel.argtypes = [POINTER(c_char)]
+BVC_DisableChannel.argtypes = []
 
 
 def disable_channel(serial_number):
@@ -221,7 +226,7 @@ def disable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_DisableChannel(serial_number)
 
@@ -230,7 +235,7 @@ def disable_channel(serial_number):
 
 BVC_EnableChannel = lib.BVC_EnableChannel
 BVC_EnableChannel.restype = c_short
-BVC_EnableChannel.argtypes = [POINTER(c_char)]
+BVC_EnableChannel.argtypes = []
 
 
 def enable_channel(serial_number):
@@ -246,7 +251,7 @@ def enable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_EnableChannel(serial_number)
 
@@ -255,7 +260,7 @@ def enable_channel(serial_number):
 
 BVC_EnableLastMsgTimer = lib.BVC_EnableLastMsgTimer
 BVC_EnableLastMsgTimer.restype = c_void_p
-BVC_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+BVC_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serial_number):
@@ -273,7 +278,7 @@ def enable_last_msg_timer(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     enable = c_bool()
     lastMsgTimeout = c_int32()
 
@@ -284,7 +289,7 @@ def enable_last_msg_timer(serial_number):
 
 BVC_GetBacklash = lib.BVC_GetBacklash
 BVC_GetBacklash.restype = c_long
-BVC_GetBacklash.argtypes = [POINTER(c_char)]
+BVC_GetBacklash.argtypes = []
 
 
 def get_backlash(serial_number):
@@ -300,7 +305,7 @@ def get_backlash(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetBacklash(serial_number)
 
@@ -309,7 +314,7 @@ def get_backlash(serial_number):
 
 BVC_GetDCPIDParams = lib.BVC_GetDCPIDParams
 BVC_GetDCPIDParams.restype = c_short
-BVC_GetDCPIDParams.argtypes = [POINTER(c_char)]
+BVC_GetDCPIDParams.argtypes = []
 
 
 def get_d_c_p_i_d_params(serial_number):
@@ -326,7 +331,7 @@ def get_d_c_p_i_d_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     DCproportionalIntegralDerivativeParams = MOT_DC_PIDParameters()
 
     output = BVC_GetDCPIDParams(serial_number)
@@ -336,7 +341,7 @@ def get_d_c_p_i_d_params(serial_number):
 
 BVC_GetDeviceUnitFromRealValue = lib.BVC_GetDeviceUnitFromRealValue
 BVC_GetDeviceUnitFromRealValue.restype = c_short
-BVC_GetDeviceUnitFromRealValue.argtypes = [POINTER(c_char)]
+BVC_GetDeviceUnitFromRealValue.argtypes = []
 
 
 def get_device_unit_from_real_value(serial_number):
@@ -355,7 +360,7 @@ def get_device_unit_from_real_value(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     real_unit = c_double()
     device_unit = c_int()
     unitType = c_int()
@@ -367,7 +372,7 @@ def get_device_unit_from_real_value(serial_number):
 
 BVC_GetDigitalOutputs = lib.BVC_GetDigitalOutputs
 BVC_GetDigitalOutputs.restype = c_byte
-BVC_GetDigitalOutputs.argtypes = [POINTER(c_char)]
+BVC_GetDigitalOutputs.argtypes = []
 
 
 def get_digital_outputs(serial_number):
@@ -383,7 +388,7 @@ def get_digital_outputs(serial_number):
         c_byte
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetDigitalOutputs(serial_number)
 
@@ -392,7 +397,7 @@ def get_digital_outputs(serial_number):
 
 BVC_GetEncoderCounter = lib.BVC_GetEncoderCounter
 BVC_GetEncoderCounter.restype = c_long
-BVC_GetEncoderCounter.argtypes = [POINTER(c_char)]
+BVC_GetEncoderCounter.argtypes = []
 
 
 def get_encoder_counter(serial_number):
@@ -408,7 +413,7 @@ def get_encoder_counter(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetEncoderCounter(serial_number)
 
@@ -417,7 +422,7 @@ def get_encoder_counter(serial_number):
 
 BVC_GetFrontPanelLocked = lib.BVC_GetFrontPanelLocked
 BVC_GetFrontPanelLocked.restype = c_bool
-BVC_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
+BVC_GetFrontPanelLocked.argtypes = []
 
 
 def get_front_panel_locked(serial_number):
@@ -433,7 +438,7 @@ def get_front_panel_locked(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetFrontPanelLocked(serial_number)
 
@@ -451,23 +456,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -494,15 +491,15 @@ def get_hardware_info_block(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     hardwareInfo = TLI_HardwareInformation()
 
     output = BVC_GetHardwareInfoBlock(serial_number)
@@ -512,7 +509,7 @@ def get_hardware_info_block(serial_number):
 
 BVC_GetHomingParamsBlock = lib.BVC_GetHomingParamsBlock
 BVC_GetHomingParamsBlock.restype = c_short
-BVC_GetHomingParamsBlock.argtypes = [POINTER(c_char)]
+BVC_GetHomingParamsBlock.argtypes = []
 
 
 def get_homing_params_block(serial_number):
@@ -529,7 +526,7 @@ def get_homing_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     homingParams = MOT_HomingParameters()
 
     output = BVC_GetHomingParamsBlock(serial_number)
@@ -539,7 +536,7 @@ def get_homing_params_block(serial_number):
 
 BVC_GetHomingVelocity = lib.BVC_GetHomingVelocity
 BVC_GetHomingVelocity.restype = c_uint
-BVC_GetHomingVelocity.argtypes = [POINTER(c_char)]
+BVC_GetHomingVelocity.argtypes = []
 
 
 def get_homing_velocity(serial_number):
@@ -555,7 +552,7 @@ def get_homing_velocity(serial_number):
         c_uint
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetHomingVelocity(serial_number)
 
@@ -564,7 +561,7 @@ def get_homing_velocity(serial_number):
 
 BVC_GetHubBay = lib.BVC_GetHubBay
 BVC_GetHubBay.restype = POINTER(c_char)
-BVC_GetHubBay.argtypes = [POINTER(c_char)]
+BVC_GetHubBay.argtypes = []
 
 
 def get_hub_bay(serial_number):
@@ -580,7 +577,7 @@ def get_hub_bay(serial_number):
         POINTER(c_char)
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetHubBay(serial_number)
 
@@ -589,7 +586,7 @@ def get_hub_bay(serial_number):
 
 BVC_GetJogMode = lib.BVC_GetJogMode
 BVC_GetJogMode.restype = c_short
-BVC_GetJogMode.argtypes = [POINTER(c_char)]
+BVC_GetJogMode.argtypes = []
 
 
 def get_jog_mode(serial_number):
@@ -607,7 +604,7 @@ def get_jog_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = MOT_JogModes()
     stopMode = MOT_StopModes()
 
@@ -618,7 +615,7 @@ def get_jog_mode(serial_number):
 
 BVC_GetJogParamsBlock = lib.BVC_GetJogParamsBlock
 BVC_GetJogParamsBlock.restype = c_short
-BVC_GetJogParamsBlock.argtypes = [POINTER(c_char)]
+BVC_GetJogParamsBlock.argtypes = []
 
 
 def get_jog_params_block(serial_number):
@@ -635,7 +632,7 @@ def get_jog_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     jogParams = MOT_JogParameters()
 
     output = BVC_GetJogParamsBlock(serial_number)
@@ -645,7 +642,7 @@ def get_jog_params_block(serial_number):
 
 BVC_GetJogStepSize = lib.BVC_GetJogStepSize
 BVC_GetJogStepSize.restype = c_uint
-BVC_GetJogStepSize.argtypes = [POINTER(c_char)]
+BVC_GetJogStepSize.argtypes = []
 
 
 def get_jog_step_size(serial_number):
@@ -661,7 +658,7 @@ def get_jog_step_size(serial_number):
         c_uint
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetJogStepSize(serial_number)
 
@@ -670,7 +667,7 @@ def get_jog_step_size(serial_number):
 
 BVC_GetJogVelParams = lib.BVC_GetJogVelParams
 BVC_GetJogVelParams.restype = c_short
-BVC_GetJogVelParams.argtypes = [POINTER(c_char)]
+BVC_GetJogVelParams.argtypes = []
 
 
 def get_jog_vel_params(serial_number):
@@ -688,7 +685,7 @@ def get_jog_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     acceleration = c_int()
     maxVelocity = c_int()
 
@@ -699,7 +696,7 @@ def get_jog_vel_params(serial_number):
 
 BVC_GetLEDswitches = lib.BVC_GetLEDswitches
 BVC_GetLEDswitches.restype = c_long
-BVC_GetLEDswitches.argtypes = [POINTER(c_char)]
+BVC_GetLEDswitches.argtypes = []
 
 
 def get_l_e_dswitches(serial_number):
@@ -715,7 +712,7 @@ def get_l_e_dswitches(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetLEDswitches(serial_number)
 
@@ -724,7 +721,7 @@ def get_l_e_dswitches(serial_number):
 
 BVC_GetLimitSwitchParams = lib.BVC_GetLimitSwitchParams
 BVC_GetLimitSwitchParams.restype = c_short
-BVC_GetLimitSwitchParams.argtypes = [POINTER(c_char)]
+BVC_GetLimitSwitchParams.argtypes = []
 
 
 def get_limit_switch_params(serial_number):
@@ -745,7 +742,7 @@ def get_limit_switch_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     clockwiseHardwareLimit = MOT_LimitSwitchModes()
     anticlockwiseHardwareLimit = MOT_LimitSwitchModes()
     clockwisePosition = c_uint()
@@ -759,7 +756,7 @@ def get_limit_switch_params(serial_number):
 
 BVC_GetLimitSwitchParamsBlock = lib.BVC_GetLimitSwitchParamsBlock
 BVC_GetLimitSwitchParamsBlock.restype = c_short
-BVC_GetLimitSwitchParamsBlock.argtypes = [POINTER(c_char)]
+BVC_GetLimitSwitchParamsBlock.argtypes = []
 
 
 def get_limit_switch_params_block(serial_number):
@@ -776,7 +773,7 @@ def get_limit_switch_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     limitSwitchParams = MOT_LimitSwitchParameters()
 
     output = BVC_GetLimitSwitchParamsBlock(serial_number)
@@ -786,7 +783,7 @@ def get_limit_switch_params_block(serial_number):
 
 BVC_GetMMIParams = lib.BVC_GetMMIParams
 BVC_GetMMIParams.restype = c_short
-BVC_GetMMIParams.argtypes = [POINTER(c_char)]
+BVC_GetMMIParams.argtypes = []
 
 
 def get_m_m_i_params(serial_number):
@@ -809,7 +806,7 @@ def get_m_m_i_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KMOT_WheelMode()
     wheelMaxVelocity = c_int32()
     wheelAcceleration = c_int32()
@@ -825,7 +822,7 @@ def get_m_m_i_params(serial_number):
 
 BVC_GetMMIParamsBlock = lib.BVC_GetMMIParamsBlock
 BVC_GetMMIParamsBlock.restype = c_short
-BVC_GetMMIParamsBlock.argtypes = [POINTER(c_char)]
+BVC_GetMMIParamsBlock.argtypes = []
 
 
 def get_m_m_i_params_block(serial_number):
@@ -842,7 +839,7 @@ def get_m_m_i_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mmiParams = KMOT_MMIParams()
 
     output = BVC_GetMMIParamsBlock(serial_number)
@@ -852,7 +849,7 @@ def get_m_m_i_params_block(serial_number):
 
 BVC_GetMMIParamsExt = lib.BVC_GetMMIParamsExt
 BVC_GetMMIParamsExt.restype = c_short
-BVC_GetMMIParamsExt.argtypes = [POINTER(c_char)]
+BVC_GetMMIParamsExt.argtypes = []
 
 
 def get_m_m_i_params_ext(serial_number):
@@ -877,7 +874,7 @@ def get_m_m_i_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KMOT_WheelMode()
     wheelMaxVelocity = c_int32()
     wheelAcceleration = c_int32()
@@ -895,7 +892,7 @@ def get_m_m_i_params_ext(serial_number):
 
 BVC_GetMotorParams = lib.BVC_GetMotorParams
 BVC_GetMotorParams.restype = c_short
-BVC_GetMotorParams.argtypes = [POINTER(c_char)]
+BVC_GetMotorParams.argtypes = []
 
 
 def get_motor_params(serial_number):
@@ -914,7 +911,7 @@ def get_motor_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     stepsPerRev = c_long()
     gearBoxRatio = c_long()
     pitch = c_float()
@@ -926,7 +923,7 @@ def get_motor_params(serial_number):
 
 BVC_GetMotorParamsExt = lib.BVC_GetMotorParamsExt
 BVC_GetMotorParamsExt.restype = c_short
-BVC_GetMotorParamsExt.argtypes = [POINTER(c_char)]
+BVC_GetMotorParamsExt.argtypes = []
 
 
 def get_motor_params_ext(serial_number):
@@ -945,7 +942,7 @@ def get_motor_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     stepsPerRev = c_double()
     gearBoxRatio = c_double()
     pitch = c_double()
@@ -957,7 +954,7 @@ def get_motor_params_ext(serial_number):
 
 BVC_GetMotorTravelLimits = lib.BVC_GetMotorTravelLimits
 BVC_GetMotorTravelLimits.restype = c_short
-BVC_GetMotorTravelLimits.argtypes = [POINTER(c_char)]
+BVC_GetMotorTravelLimits.argtypes = []
 
 
 def get_motor_travel_limits(serial_number):
@@ -975,7 +972,7 @@ def get_motor_travel_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     minPosition = c_double()
     maxPosition = c_double()
 
@@ -986,7 +983,7 @@ def get_motor_travel_limits(serial_number):
 
 BVC_GetMotorTravelMode = lib.BVC_GetMotorTravelMode
 BVC_GetMotorTravelMode.restype = MOT_TravelModes
-BVC_GetMotorTravelMode.argtypes = [POINTER(c_char)]
+BVC_GetMotorTravelMode.argtypes = []
 
 
 def get_motor_travel_mode(serial_number):
@@ -1002,7 +999,7 @@ def get_motor_travel_mode(serial_number):
         MOT_TravelModes
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetMotorTravelMode(serial_number)
 
@@ -1011,7 +1008,7 @@ def get_motor_travel_mode(serial_number):
 
 BVC_GetMotorVelocityLimits = lib.BVC_GetMotorVelocityLimits
 BVC_GetMotorVelocityLimits.restype = c_short
-BVC_GetMotorVelocityLimits.argtypes = [POINTER(c_char)]
+BVC_GetMotorVelocityLimits.argtypes = []
 
 
 def get_motor_velocity_limits(serial_number):
@@ -1029,7 +1026,7 @@ def get_motor_velocity_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     maxVelocity = c_double()
     maxAcceleration = c_double()
 
@@ -1040,7 +1037,7 @@ def get_motor_velocity_limits(serial_number):
 
 BVC_GetMoveAbsolutePosition = lib.BVC_GetMoveAbsolutePosition
 BVC_GetMoveAbsolutePosition.restype = c_int
-BVC_GetMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+BVC_GetMoveAbsolutePosition.argtypes = []
 
 
 def get_move_absolute_position(serial_number):
@@ -1056,7 +1053,7 @@ def get_move_absolute_position(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetMoveAbsolutePosition(serial_number)
 
@@ -1065,7 +1062,7 @@ def get_move_absolute_position(serial_number):
 
 BVC_GetMoveRelativeDistance = lib.BVC_GetMoveRelativeDistance
 BVC_GetMoveRelativeDistance.restype = c_int
-BVC_GetMoveRelativeDistance.argtypes = [POINTER(c_char)]
+BVC_GetMoveRelativeDistance.argtypes = []
 
 
 def get_move_relative_distance(serial_number):
@@ -1081,7 +1078,7 @@ def get_move_relative_distance(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetMoveRelativeDistance(serial_number)
 
@@ -1090,7 +1087,7 @@ def get_move_relative_distance(serial_number):
 
 BVC_GetNextMessage = lib.BVC_GetNextMessage
 BVC_GetNextMessage.restype = c_bool
-BVC_GetNextMessage.argtypes = [POINTER(c_char)]
+BVC_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -1109,7 +1106,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -1121,7 +1118,7 @@ def get_next_message(serial_number):
 
 BVC_GetNumberPositions = lib.BVC_GetNumberPositions
 BVC_GetNumberPositions.restype = c_int
-BVC_GetNumberPositions.argtypes = [POINTER(c_char)]
+BVC_GetNumberPositions.argtypes = []
 
 
 def get_number_positions(serial_number):
@@ -1137,7 +1134,7 @@ def get_number_positions(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetNumberPositions(serial_number)
 
@@ -1146,7 +1143,7 @@ def get_number_positions(serial_number):
 
 BVC_GetPosition = lib.BVC_GetPosition
 BVC_GetPosition.restype = c_int
-BVC_GetPosition.argtypes = [POINTER(c_char)]
+BVC_GetPosition.argtypes = []
 
 
 def get_position(serial_number):
@@ -1162,7 +1159,7 @@ def get_position(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetPosition(serial_number)
 
@@ -1171,7 +1168,7 @@ def get_position(serial_number):
 
 BVC_GetPositionCounter = lib.BVC_GetPositionCounter
 BVC_GetPositionCounter.restype = c_long
-BVC_GetPositionCounter.argtypes = [POINTER(c_char)]
+BVC_GetPositionCounter.argtypes = []
 
 
 def get_position_counter(serial_number):
@@ -1187,7 +1184,7 @@ def get_position_counter(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetPositionCounter(serial_number)
 
@@ -1196,7 +1193,7 @@ def get_position_counter(serial_number):
 
 BVC_GetRealValueFromDeviceUnit = lib.BVC_GetRealValueFromDeviceUnit
 BVC_GetRealValueFromDeviceUnit.restype = c_short
-BVC_GetRealValueFromDeviceUnit.argtypes = [POINTER(c_char)]
+BVC_GetRealValueFromDeviceUnit.argtypes = []
 
 
 def get_real_value_from_device_unit(serial_number):
@@ -1215,7 +1212,7 @@ def get_real_value_from_device_unit(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     device_unit = c_int()
     real_unit = c_double()
     unitType = c_int()
@@ -1227,7 +1224,7 @@ def get_real_value_from_device_unit(serial_number):
 
 BVC_GetScanParams = lib.BVC_GetScanParams
 BVC_GetScanParams.restype = c_short
-BVC_GetScanParams.argtypes = [POINTER(c_char)]
+BVC_GetScanParams.argtypes = []
 
 
 def get_scan_params(serial_number):
@@ -1244,7 +1241,7 @@ def get_scan_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     scanParameters = MOT_BVC_ScanParams()
 
     output = BVC_GetScanParams(serial_number)
@@ -1254,7 +1251,7 @@ def get_scan_params(serial_number):
 
 BVC_GetSoftLimitMode = lib.BVC_GetSoftLimitMode
 BVC_GetSoftLimitMode.restype = MOT_LimitsSoftwareApproachPolicy
-BVC_GetSoftLimitMode.argtypes = [POINTER(c_char)]
+BVC_GetSoftLimitMode.argtypes = []
 
 
 def get_soft_limit_mode(serial_number):
@@ -1270,7 +1267,7 @@ def get_soft_limit_mode(serial_number):
         MOT_LimitsSoftwareApproachPolicy
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetSoftLimitMode(serial_number)
 
@@ -1279,7 +1276,7 @@ def get_soft_limit_mode(serial_number):
 
 BVC_GetSoftwareVersion = lib.BVC_GetSoftwareVersion
 BVC_GetSoftwareVersion.restype = c_ulong
-BVC_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+BVC_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -1295,7 +1292,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetSoftwareVersion(serial_number)
 
@@ -1304,7 +1301,7 @@ def get_software_version(serial_number):
 
 BVC_GetStageAxisMaxPos = lib.BVC_GetStageAxisMaxPos
 BVC_GetStageAxisMaxPos.restype = c_int
-BVC_GetStageAxisMaxPos.argtypes = [POINTER(c_char)]
+BVC_GetStageAxisMaxPos.argtypes = []
 
 
 def get_stage_axis_max_pos(serial_number):
@@ -1320,7 +1317,7 @@ def get_stage_axis_max_pos(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetStageAxisMaxPos(serial_number)
 
@@ -1329,7 +1326,7 @@ def get_stage_axis_max_pos(serial_number):
 
 BVC_GetStageAxisMinPos = lib.BVC_GetStageAxisMinPos
 BVC_GetStageAxisMinPos.restype = c_int
-BVC_GetStageAxisMinPos.argtypes = [POINTER(c_char)]
+BVC_GetStageAxisMinPos.argtypes = []
 
 
 def get_stage_axis_min_pos(serial_number):
@@ -1345,7 +1342,7 @@ def get_stage_axis_min_pos(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetStageAxisMinPos(serial_number)
 
@@ -1354,7 +1351,7 @@ def get_stage_axis_min_pos(serial_number):
 
 BVC_GetStatusBits = lib.BVC_GetStatusBits
 BVC_GetStatusBits.restype = c_ulong
-BVC_GetStatusBits.argtypes = [POINTER(c_char)]
+BVC_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -1370,7 +1367,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_GetStatusBits(serial_number)
 
@@ -1379,7 +1376,7 @@ def get_status_bits(serial_number):
 
 BVC_GetTriggerConfigParams = lib.BVC_GetTriggerConfigParams
 BVC_GetTriggerConfigParams.restype = c_short
-BVC_GetTriggerConfigParams.argtypes = [POINTER(c_char)]
+BVC_GetTriggerConfigParams.argtypes = []
 
 
 def get_trigger_config_params(serial_number):
@@ -1399,7 +1396,7 @@ def get_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     trigger1Mode = KMOT_TriggerPortMode()
     trigger1Polarity = KMOT_TriggerPortPolarity()
     trigger2Mode = KMOT_TriggerPortMode()
@@ -1412,7 +1409,7 @@ def get_trigger_config_params(serial_number):
 
 BVC_GetTriggerConfigParamsBlock = lib.BVC_GetTriggerConfigParamsBlock
 BVC_GetTriggerConfigParamsBlock.restype = c_short
-BVC_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
+BVC_GetTriggerConfigParamsBlock.argtypes = []
 
 
 def get_trigger_config_params_block(serial_number):
@@ -1429,7 +1426,7 @@ def get_trigger_config_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerConfigParams = KMOT_TriggerConfig()
 
     output = BVC_GetTriggerConfigParamsBlock(serial_number)
@@ -1439,7 +1436,7 @@ def get_trigger_config_params_block(serial_number):
 
 BVC_GetTriggerParamsParams = lib.BVC_GetTriggerParamsParams
 BVC_GetTriggerParamsParams.restype = c_short
-BVC_GetTriggerParamsParams.argtypes = [POINTER(c_char)]
+BVC_GetTriggerParamsParams.argtypes = []
 
 
 def get_trigger_params_params(serial_number):
@@ -1463,7 +1460,7 @@ def get_trigger_params_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerStartPositionFwd = c_int32()
     triggerIntervalFwd = c_int32()
     triggerPulseCountFwd = c_int32()
@@ -1480,7 +1477,7 @@ def get_trigger_params_params(serial_number):
 
 BVC_GetTriggerParamsParamsBlock = lib.BVC_GetTriggerParamsParamsBlock
 BVC_GetTriggerParamsParamsBlock.restype = c_short
-BVC_GetTriggerParamsParamsBlock.argtypes = [POINTER(c_char)]
+BVC_GetTriggerParamsParamsBlock.argtypes = []
 
 
 def get_trigger_params_params_block(serial_number):
@@ -1497,7 +1494,7 @@ def get_trigger_params_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerParamsParams = KMOT_TriggerParams()
 
     output = BVC_GetTriggerParamsParamsBlock(serial_number)
@@ -1507,7 +1504,7 @@ def get_trigger_params_params_block(serial_number):
 
 BVC_GetVelParams = lib.BVC_GetVelParams
 BVC_GetVelParams.restype = c_short
-BVC_GetVelParams.argtypes = [POINTER(c_char)]
+BVC_GetVelParams.argtypes = []
 
 
 def get_vel_params(serial_number):
@@ -1525,7 +1522,7 @@ def get_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     acceleration = c_int()
     maxVelocity = c_int()
 
@@ -1536,7 +1533,7 @@ def get_vel_params(serial_number):
 
 BVC_GetVelParamsBlock = lib.BVC_GetVelParamsBlock
 BVC_GetVelParamsBlock.restype = c_short
-BVC_GetVelParamsBlock.argtypes = [POINTER(c_char)]
+BVC_GetVelParamsBlock.argtypes = []
 
 
 def get_vel_params_block(serial_number):
@@ -1553,7 +1550,7 @@ def get_vel_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     velocityParams = MOT_VelocityParameters()
 
     output = BVC_GetVelParamsBlock(serial_number)
@@ -1563,7 +1560,7 @@ def get_vel_params_block(serial_number):
 
 BVC_HasLastMsgTimerOverrun = lib.BVC_HasLastMsgTimerOverrun
 BVC_HasLastMsgTimerOverrun.restype = c_bool
-BVC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+BVC_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serial_number):
@@ -1579,7 +1576,7 @@ def has_last_msg_timer_overrun(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_HasLastMsgTimerOverrun(serial_number)
 
@@ -1588,7 +1585,7 @@ def has_last_msg_timer_overrun(serial_number):
 
 BVC_Home = lib.BVC_Home
 BVC_Home.restype = c_short
-BVC_Home.argtypes = [POINTER(c_char)]
+BVC_Home.argtypes = []
 
 
 def home(serial_number):
@@ -1604,7 +1601,7 @@ def home(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_Home(serial_number)
 
@@ -1613,7 +1610,7 @@ def home(serial_number):
 
 BVC_Identify = lib.BVC_Identify
 BVC_Identify.restype = c_void_p
-BVC_Identify.argtypes = [POINTER(c_char)]
+BVC_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -1629,7 +1626,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_Identify(serial_number)
 
@@ -1638,7 +1635,7 @@ def identify(serial_number):
 
 BVC_IsScanning = lib.BVC_IsScanning
 BVC_IsScanning.restype = c_bool
-BVC_IsScanning.argtypes = [POINTER(c_char)]
+BVC_IsScanning.argtypes = []
 
 
 def is_scanning(serial_number):
@@ -1654,7 +1651,7 @@ def is_scanning(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_IsScanning(serial_number)
 
@@ -1663,7 +1660,7 @@ def is_scanning(serial_number):
 
 BVC_IsScanningEnabled = lib.BVC_IsScanningEnabled
 BVC_IsScanningEnabled.restype = c_bool
-BVC_IsScanningEnabled.argtypes = [POINTER(c_char)]
+BVC_IsScanningEnabled.argtypes = []
 
 
 def is_scanning_enabled(serial_number):
@@ -1679,7 +1676,7 @@ def is_scanning_enabled(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_IsScanningEnabled(serial_number)
 
@@ -1688,7 +1685,7 @@ def is_scanning_enabled(serial_number):
 
 BVC_LoadNamedSettings = lib.BVC_LoadNamedSettings
 BVC_LoadNamedSettings.restype = c_bool
-BVC_LoadNamedSettings.argtypes = [POINTER(c_char)]
+BVC_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -1705,7 +1702,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settingsName = POINTER(c_char)()
 
     output = BVC_LoadNamedSettings(serial_number)
@@ -1715,7 +1712,7 @@ def load_named_settings(serial_number):
 
 BVC_LoadSettings = lib.BVC_LoadSettings
 BVC_LoadSettings.restype = c_bool
-BVC_LoadSettings.argtypes = [POINTER(c_char)]
+BVC_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -1731,7 +1728,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_LoadSettings(serial_number)
 
@@ -1740,7 +1737,7 @@ def load_settings(serial_number):
 
 BVC_MessageQueueSize = lib.BVC_MessageQueueSize
 BVC_MessageQueueSize.restype = c_int
-BVC_MessageQueueSize.argtypes = [POINTER(c_char)]
+BVC_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -1756,7 +1753,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_MessageQueueSize(serial_number)
 
@@ -1765,7 +1762,7 @@ def message_queue_size(serial_number):
 
 BVC_MoveAbsolute = lib.BVC_MoveAbsolute
 BVC_MoveAbsolute.restype = c_short
-BVC_MoveAbsolute.argtypes = [POINTER(c_char)]
+BVC_MoveAbsolute.argtypes = []
 
 
 def move_absolute(serial_number):
@@ -1781,7 +1778,7 @@ def move_absolute(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_MoveAbsolute(serial_number)
 
@@ -1790,7 +1787,7 @@ def move_absolute(serial_number):
 
 BVC_MoveAtVelocity = lib.BVC_MoveAtVelocity
 BVC_MoveAtVelocity.restype = c_short
-BVC_MoveAtVelocity.argtypes = [POINTER(c_char)]
+BVC_MoveAtVelocity.argtypes = []
 
 
 def move_at_velocity(serial_number):
@@ -1807,7 +1804,7 @@ def move_at_velocity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     direction = MOT_TravelDirection()
 
     output = BVC_MoveAtVelocity(serial_number)
@@ -1817,7 +1814,7 @@ def move_at_velocity(serial_number):
 
 BVC_MoveJog = lib.BVC_MoveJog
 BVC_MoveJog.restype = c_short
-BVC_MoveJog.argtypes = [POINTER(c_char)]
+BVC_MoveJog.argtypes = []
 
 
 def move_jog(serial_number):
@@ -1834,7 +1831,7 @@ def move_jog(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     jogDirection = MOT_TravelDirection()
 
     output = BVC_MoveJog(serial_number)
@@ -1844,7 +1841,7 @@ def move_jog(serial_number):
 
 BVC_MoveRelative = lib.BVC_MoveRelative
 BVC_MoveRelative.restype = c_short
-BVC_MoveRelative.argtypes = [POINTER(c_char)]
+BVC_MoveRelative.argtypes = []
 
 
 def move_relative(serial_number):
@@ -1861,7 +1858,7 @@ def move_relative(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     displacement = c_int()
 
     output = BVC_MoveRelative(serial_number)
@@ -1871,7 +1868,7 @@ def move_relative(serial_number):
 
 BVC_MoveRelativeDistance = lib.BVC_MoveRelativeDistance
 BVC_MoveRelativeDistance.restype = c_short
-BVC_MoveRelativeDistance.argtypes = [POINTER(c_char)]
+BVC_MoveRelativeDistance.argtypes = []
 
 
 def move_relative_distance(serial_number):
@@ -1887,7 +1884,7 @@ def move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_MoveRelativeDistance(serial_number)
 
@@ -1896,7 +1893,7 @@ def move_relative_distance(serial_number):
 
 BVC_MoveToPosition = lib.BVC_MoveToPosition
 BVC_MoveToPosition.restype = c_short
-BVC_MoveToPosition.argtypes = [POINTER(c_char)]
+BVC_MoveToPosition.argtypes = []
 
 
 def move_to_position(serial_number):
@@ -1913,7 +1910,7 @@ def move_to_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     index = c_int()
 
     output = BVC_MoveToPosition(serial_number)
@@ -1923,7 +1920,7 @@ def move_to_position(serial_number):
 
 BVC_NeedsHoming = lib.BVC_NeedsHoming
 BVC_NeedsHoming.restype = c_bool
-BVC_NeedsHoming.argtypes = [POINTER(c_char)]
+BVC_NeedsHoming.argtypes = []
 
 
 def needs_homing(serial_number):
@@ -1939,7 +1936,7 @@ def needs_homing(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_NeedsHoming(serial_number)
 
@@ -1948,7 +1945,7 @@ def needs_homing(serial_number):
 
 BVC_Open = lib.BVC_Open
 BVC_Open.restype = c_short
-BVC_Open.argtypes = [POINTER(c_char)]
+BVC_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -1964,7 +1961,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_Open(serial_number)
 
@@ -1973,7 +1970,7 @@ def open_device(serial_number):
 
 BVC_PersistSettings = lib.BVC_PersistSettings
 BVC_PersistSettings.restype = c_bool
-BVC_PersistSettings.argtypes = [POINTER(c_char)]
+BVC_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -1989,7 +1986,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_PersistSettings(serial_number)
 
@@ -1998,7 +1995,7 @@ def persist_settings(serial_number):
 
 BVC_PollingDuration = lib.BVC_PollingDuration
 BVC_PollingDuration.restype = c_long
-BVC_PollingDuration.argtypes = [POINTER(c_char)]
+BVC_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -2014,7 +2011,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_PollingDuration(serial_number)
 
@@ -2023,7 +2020,7 @@ def polling_duration(serial_number):
 
 BVC_RegisterMessageCallback = lib.BVC_RegisterMessageCallback
 BVC_RegisterMessageCallback.restype = c_void_p
-BVC_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+BVC_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -2040,7 +2037,7 @@ def register_message_callback(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RegisterMessageCallback(serial_number)
 
@@ -2049,7 +2046,7 @@ def register_message_callback(serial_number):
 
 BVC_RequestBacklash = lib.BVC_RequestBacklash
 BVC_RequestBacklash.restype = c_short
-BVC_RequestBacklash.argtypes = [POINTER(c_char)]
+BVC_RequestBacklash.argtypes = []
 
 
 def request_backlash(serial_number):
@@ -2065,7 +2062,7 @@ def request_backlash(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestBacklash(serial_number)
 
@@ -2074,7 +2071,7 @@ def request_backlash(serial_number):
 
 BVC_RequestDCPIDParams = lib.BVC_RequestDCPIDParams
 BVC_RequestDCPIDParams.restype = c_short
-BVC_RequestDCPIDParams.argtypes = [POINTER(c_char)]
+BVC_RequestDCPIDParams.argtypes = []
 
 
 def request_d_c_p_i_d_params(serial_number):
@@ -2090,7 +2087,7 @@ def request_d_c_p_i_d_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestDCPIDParams(serial_number)
 
@@ -2099,7 +2096,7 @@ def request_d_c_p_i_d_params(serial_number):
 
 BVC_RequestDigitalOutputs = lib.BVC_RequestDigitalOutputs
 BVC_RequestDigitalOutputs.restype = c_short
-BVC_RequestDigitalOutputs.argtypes = [POINTER(c_char)]
+BVC_RequestDigitalOutputs.argtypes = []
 
 
 def request_digital_outputs(serial_number):
@@ -2115,7 +2112,7 @@ def request_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestDigitalOutputs(serial_number)
 
@@ -2124,7 +2121,7 @@ def request_digital_outputs(serial_number):
 
 BVC_RequestEncoderCounter = lib.BVC_RequestEncoderCounter
 BVC_RequestEncoderCounter.restype = c_short
-BVC_RequestEncoderCounter.argtypes = [POINTER(c_char)]
+BVC_RequestEncoderCounter.argtypes = []
 
 
 def request_encoder_counter(serial_number):
@@ -2140,7 +2137,7 @@ def request_encoder_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestEncoderCounter(serial_number)
 
@@ -2149,7 +2146,7 @@ def request_encoder_counter(serial_number):
 
 BVC_RequestFrontPanelLocked = lib.BVC_RequestFrontPanelLocked
 BVC_RequestFrontPanelLocked.restype = c_short
-BVC_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
+BVC_RequestFrontPanelLocked.argtypes = []
 
 
 def request_front_panel_locked(serial_number):
@@ -2165,7 +2162,7 @@ def request_front_panel_locked(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestFrontPanelLocked(serial_number)
 
@@ -2174,7 +2171,7 @@ def request_front_panel_locked(serial_number):
 
 BVC_RequestHomingParams = lib.BVC_RequestHomingParams
 BVC_RequestHomingParams.restype = c_short
-BVC_RequestHomingParams.argtypes = [POINTER(c_char)]
+BVC_RequestHomingParams.argtypes = []
 
 
 def request_homing_params(serial_number):
@@ -2190,7 +2187,7 @@ def request_homing_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestHomingParams(serial_number)
 
@@ -2199,7 +2196,7 @@ def request_homing_params(serial_number):
 
 BVC_RequestJogParams = lib.BVC_RequestJogParams
 BVC_RequestJogParams.restype = c_short
-BVC_RequestJogParams.argtypes = [POINTER(c_char)]
+BVC_RequestJogParams.argtypes = []
 
 
 def request_jog_params(serial_number):
@@ -2215,7 +2212,7 @@ def request_jog_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestJogParams(serial_number)
 
@@ -2224,7 +2221,7 @@ def request_jog_params(serial_number):
 
 BVC_RequestLEDswitches = lib.BVC_RequestLEDswitches
 BVC_RequestLEDswitches.restype = c_short
-BVC_RequestLEDswitches.argtypes = [POINTER(c_char)]
+BVC_RequestLEDswitches.argtypes = []
 
 
 def request_l_e_dswitches(serial_number):
@@ -2240,7 +2237,7 @@ def request_l_e_dswitches(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestLEDswitches(serial_number)
 
@@ -2249,7 +2246,7 @@ def request_l_e_dswitches(serial_number):
 
 BVC_RequestLimitSwitchParams = lib.BVC_RequestLimitSwitchParams
 BVC_RequestLimitSwitchParams.restype = c_short
-BVC_RequestLimitSwitchParams.argtypes = [POINTER(c_char)]
+BVC_RequestLimitSwitchParams.argtypes = []
 
 
 def request_limit_switch_params(serial_number):
@@ -2265,7 +2262,7 @@ def request_limit_switch_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestLimitSwitchParams(serial_number)
 
@@ -2274,7 +2271,7 @@ def request_limit_switch_params(serial_number):
 
 BVC_RequestMMIparams = lib.BVC_RequestMMIparams
 BVC_RequestMMIparams.restype = c_short
-BVC_RequestMMIparams.argtypes = [POINTER(c_char)]
+BVC_RequestMMIparams.argtypes = []
 
 
 def request_m_m_iparams(serial_number):
@@ -2290,7 +2287,7 @@ def request_m_m_iparams(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestMMIparams(serial_number)
 
@@ -2299,7 +2296,7 @@ def request_m_m_iparams(serial_number):
 
 BVC_RequestMoveAbsolutePosition = lib.BVC_RequestMoveAbsolutePosition
 BVC_RequestMoveAbsolutePosition.restype = c_short
-BVC_RequestMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+BVC_RequestMoveAbsolutePosition.argtypes = []
 
 
 def request_move_absolute_position(serial_number):
@@ -2315,7 +2312,7 @@ def request_move_absolute_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestMoveAbsolutePosition(serial_number)
 
@@ -2324,7 +2321,7 @@ def request_move_absolute_position(serial_number):
 
 BVC_RequestMoveRelativeDistance = lib.BVC_RequestMoveRelativeDistance
 BVC_RequestMoveRelativeDistance.restype = c_short
-BVC_RequestMoveRelativeDistance.argtypes = [POINTER(c_char)]
+BVC_RequestMoveRelativeDistance.argtypes = []
 
 
 def request_move_relative_distance(serial_number):
@@ -2340,7 +2337,7 @@ def request_move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestMoveRelativeDistance(serial_number)
 
@@ -2349,7 +2346,7 @@ def request_move_relative_distance(serial_number):
 
 BVC_RequestPosTriggerParams = lib.BVC_RequestPosTriggerParams
 BVC_RequestPosTriggerParams.restype = c_short
-BVC_RequestPosTriggerParams.argtypes = [POINTER(c_char)]
+BVC_RequestPosTriggerParams.argtypes = []
 
 
 def request_pos_trigger_params(serial_number):
@@ -2365,7 +2362,7 @@ def request_pos_trigger_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestPosTriggerParams(serial_number)
 
@@ -2374,7 +2371,7 @@ def request_pos_trigger_params(serial_number):
 
 BVC_RequestPosition = lib.BVC_RequestPosition
 BVC_RequestPosition.restype = c_short
-BVC_RequestPosition.argtypes = [POINTER(c_char)]
+BVC_RequestPosition.argtypes = []
 
 
 def request_position(serial_number):
@@ -2390,7 +2387,7 @@ def request_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestPosition(serial_number)
 
@@ -2399,7 +2396,7 @@ def request_position(serial_number):
 
 BVC_RequestScanParams = lib.BVC_RequestScanParams
 BVC_RequestScanParams.restype = c_short
-BVC_RequestScanParams.argtypes = [POINTER(c_char)]
+BVC_RequestScanParams.argtypes = []
 
 
 def request_scan_params(serial_number):
@@ -2415,7 +2412,7 @@ def request_scan_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestScanParams(serial_number)
 
@@ -2424,7 +2421,7 @@ def request_scan_params(serial_number):
 
 BVC_RequestSettings = lib.BVC_RequestSettings
 BVC_RequestSettings.restype = c_short
-BVC_RequestSettings.argtypes = [POINTER(c_char)]
+BVC_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -2440,7 +2437,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestSettings(serial_number)
 
@@ -2449,7 +2446,7 @@ def request_settings(serial_number):
 
 BVC_RequestStatusBits = lib.BVC_RequestStatusBits
 BVC_RequestStatusBits.restype = c_short
-BVC_RequestStatusBits.argtypes = [POINTER(c_char)]
+BVC_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serial_number):
@@ -2465,7 +2462,7 @@ def request_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestStatusBits(serial_number)
 
@@ -2474,7 +2471,7 @@ def request_status_bits(serial_number):
 
 BVC_RequestTriggerConfigParams = lib.BVC_RequestTriggerConfigParams
 BVC_RequestTriggerConfigParams.restype = c_short
-BVC_RequestTriggerConfigParams.argtypes = [POINTER(c_char)]
+BVC_RequestTriggerConfigParams.argtypes = []
 
 
 def request_trigger_config_params(serial_number):
@@ -2490,7 +2487,7 @@ def request_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestTriggerConfigParams(serial_number)
 
@@ -2499,7 +2496,7 @@ def request_trigger_config_params(serial_number):
 
 BVC_RequestVelParams = lib.BVC_RequestVelParams
 BVC_RequestVelParams.restype = c_short
-BVC_RequestVelParams.argtypes = [POINTER(c_char)]
+BVC_RequestVelParams.argtypes = []
 
 
 def request_vel_params(serial_number):
@@ -2515,7 +2512,7 @@ def request_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_RequestVelParams(serial_number)
 
@@ -2524,7 +2521,7 @@ def request_vel_params(serial_number):
 
 BVC_ResetRotationModes = lib.BVC_ResetRotationModes
 BVC_ResetRotationModes.restype = c_short
-BVC_ResetRotationModes.argtypes = [POINTER(c_char)]
+BVC_ResetRotationModes.argtypes = []
 
 
 def reset_rotation_modes(serial_number):
@@ -2540,7 +2537,7 @@ def reset_rotation_modes(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_ResetRotationModes(serial_number)
 
@@ -2549,7 +2546,7 @@ def reset_rotation_modes(serial_number):
 
 BVC_ResetStageToDefaults = lib.BVC_ResetStageToDefaults
 BVC_ResetStageToDefaults.restype = c_short
-BVC_ResetStageToDefaults.argtypes = [POINTER(c_char)]
+BVC_ResetStageToDefaults.argtypes = []
 
 
 def reset_stage_to_defaults(serial_number):
@@ -2565,7 +2562,7 @@ def reset_stage_to_defaults(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_ResetStageToDefaults(serial_number)
 
@@ -2574,7 +2571,7 @@ def reset_stage_to_defaults(serial_number):
 
 BVC_ResumeMoveMessages = lib.BVC_ResumeMoveMessages
 BVC_ResumeMoveMessages.restype = c_short
-BVC_ResumeMoveMessages.argtypes = [POINTER(c_char)]
+BVC_ResumeMoveMessages.argtypes = []
 
 
 def resume_move_messages(serial_number):
@@ -2590,7 +2587,7 @@ def resume_move_messages(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_ResumeMoveMessages(serial_number)
 
@@ -2599,7 +2596,7 @@ def resume_move_messages(serial_number):
 
 BVC_SetBacklash = lib.BVC_SetBacklash
 BVC_SetBacklash.restype = c_short
-BVC_SetBacklash.argtypes = [POINTER(c_char)]
+BVC_SetBacklash.argtypes = []
 
 
 def set_backlash(serial_number):
@@ -2616,7 +2613,7 @@ def set_backlash(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     distance = c_long()
 
     output = BVC_SetBacklash(serial_number)
@@ -2626,7 +2623,7 @@ def set_backlash(serial_number):
 
 BVC_SetDCPIDParams = lib.BVC_SetDCPIDParams
 BVC_SetDCPIDParams.restype = c_short
-BVC_SetDCPIDParams.argtypes = [POINTER(c_char)]
+BVC_SetDCPIDParams.argtypes = []
 
 
 def set_d_c_p_i_d_params(serial_number):
@@ -2643,7 +2640,7 @@ def set_d_c_p_i_d_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     DCproportionalIntegralDerivativeParams = MOT_DC_PIDParameters()
 
     output = BVC_SetDCPIDParams(serial_number)
@@ -2653,7 +2650,7 @@ def set_d_c_p_i_d_params(serial_number):
 
 BVC_SetDigitalOutputs = lib.BVC_SetDigitalOutputs
 BVC_SetDigitalOutputs.restype = c_short
-BVC_SetDigitalOutputs.argtypes = [POINTER(c_char)]
+BVC_SetDigitalOutputs.argtypes = []
 
 
 def set_digital_outputs(serial_number):
@@ -2670,7 +2667,7 @@ def set_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     outputsBits = c_byte()
 
     output = BVC_SetDigitalOutputs(serial_number)
@@ -2680,7 +2677,7 @@ def set_digital_outputs(serial_number):
 
 BVC_SetDirection = lib.BVC_SetDirection
 BVC_SetDirection.restype = c_void_p
-BVC_SetDirection.argtypes = [POINTER(c_char)]
+BVC_SetDirection.argtypes = []
 
 
 def set_direction(serial_number):
@@ -2697,7 +2694,7 @@ def set_direction(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     reverse = c_bool()
 
     output = BVC_SetDirection(serial_number)
@@ -2707,7 +2704,7 @@ def set_direction(serial_number):
 
 BVC_SetEncoderCounter = lib.BVC_SetEncoderCounter
 BVC_SetEncoderCounter.restype = c_short
-BVC_SetEncoderCounter.argtypes = [POINTER(c_char)]
+BVC_SetEncoderCounter.argtypes = []
 
 
 def set_encoder_counter(serial_number):
@@ -2724,7 +2721,7 @@ def set_encoder_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     count = c_long()
 
     output = BVC_SetEncoderCounter(serial_number)
@@ -2734,7 +2731,7 @@ def set_encoder_counter(serial_number):
 
 BVC_SetFrontPanelLock = lib.BVC_SetFrontPanelLock
 BVC_SetFrontPanelLock.restype = c_short
-BVC_SetFrontPanelLock.argtypes = [POINTER(c_char)]
+BVC_SetFrontPanelLock.argtypes = []
 
 
 def set_front_panel_lock(serial_number):
@@ -2751,7 +2748,7 @@ def set_front_panel_lock(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     locked = c_bool()
 
     output = BVC_SetFrontPanelLock(serial_number)
@@ -2761,7 +2758,7 @@ def set_front_panel_lock(serial_number):
 
 BVC_SetHomingParamsBlock = lib.BVC_SetHomingParamsBlock
 BVC_SetHomingParamsBlock.restype = c_short
-BVC_SetHomingParamsBlock.argtypes = [POINTER(c_char)]
+BVC_SetHomingParamsBlock.argtypes = []
 
 
 def set_homing_params_block(serial_number):
@@ -2778,7 +2775,7 @@ def set_homing_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     homingParams = MOT_HomingParameters()
 
     output = BVC_SetHomingParamsBlock(serial_number)
@@ -2788,7 +2785,7 @@ def set_homing_params_block(serial_number):
 
 BVC_SetHomingVelocity = lib.BVC_SetHomingVelocity
 BVC_SetHomingVelocity.restype = c_short
-BVC_SetHomingVelocity.argtypes = [POINTER(c_char)]
+BVC_SetHomingVelocity.argtypes = []
 
 
 def set_homing_velocity(serial_number):
@@ -2805,7 +2802,7 @@ def set_homing_velocity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     velocity = c_uint()
 
     output = BVC_SetHomingVelocity(serial_number)
@@ -2815,7 +2812,7 @@ def set_homing_velocity(serial_number):
 
 BVC_SetJogMode = lib.BVC_SetJogMode
 BVC_SetJogMode.restype = c_short
-BVC_SetJogMode.argtypes = [POINTER(c_char)]
+BVC_SetJogMode.argtypes = []
 
 
 def set_jog_mode(serial_number):
@@ -2833,7 +2830,7 @@ def set_jog_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = MOT_JogModes()
     stopMode = MOT_StopModes()
 
@@ -2844,7 +2841,7 @@ def set_jog_mode(serial_number):
 
 BVC_SetJogParamsBlock = lib.BVC_SetJogParamsBlock
 BVC_SetJogParamsBlock.restype = c_short
-BVC_SetJogParamsBlock.argtypes = [POINTER(c_char)]
+BVC_SetJogParamsBlock.argtypes = []
 
 
 def set_jog_params_block(serial_number):
@@ -2861,7 +2858,7 @@ def set_jog_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     jogParams = MOT_JogParameters()
 
     output = BVC_SetJogParamsBlock(serial_number)
@@ -2871,7 +2868,7 @@ def set_jog_params_block(serial_number):
 
 BVC_SetJogStepSize = lib.BVC_SetJogStepSize
 BVC_SetJogStepSize.restype = c_short
-BVC_SetJogStepSize.argtypes = [POINTER(c_char)]
+BVC_SetJogStepSize.argtypes = []
 
 
 def set_jog_step_size(serial_number):
@@ -2888,7 +2885,7 @@ def set_jog_step_size(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     stepSize = c_uint()
 
     output = BVC_SetJogStepSize(serial_number)
@@ -2898,7 +2895,7 @@ def set_jog_step_size(serial_number):
 
 BVC_SetJogVelParams = lib.BVC_SetJogVelParams
 BVC_SetJogVelParams.restype = c_short
-BVC_SetJogVelParams.argtypes = [POINTER(c_char)]
+BVC_SetJogVelParams.argtypes = []
 
 
 def set_jog_vel_params(serial_number):
@@ -2916,7 +2913,7 @@ def set_jog_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     acceleration = c_int()
     maxVelocity = c_int()
 
@@ -2927,7 +2924,7 @@ def set_jog_vel_params(serial_number):
 
 BVC_SetLEDswitches = lib.BVC_SetLEDswitches
 BVC_SetLEDswitches.restype = c_short
-BVC_SetLEDswitches.argtypes = [POINTER(c_char)]
+BVC_SetLEDswitches.argtypes = []
 
 
 def set_l_e_dswitches(serial_number):
@@ -2944,7 +2941,7 @@ def set_l_e_dswitches(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     LEDswitches = c_long()
 
     output = BVC_SetLEDswitches(serial_number)
@@ -2954,7 +2951,7 @@ def set_l_e_dswitches(serial_number):
 
 BVC_SetLimitSwitchParams = lib.BVC_SetLimitSwitchParams
 BVC_SetLimitSwitchParams.restype = c_short
-BVC_SetLimitSwitchParams.argtypes = [POINTER(c_char)]
+BVC_SetLimitSwitchParams.argtypes = []
 
 
 def set_limit_switch_params(serial_number):
@@ -2975,7 +2972,7 @@ def set_limit_switch_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     clockwiseHardwareLimit = MOT_LimitSwitchModes()
     anticlockwiseHardwareLimit = MOT_LimitSwitchModes()
     clockwisePosition = c_uint()
@@ -2989,7 +2986,7 @@ def set_limit_switch_params(serial_number):
 
 BVC_SetLimitSwitchParamsBlock = lib.BVC_SetLimitSwitchParamsBlock
 BVC_SetLimitSwitchParamsBlock.restype = c_short
-BVC_SetLimitSwitchParamsBlock.argtypes = [POINTER(c_char)]
+BVC_SetLimitSwitchParamsBlock.argtypes = []
 
 
 def set_limit_switch_params_block(serial_number):
@@ -3006,7 +3003,7 @@ def set_limit_switch_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     limitSwitchParams = MOT_LimitSwitchParameters()
 
     output = BVC_SetLimitSwitchParamsBlock(serial_number)
@@ -3016,7 +3013,7 @@ def set_limit_switch_params_block(serial_number):
 
 BVC_SetLimitsSoftwareApproachPolicy = lib.BVC_SetLimitsSoftwareApproachPolicy
 BVC_SetLimitsSoftwareApproachPolicy.restype = c_void_p
-BVC_SetLimitsSoftwareApproachPolicy.argtypes = [POINTER(c_char)]
+BVC_SetLimitsSoftwareApproachPolicy.argtypes = []
 
 
 def set_limits_software_approach_policy(serial_number):
@@ -3033,7 +3030,7 @@ def set_limits_software_approach_policy(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     limitsSoftwareApproachPolicy = MOT_LimitsSoftwareApproachPolicy()
 
     output = BVC_SetLimitsSoftwareApproachPolicy(serial_number)
@@ -3043,7 +3040,7 @@ def set_limits_software_approach_policy(serial_number):
 
 BVC_SetMMIParams = lib.BVC_SetMMIParams
 BVC_SetMMIParams.restype = c_short
-BVC_SetMMIParams.argtypes = [POINTER(c_char)]
+BVC_SetMMIParams.argtypes = []
 
 
 def set_m_m_i_params(serial_number):
@@ -3066,7 +3063,7 @@ def set_m_m_i_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KMOT_WheelMode()
     wheelMaxVelocity = c_int32()
     wheelAcceleration = c_int32()
@@ -3082,7 +3079,7 @@ def set_m_m_i_params(serial_number):
 
 BVC_SetMMIParamsBlock = lib.BVC_SetMMIParamsBlock
 BVC_SetMMIParamsBlock.restype = c_short
-BVC_SetMMIParamsBlock.argtypes = [POINTER(c_char)]
+BVC_SetMMIParamsBlock.argtypes = []
 
 
 def set_m_m_i_params_block(serial_number):
@@ -3099,7 +3096,7 @@ def set_m_m_i_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mmiParams = KMOT_MMIParams()
 
     output = BVC_SetMMIParamsBlock(serial_number)
@@ -3109,7 +3106,7 @@ def set_m_m_i_params_block(serial_number):
 
 BVC_SetMMIParamsExt = lib.BVC_SetMMIParamsExt
 BVC_SetMMIParamsExt.restype = c_short
-BVC_SetMMIParamsExt.argtypes = [POINTER(c_char)]
+BVC_SetMMIParamsExt.argtypes = []
 
 
 def set_m_m_i_params_ext(serial_number):
@@ -3134,7 +3131,7 @@ def set_m_m_i_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KMOT_WheelMode()
     wheelMaxVelocity = c_int32()
     wheelAcceleration = c_int32()
@@ -3152,7 +3149,7 @@ def set_m_m_i_params_ext(serial_number):
 
 BVC_SetMotorParams = lib.BVC_SetMotorParams
 BVC_SetMotorParams.restype = c_short
-BVC_SetMotorParams.argtypes = [POINTER(c_char)]
+BVC_SetMotorParams.argtypes = []
 
 
 def set_motor_params(serial_number):
@@ -3171,7 +3168,7 @@ def set_motor_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     stepsPerRev = c_long()
     gearBoxRatio = c_long()
     pitch = c_float()
@@ -3183,7 +3180,7 @@ def set_motor_params(serial_number):
 
 BVC_SetMotorParamsExt = lib.BVC_SetMotorParamsExt
 BVC_SetMotorParamsExt.restype = c_short
-BVC_SetMotorParamsExt.argtypes = [POINTER(c_char)]
+BVC_SetMotorParamsExt.argtypes = []
 
 
 def set_motor_params_ext(serial_number):
@@ -3202,7 +3199,7 @@ def set_motor_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     stepsPerRev = c_double()
     gearBoxRatio = c_double()
     pitch = c_double()
@@ -3214,7 +3211,7 @@ def set_motor_params_ext(serial_number):
 
 BVC_SetMotorTravelLimits = lib.BVC_SetMotorTravelLimits
 BVC_SetMotorTravelLimits.restype = c_short
-BVC_SetMotorTravelLimits.argtypes = [POINTER(c_char)]
+BVC_SetMotorTravelLimits.argtypes = []
 
 
 def set_motor_travel_limits(serial_number):
@@ -3232,7 +3229,7 @@ def set_motor_travel_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     minPosition = c_double()
     maxPosition = c_double()
 
@@ -3243,7 +3240,7 @@ def set_motor_travel_limits(serial_number):
 
 BVC_SetMotorTravelMode = lib.BVC_SetMotorTravelMode
 BVC_SetMotorTravelMode.restype = c_short
-BVC_SetMotorTravelMode.argtypes = [POINTER(c_char)]
+BVC_SetMotorTravelMode.argtypes = []
 
 
 def set_motor_travel_mode(serial_number):
@@ -3260,7 +3257,7 @@ def set_motor_travel_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     travelMode = MOT_TravelModes()
 
     output = BVC_SetMotorTravelMode(serial_number)
@@ -3270,7 +3267,7 @@ def set_motor_travel_mode(serial_number):
 
 BVC_SetMotorVelocityLimits = lib.BVC_SetMotorVelocityLimits
 BVC_SetMotorVelocityLimits.restype = c_short
-BVC_SetMotorVelocityLimits.argtypes = [POINTER(c_char)]
+BVC_SetMotorVelocityLimits.argtypes = []
 
 
 def set_motor_velocity_limits(serial_number):
@@ -3288,7 +3285,7 @@ def set_motor_velocity_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     maxVelocity = c_double()
     maxAcceleration = c_double()
 
@@ -3299,7 +3296,7 @@ def set_motor_velocity_limits(serial_number):
 
 BVC_SetMoveAbsolutePosition = lib.BVC_SetMoveAbsolutePosition
 BVC_SetMoveAbsolutePosition.restype = c_short
-BVC_SetMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+BVC_SetMoveAbsolutePosition.argtypes = []
 
 
 def set_move_absolute_position(serial_number):
@@ -3316,7 +3313,7 @@ def set_move_absolute_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = c_int()
 
     output = BVC_SetMoveAbsolutePosition(serial_number)
@@ -3326,7 +3323,7 @@ def set_move_absolute_position(serial_number):
 
 BVC_SetMoveRelativeDistance = lib.BVC_SetMoveRelativeDistance
 BVC_SetMoveRelativeDistance.restype = c_short
-BVC_SetMoveRelativeDistance.argtypes = [POINTER(c_char)]
+BVC_SetMoveRelativeDistance.argtypes = []
 
 
 def set_move_relative_distance(serial_number):
@@ -3343,7 +3340,7 @@ def set_move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     distance = c_int()
 
     output = BVC_SetMoveRelativeDistance(serial_number)
@@ -3353,7 +3350,7 @@ def set_move_relative_distance(serial_number):
 
 BVC_SetPositionCounter = lib.BVC_SetPositionCounter
 BVC_SetPositionCounter.restype = c_short
-BVC_SetPositionCounter.argtypes = [POINTER(c_char)]
+BVC_SetPositionCounter.argtypes = []
 
 
 def set_position_counter(serial_number):
@@ -3370,7 +3367,7 @@ def set_position_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     count = c_long()
 
     output = BVC_SetPositionCounter(serial_number)
@@ -3380,7 +3377,7 @@ def set_position_counter(serial_number):
 
 BVC_SetRotationModes = lib.BVC_SetRotationModes
 BVC_SetRotationModes.restype = c_short
-BVC_SetRotationModes.argtypes = [POINTER(c_char)]
+BVC_SetRotationModes.argtypes = []
 
 
 def set_rotation_modes(serial_number):
@@ -3398,7 +3395,7 @@ def set_rotation_modes(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = MOT_MovementModes()
     direction = MOT_MovementDirections()
 
@@ -3409,7 +3406,7 @@ def set_rotation_modes(serial_number):
 
 BVC_SetScanParams = lib.BVC_SetScanParams
 BVC_SetScanParams.restype = c_short
-BVC_SetScanParams.argtypes = [POINTER(c_char)]
+BVC_SetScanParams.argtypes = []
 
 
 def set_scan_params(serial_number):
@@ -3426,7 +3423,7 @@ def set_scan_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     scanParameters = MOT_BVC_ScanParams()
 
     output = BVC_SetScanParams(serial_number)
@@ -3436,7 +3433,7 @@ def set_scan_params(serial_number):
 
 BVC_SetStageAxisLimits = lib.BVC_SetStageAxisLimits
 BVC_SetStageAxisLimits.restype = c_short
-BVC_SetStageAxisLimits.argtypes = [POINTER(c_char)]
+BVC_SetStageAxisLimits.argtypes = []
 
 
 def set_stage_axis_limits(serial_number):
@@ -3454,7 +3451,7 @@ def set_stage_axis_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     minPosition = c_int()
     maxPosition = c_int()
 
@@ -3465,7 +3462,7 @@ def set_stage_axis_limits(serial_number):
 
 BVC_SetTriggerConfigParams = lib.BVC_SetTriggerConfigParams
 BVC_SetTriggerConfigParams.restype = c_short
-BVC_SetTriggerConfigParams.argtypes = [POINTER(c_char)]
+BVC_SetTriggerConfigParams.argtypes = []
 
 
 def set_trigger_config_params(serial_number):
@@ -3485,7 +3482,7 @@ def set_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     trigger1Mode = KMOT_TriggerPortMode()
     trigger1Polarity = KMOT_TriggerPortPolarity()
     trigger2Mode = KMOT_TriggerPortMode()
@@ -3498,7 +3495,7 @@ def set_trigger_config_params(serial_number):
 
 BVC_SetTriggerConfigParamsBlock = lib.BVC_SetTriggerConfigParamsBlock
 BVC_SetTriggerConfigParamsBlock.restype = c_short
-BVC_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
+BVC_SetTriggerConfigParamsBlock.argtypes = []
 
 
 def set_trigger_config_params_block(serial_number):
@@ -3515,7 +3512,7 @@ def set_trigger_config_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerConfigParams = KMOT_TriggerConfig()
 
     output = BVC_SetTriggerConfigParamsBlock(serial_number)
@@ -3525,7 +3522,7 @@ def set_trigger_config_params_block(serial_number):
 
 BVC_SetTriggerParamsParams = lib.BVC_SetTriggerParamsParams
 BVC_SetTriggerParamsParams.restype = c_short
-BVC_SetTriggerParamsParams.argtypes = [POINTER(c_char)]
+BVC_SetTriggerParamsParams.argtypes = []
 
 
 def set_trigger_params_params(serial_number):
@@ -3549,7 +3546,7 @@ def set_trigger_params_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerStartPositionFwd = c_int32()
     triggerIntervalFwd = c_int32()
     triggerPulseCountFwd = c_int32()
@@ -3566,7 +3563,7 @@ def set_trigger_params_params(serial_number):
 
 BVC_SetTriggerParamsParamsBlock = lib.BVC_SetTriggerParamsParamsBlock
 BVC_SetTriggerParamsParamsBlock.restype = c_short
-BVC_SetTriggerParamsParamsBlock.argtypes = [POINTER(c_char)]
+BVC_SetTriggerParamsParamsBlock.argtypes = []
 
 
 def set_trigger_params_params_block(serial_number):
@@ -3583,7 +3580,7 @@ def set_trigger_params_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerParamsParams = KMOT_TriggerParams()
 
     output = BVC_SetTriggerParamsParamsBlock(serial_number)
@@ -3593,7 +3590,7 @@ def set_trigger_params_params_block(serial_number):
 
 BVC_SetVelParams = lib.BVC_SetVelParams
 BVC_SetVelParams.restype = c_short
-BVC_SetVelParams.argtypes = [POINTER(c_char)]
+BVC_SetVelParams.argtypes = []
 
 
 def set_vel_params(serial_number):
@@ -3611,7 +3608,7 @@ def set_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     acceleration = c_int()
     maxVelocity = c_int()
 
@@ -3622,7 +3619,7 @@ def set_vel_params(serial_number):
 
 BVC_SetVelParamsBlock = lib.BVC_SetVelParamsBlock
 BVC_SetVelParamsBlock.restype = c_short
-BVC_SetVelParamsBlock.argtypes = [POINTER(c_char)]
+BVC_SetVelParamsBlock.argtypes = []
 
 
 def set_vel_params_block(serial_number):
@@ -3639,7 +3636,7 @@ def set_vel_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     velocityParams = MOT_VelocityParameters()
 
     output = BVC_SetVelParamsBlock(serial_number)
@@ -3649,7 +3646,7 @@ def set_vel_params_block(serial_number):
 
 BVC_StartPolling = lib.BVC_StartPolling
 BVC_StartPolling.restype = c_bool
-BVC_StartPolling.argtypes = [POINTER(c_char)]
+BVC_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -3666,7 +3663,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     milliseconds = c_int()
 
     output = BVC_StartPolling(serial_number)
@@ -3676,7 +3673,7 @@ def start_polling(serial_number):
 
 BVC_StartScanning = lib.BVC_StartScanning
 BVC_StartScanning.restype = c_short
-BVC_StartScanning.argtypes = [POINTER(c_char)]
+BVC_StartScanning.argtypes = []
 
 
 def start_scanning(serial_number):
@@ -3692,7 +3689,7 @@ def start_scanning(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_StartScanning(serial_number)
 
@@ -3701,7 +3698,7 @@ def start_scanning(serial_number):
 
 BVC_StopImmediate = lib.BVC_StopImmediate
 BVC_StopImmediate.restype = c_short
-BVC_StopImmediate.argtypes = [POINTER(c_char)]
+BVC_StopImmediate.argtypes = []
 
 
 def stop_immediate(serial_number):
@@ -3717,7 +3714,7 @@ def stop_immediate(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_StopImmediate(serial_number)
 
@@ -3726,7 +3723,7 @@ def stop_immediate(serial_number):
 
 BVC_StopPolling = lib.BVC_StopPolling
 BVC_StopPolling.restype = c_void_p
-BVC_StopPolling.argtypes = [POINTER(c_char)]
+BVC_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -3742,7 +3739,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_StopPolling(serial_number)
 
@@ -3751,7 +3748,7 @@ def stop_polling(serial_number):
 
 BVC_StopProfiled = lib.BVC_StopProfiled
 BVC_StopProfiled.restype = c_short
-BVC_StopProfiled.argtypes = [POINTER(c_char)]
+BVC_StopProfiled.argtypes = []
 
 
 def stop_profiled(serial_number):
@@ -3767,7 +3764,7 @@ def stop_profiled(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_StopProfiled(serial_number)
 
@@ -3776,7 +3773,7 @@ def stop_profiled(serial_number):
 
 BVC_StopScanning = lib.BVC_StopScanning
 BVC_StopScanning.restype = c_short
-BVC_StopScanning.argtypes = [POINTER(c_char)]
+BVC_StopScanning.argtypes = []
 
 
 def stop_scanning(serial_number):
@@ -3792,7 +3789,7 @@ def stop_scanning(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_StopScanning(serial_number)
 
@@ -3801,7 +3798,7 @@ def stop_scanning(serial_number):
 
 BVC_SuspendMoveMessages = lib.BVC_SuspendMoveMessages
 BVC_SuspendMoveMessages.restype = c_short
-BVC_SuspendMoveMessages.argtypes = [POINTER(c_char)]
+BVC_SuspendMoveMessages.argtypes = []
 
 
 def suspend_move_messages(serial_number):
@@ -3817,7 +3814,7 @@ def suspend_move_messages(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BVC_SuspendMoveMessages(serial_number)
 
@@ -3826,7 +3823,7 @@ def suspend_move_messages(serial_number):
 
 BVC_TimeSinceLastMsgReceived = lib.BVC_TimeSinceLastMsgReceived
 BVC_TimeSinceLastMsgReceived.restype = c_bool
-BVC_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+BVC_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serial_number):
@@ -3843,7 +3840,7 @@ def time_since_last_msg_received(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     lastUpdateTimeMS = c_int64()
 
     output = BVC_TimeSinceLastMsgReceived(serial_number)
@@ -3853,7 +3850,7 @@ def time_since_last_msg_received(serial_number):
 
 BVC_WaitForMessage = lib.BVC_WaitForMessage
 BVC_WaitForMessage.restype = c_bool
-BVC_WaitForMessage.argtypes = [POINTER(c_char)]
+BVC_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -3872,7 +3869,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -3910,7 +3907,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -3928,18 +3925,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -3966,7 +3965,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -3988,12 +3987,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -4017,12 +4018,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -4046,12 +4049,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -4077,12 +4082,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -4104,7 +4111,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -4127,7 +4136,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations

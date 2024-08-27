@@ -23,6 +23,10 @@ from .definitions.structures import (
     TLI_DeviceInfo)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -42,14 +46,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_CheckConnection(serial_number)
 
@@ -58,7 +63,7 @@ def check_connection(serial_number):
 
 MPC_ClearMessageQueue = lib.MPC_ClearMessageQueue
 MPC_ClearMessageQueue.restype = c_void_p
-MPC_ClearMessageQueue.argtypes = [POINTER(c_char)]
+MPC_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -74,7 +79,7 @@ def clear_message_queue(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_ClearMessageQueue(serial_number)
 
@@ -83,7 +88,7 @@ def clear_message_queue(serial_number):
 
 MPC_Close = lib.MPC_Close
 MPC_Close.restype = c_void_p
-MPC_Close.argtypes = [POINTER(c_char)]
+MPC_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -99,7 +104,7 @@ def close_device(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_Close(serial_number)
 
@@ -108,7 +113,7 @@ def close_device(serial_number):
 
 MPC_EnableLastMsgTimer = lib.MPC_EnableLastMsgTimer
 MPC_EnableLastMsgTimer.restype = c_void_p
-MPC_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+MPC_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serial_number):
@@ -126,7 +131,7 @@ def enable_last_msg_timer(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     enable = c_bool()
     lastMsgTimeout = c_int32()
 
@@ -137,7 +142,7 @@ def enable_last_msg_timer(serial_number):
 
 MPC_GetEnabledPaddles = lib.MPC_GetEnabledPaddles
 MPC_GetEnabledPaddles.restype = POL_PaddleBits
-MPC_GetEnabledPaddles.argtypes = [POINTER(c_char)]
+MPC_GetEnabledPaddles.argtypes = []
 
 
 def get_enabled_paddles(serial_number):
@@ -153,7 +158,7 @@ def get_enabled_paddles(serial_number):
         POL_PaddleBits
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_GetEnabledPaddles(serial_number)
 
@@ -162,7 +167,7 @@ def get_enabled_paddles(serial_number):
 
 MPC_GetFirmwareVersion = lib.MPC_GetFirmwareVersion
 MPC_GetFirmwareVersion.restype = c_ulong
-MPC_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+MPC_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serial_number):
@@ -178,7 +183,7 @@ def get_firmware_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_GetFirmwareVersion(serial_number)
 
@@ -196,23 +201,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numchannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -230,7 +227,7 @@ def get_hardware_info(serial_number):
 
 MPC_GetHomeOffset = lib.MPC_GetHomeOffset
 MPC_GetHomeOffset.restype = c_double
-MPC_GetHomeOffset.argtypes = [POINTER(c_char)]
+MPC_GetHomeOffset.argtypes = []
 
 
 def get_home_offset(serial_number):
@@ -246,7 +243,7 @@ def get_home_offset(serial_number):
         c_double
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_GetHomeOffset(serial_number)
 
@@ -255,7 +252,7 @@ def get_home_offset(serial_number):
 
 MPC_GetJogSize = lib.MPC_GetJogSize
 MPC_GetJogSize.restype = c_double
-MPC_GetJogSize.argtypes = [POINTER(c_char)]
+MPC_GetJogSize.argtypes = []
 
 
 def get_jog_size(serial_number):
@@ -272,7 +269,7 @@ def get_jog_size(serial_number):
         c_double
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     paddle = POL_Paddles()
 
     output = MPC_GetJogSize(serial_number)
@@ -282,7 +279,7 @@ def get_jog_size(serial_number):
 
 MPC_GetMaxTravel = lib.MPC_GetMaxTravel
 MPC_GetMaxTravel.restype = c_double
-MPC_GetMaxTravel.argtypes = [POINTER(c_char)]
+MPC_GetMaxTravel.argtypes = []
 
 
 def get_max_travel(serial_number):
@@ -298,7 +295,7 @@ def get_max_travel(serial_number):
         c_double
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_GetMaxTravel(serial_number)
 
@@ -307,7 +304,7 @@ def get_max_travel(serial_number):
 
 MPC_GetNextMessage = lib.MPC_GetNextMessage
 MPC_GetNextMessage.restype = c_bool
-MPC_GetNextMessage.argtypes = [POINTER(c_char)]
+MPC_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -326,7 +323,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -338,7 +335,7 @@ def get_next_message(serial_number):
 
 MPC_GetPaddleCount = lib.MPC_GetPaddleCount
 MPC_GetPaddleCount.restype = c_int
-MPC_GetPaddleCount.argtypes = [POINTER(c_char)]
+MPC_GetPaddleCount.argtypes = []
 
 
 def get_paddle_count(serial_number):
@@ -354,7 +351,7 @@ def get_paddle_count(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_GetPaddleCount(serial_number)
 
@@ -363,7 +360,7 @@ def get_paddle_count(serial_number):
 
 MPC_GetPolParams = lib.MPC_GetPolParams
 MPC_GetPolParams.restype = c_short
-MPC_GetPolParams.argtypes = [POINTER(c_char)]
+MPC_GetPolParams.argtypes = []
 
 
 def get_pol_params(serial_number):
@@ -380,7 +377,7 @@ def get_pol_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     polParams = PolarizerParameters()
 
     output = MPC_GetPolParams(serial_number)
@@ -390,7 +387,7 @@ def get_pol_params(serial_number):
 
 MPC_GetPosition = lib.MPC_GetPosition
 MPC_GetPosition.restype = c_double
-MPC_GetPosition.argtypes = [POINTER(c_char)]
+MPC_GetPosition.argtypes = []
 
 
 def get_position(serial_number):
@@ -407,7 +404,7 @@ def get_position(serial_number):
         c_double
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     paddle = POL_Paddles()
 
     output = MPC_GetPosition(serial_number)
@@ -417,7 +414,7 @@ def get_position(serial_number):
 
 MPC_GetSoftwareVersion = lib.MPC_GetSoftwareVersion
 MPC_GetSoftwareVersion.restype = c_ulong
-MPC_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+MPC_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -433,7 +430,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_GetSoftwareVersion(serial_number)
 
@@ -442,7 +439,7 @@ def get_software_version(serial_number):
 
 MPC_GetStatusBits = lib.MPC_GetStatusBits
 MPC_GetStatusBits.restype = c_ulong
-MPC_GetStatusBits.argtypes = [POINTER(c_char)]
+MPC_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -459,7 +456,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     paddle = POL_Paddles()
 
     output = MPC_GetStatusBits(serial_number)
@@ -469,7 +466,7 @@ def get_status_bits(serial_number):
 
 MPC_GetStepsPerDegree = lib.MPC_GetStepsPerDegree
 MPC_GetStepsPerDegree.restype = c_double
-MPC_GetStepsPerDegree.argtypes = [POINTER(c_char)]
+MPC_GetStepsPerDegree.argtypes = []
 
 
 def get_steps_per_degree(serial_number):
@@ -485,7 +482,7 @@ def get_steps_per_degree(serial_number):
         c_double
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_GetStepsPerDegree(serial_number)
 
@@ -494,7 +491,7 @@ def get_steps_per_degree(serial_number):
 
 MPC_GetVelocity = lib.MPC_GetVelocity
 MPC_GetVelocity.restype = c_short
-MPC_GetVelocity.argtypes = [POINTER(c_char)]
+MPC_GetVelocity.argtypes = []
 
 
 def get_velocity(serial_number):
@@ -510,7 +507,7 @@ def get_velocity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_GetVelocity(serial_number)
 
@@ -519,7 +516,7 @@ def get_velocity(serial_number):
 
 MPC_HasLastMsgTimerOverrun = lib.MPC_HasLastMsgTimerOverrun
 MPC_HasLastMsgTimerOverrun.restype = c_bool
-MPC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+MPC_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serial_number):
@@ -535,7 +532,7 @@ def has_last_msg_timer_overrun(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_HasLastMsgTimerOverrun(serial_number)
 
@@ -544,7 +541,7 @@ def has_last_msg_timer_overrun(serial_number):
 
 MPC_Home = lib.MPC_Home
 MPC_Home.restype = c_short
-MPC_Home.argtypes = [POINTER(c_char)]
+MPC_Home.argtypes = []
 
 
 def home(serial_number):
@@ -561,7 +558,7 @@ def home(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     paddle = POL_Paddles()
 
     output = MPC_Home(serial_number)
@@ -571,7 +568,7 @@ def home(serial_number):
 
 MPC_Identify = lib.MPC_Identify
 MPC_Identify.restype = c_void_p
-MPC_Identify.argtypes = [POINTER(c_char)]
+MPC_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -587,7 +584,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_Identify(serial_number)
 
@@ -596,7 +593,7 @@ def identify(serial_number):
 
 MPC_IsPaddleEnabled = lib.MPC_IsPaddleEnabled
 MPC_IsPaddleEnabled.restype = c_bool
-MPC_IsPaddleEnabled.argtypes = [POINTER(c_char)]
+MPC_IsPaddleEnabled.argtypes = []
 
 
 def is_paddle_enabled(serial_number):
@@ -613,7 +610,7 @@ def is_paddle_enabled(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     paddle = POL_Paddles()
 
     output = MPC_IsPaddleEnabled(serial_number)
@@ -623,7 +620,7 @@ def is_paddle_enabled(serial_number):
 
 MPC_Jog = lib.MPC_Jog
 MPC_Jog.restype = c_short
-MPC_Jog.argtypes = [POINTER(c_char)]
+MPC_Jog.argtypes = []
 
 
 def jog(serial_number):
@@ -641,7 +638,7 @@ def jog(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     paddle = POL_Paddles()
     direction = MOT_TravelDirection()
 
@@ -652,7 +649,7 @@ def jog(serial_number):
 
 MPC_LoadNamedSettings = lib.MPC_LoadNamedSettings
 MPC_LoadNamedSettings.restype = c_bool
-MPC_LoadNamedSettings.argtypes = [POINTER(c_char)]
+MPC_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -669,7 +666,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settingsName = POINTER(c_char)()
 
     output = MPC_LoadNamedSettings(serial_number)
@@ -679,7 +676,7 @@ def load_named_settings(serial_number):
 
 MPC_LoadSettings = lib.MPC_LoadSettings
 MPC_LoadSettings.restype = c_bool
-MPC_LoadSettings.argtypes = [POINTER(c_char)]
+MPC_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -695,7 +692,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_LoadSettings(serial_number)
 
@@ -704,7 +701,7 @@ def load_settings(serial_number):
 
 MPC_MessageQueueSize = lib.MPC_MessageQueueSize
 MPC_MessageQueueSize.restype = c_int
-MPC_MessageQueueSize.argtypes = [POINTER(c_char)]
+MPC_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -720,7 +717,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_MessageQueueSize(serial_number)
 
@@ -729,7 +726,7 @@ def message_queue_size(serial_number):
 
 MPC_MoveRelative = lib.MPC_MoveRelative
 MPC_MoveRelative.restype = c_short
-MPC_MoveRelative.argtypes = [POINTER(c_char)]
+MPC_MoveRelative.argtypes = []
 
 
 def move_relative(serial_number):
@@ -747,7 +744,7 @@ def move_relative(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     paddle = POL_Paddles()
     position = c_double()
 
@@ -758,7 +755,7 @@ def move_relative(serial_number):
 
 MPC_MoveToPosition = lib.MPC_MoveToPosition
 MPC_MoveToPosition.restype = c_short
-MPC_MoveToPosition.argtypes = [POINTER(c_char)]
+MPC_MoveToPosition.argtypes = []
 
 
 def move_to_position(serial_number):
@@ -776,7 +773,7 @@ def move_to_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     paddle = POL_Paddles()
     position = c_double()
 
@@ -787,7 +784,7 @@ def move_to_position(serial_number):
 
 MPC_Open = lib.MPC_Open
 MPC_Open.restype = c_short
-MPC_Open.argtypes = [POINTER(c_char)]
+MPC_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -803,7 +800,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_Open(serial_number)
 
@@ -812,7 +809,7 @@ def open_device(serial_number):
 
 MPC_PersistSettings = lib.MPC_PersistSettings
 MPC_PersistSettings.restype = c_bool
-MPC_PersistSettings.argtypes = [POINTER(c_char)]
+MPC_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -828,7 +825,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_PersistSettings(serial_number)
 
@@ -837,7 +834,7 @@ def persist_settings(serial_number):
 
 MPC_PollingDuration = lib.MPC_PollingDuration
 MPC_PollingDuration.restype = c_long
-MPC_PollingDuration.argtypes = [POINTER(c_char)]
+MPC_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -853,7 +850,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_PollingDuration(serial_number)
 
@@ -862,7 +859,7 @@ def polling_duration(serial_number):
 
 MPC_RegisterMessageCallback = lib.MPC_RegisterMessageCallback
 MPC_RegisterMessageCallback.restype = c_void_p
-MPC_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+MPC_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -879,7 +876,7 @@ def register_message_callback(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_RegisterMessageCallback(serial_number)
 
@@ -888,7 +885,7 @@ def register_message_callback(serial_number):
 
 MPC_RequestPolParams = lib.MPC_RequestPolParams
 MPC_RequestPolParams.restype = c_short
-MPC_RequestPolParams.argtypes = [POINTER(c_char)]
+MPC_RequestPolParams.argtypes = []
 
 
 def request_pol_params(serial_number):
@@ -904,7 +901,7 @@ def request_pol_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_RequestPolParams(serial_number)
 
@@ -913,7 +910,7 @@ def request_pol_params(serial_number):
 
 MPC_RequestSettings = lib.MPC_RequestSettings
 MPC_RequestSettings.restype = c_short
-MPC_RequestSettings.argtypes = [POINTER(c_char)]
+MPC_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -929,7 +926,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_RequestSettings(serial_number)
 
@@ -938,7 +935,7 @@ def request_settings(serial_number):
 
 MPC_RequestStatus = lib.MPC_RequestStatus
 MPC_RequestStatus.restype = c_short
-MPC_RequestStatus.argtypes = [POINTER(c_char)]
+MPC_RequestStatus.argtypes = []
 
 
 def request_status(serial_number):
@@ -954,7 +951,7 @@ def request_status(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_RequestStatus(serial_number)
 
@@ -963,7 +960,7 @@ def request_status(serial_number):
 
 MPC_ResetParameters = lib.MPC_ResetParameters
 MPC_ResetParameters.restype = c_bool
-MPC_ResetParameters.argtypes = [POINTER(c_char)]
+MPC_ResetParameters.argtypes = []
 
 
 def reset_parameters(serial_number):
@@ -979,7 +976,7 @@ def reset_parameters(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_ResetParameters(serial_number)
 
@@ -988,7 +985,7 @@ def reset_parameters(serial_number):
 
 MPC_SetEnabledPaddles = lib.MPC_SetEnabledPaddles
 MPC_SetEnabledPaddles.restype = c_int
-MPC_SetEnabledPaddles.argtypes = [POINTER(c_char)]
+MPC_SetEnabledPaddles.argtypes = []
 
 
 def set_enabled_paddles(serial_number):
@@ -1005,7 +1002,7 @@ def set_enabled_paddles(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     paddles = POL_PaddleBits()
 
     output = MPC_SetEnabledPaddles(serial_number)
@@ -1015,7 +1012,7 @@ def set_enabled_paddles(serial_number):
 
 MPC_SetHomeOffset = lib.MPC_SetHomeOffset
 MPC_SetHomeOffset.restype = c_short
-MPC_SetHomeOffset.argtypes = [POINTER(c_char)]
+MPC_SetHomeOffset.argtypes = []
 
 
 def set_home_offset(serial_number):
@@ -1032,7 +1029,7 @@ def set_home_offset(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     homeOffset = c_double()
 
     output = MPC_SetHomeOffset(serial_number)
@@ -1042,7 +1039,7 @@ def set_home_offset(serial_number):
 
 MPC_SetJogSize = lib.MPC_SetJogSize
 MPC_SetJogSize.restype = c_short
-MPC_SetJogSize.argtypes = [POINTER(c_char)]
+MPC_SetJogSize.argtypes = []
 
 
 def set_jog_size(serial_number):
@@ -1060,7 +1057,7 @@ def set_jog_size(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     paddle = POL_Paddles()
     jogSize = c_double()
 
@@ -1071,7 +1068,7 @@ def set_jog_size(serial_number):
 
 MPC_SetPolParams = lib.MPC_SetPolParams
 MPC_SetPolParams.restype = c_short
-MPC_SetPolParams.argtypes = [POINTER(c_char)]
+MPC_SetPolParams.argtypes = []
 
 
 def set_pol_params(serial_number):
@@ -1088,7 +1085,7 @@ def set_pol_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     polParams = PolarizerParameters()
 
     output = MPC_SetPolParams(serial_number)
@@ -1098,7 +1095,7 @@ def set_pol_params(serial_number):
 
 MPC_SetVelocity = lib.MPC_SetVelocity
 MPC_SetVelocity.restype = c_short
-MPC_SetVelocity.argtypes = [POINTER(c_char)]
+MPC_SetVelocity.argtypes = []
 
 
 def set_velocity(serial_number):
@@ -1115,7 +1112,7 @@ def set_velocity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     velocity = c_short()
 
     output = MPC_SetVelocity(serial_number)
@@ -1125,7 +1122,7 @@ def set_velocity(serial_number):
 
 MPC_StartPolling = lib.MPC_StartPolling
 MPC_StartPolling.restype = c_bool
-MPC_StartPolling.argtypes = [POINTER(c_char)]
+MPC_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -1142,7 +1139,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     milliseconds = c_int()
 
     output = MPC_StartPolling(serial_number)
@@ -1152,7 +1149,7 @@ def start_polling(serial_number):
 
 MPC_Stop = lib.MPC_Stop
 MPC_Stop.restype = c_short
-MPC_Stop.argtypes = [POINTER(c_char)]
+MPC_Stop.argtypes = []
 
 
 def stop(serial_number):
@@ -1169,7 +1166,7 @@ def stop(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     paddle = POL_Paddles()
 
     output = MPC_Stop(serial_number)
@@ -1179,7 +1176,7 @@ def stop(serial_number):
 
 MPC_StopPolling = lib.MPC_StopPolling
 MPC_StopPolling.restype = c_void_p
-MPC_StopPolling.argtypes = [POINTER(c_char)]
+MPC_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -1195,7 +1192,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = MPC_StopPolling(serial_number)
 
@@ -1204,7 +1201,7 @@ def stop_polling(serial_number):
 
 MPC_TimeSinceLastMsgReceived = lib.MPC_TimeSinceLastMsgReceived
 MPC_TimeSinceLastMsgReceived.restype = c_bool
-MPC_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+MPC_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serial_number):
@@ -1221,7 +1218,7 @@ def time_since_last_msg_received(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     lastUpdateTimeMS = c_int64()
 
     output = MPC_TimeSinceLastMsgReceived(serial_number)
@@ -1231,7 +1228,7 @@ def time_since_last_msg_received(serial_number):
 
 MPC_WaitForMessage = lib.MPC_WaitForMessage
 MPC_WaitForMessage.restype = c_bool
-MPC_WaitForMessage.argtypes = [POINTER(c_char)]
+MPC_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -1250,7 +1247,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -1288,7 +1285,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -1306,18 +1303,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -1344,7 +1343,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -1366,12 +1365,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -1395,12 +1396,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -1424,12 +1427,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -1455,12 +1460,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -1482,7 +1489,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -1505,7 +1514,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations

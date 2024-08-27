@@ -35,6 +35,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -45,7 +49,7 @@ lib = cdll.LoadLibrary(
 
 NT_ChannelEnable = lib.NT_ChannelEnable
 NT_ChannelEnable.restype = c_short
-NT_ChannelEnable.argtypes = [POINTER(c_char)]
+NT_ChannelEnable.argtypes = []
 
 
 def channel_enable(serial_number):
@@ -63,7 +67,7 @@ def channel_enable(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_long()
     enable = c_bool()
 
@@ -83,14 +87,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_CheckConnection(serial_number)
 
@@ -99,7 +104,7 @@ def check_connection(serial_number):
 
 NT_ClearMessageQueue = lib.NT_ClearMessageQueue
 NT_ClearMessageQueue.restype = c_void_p
-NT_ClearMessageQueue.argtypes = [POINTER(c_char)]
+NT_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -115,7 +120,7 @@ def clear_message_queue(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_ClearMessageQueue(serial_number)
 
@@ -124,7 +129,7 @@ def clear_message_queue(serial_number):
 
 NT_Close = lib.NT_Close
 NT_Close.restype = c_void_p
-NT_Close.argtypes = [POINTER(c_char)]
+NT_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -140,7 +145,7 @@ def close_device(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_Close(serial_number)
 
@@ -149,7 +154,7 @@ def close_device(serial_number):
 
 NT_Disconnect = lib.NT_Disconnect
 NT_Disconnect.restype = c_short
-NT_Disconnect.argtypes = [POINTER(c_char)]
+NT_Disconnect.argtypes = []
 
 
 def disconnect(serial_number):
@@ -165,7 +170,7 @@ def disconnect(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_Disconnect(serial_number)
 
@@ -174,7 +179,7 @@ def disconnect(serial_number):
 
 NT_EnableLastMsgTimer = lib.NT_EnableLastMsgTimer
 NT_EnableLastMsgTimer.restype = c_void_p
-NT_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+NT_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serial_number):
@@ -192,7 +197,7 @@ def enable_last_msg_timer(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     enable = c_bool()
     lastMsgTimeout = c_int32()
 
@@ -203,7 +208,7 @@ def enable_last_msg_timer(serial_number):
 
 NT_GetCircleDiameter = lib.NT_GetCircleDiameter
 NT_GetCircleDiameter.restype = c_long
-NT_GetCircleDiameter.argtypes = [POINTER(c_char)]
+NT_GetCircleDiameter.argtypes = []
 
 
 def get_circle_diameter(serial_number):
@@ -219,7 +224,7 @@ def get_circle_diameter(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_GetCircleDiameter(serial_number)
 
@@ -228,7 +233,7 @@ def get_circle_diameter(serial_number):
 
 NT_GetCircleDiameterLUT = lib.NT_GetCircleDiameterLUT
 NT_GetCircleDiameterLUT.restype = c_short
-NT_GetCircleDiameterLUT.argtypes = [POINTER(c_char)]
+NT_GetCircleDiameterLUT.argtypes = []
 
 
 def get_circle_diameter_l_u_t(serial_number):
@@ -245,7 +250,7 @@ def get_circle_diameter_l_u_t(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     LUT = NT_CircleDiameterLUT()
 
     output = NT_GetCircleDiameterLUT(serial_number)
@@ -255,7 +260,7 @@ def get_circle_diameter_l_u_t(serial_number):
 
 NT_GetCircleHomePosition = lib.NT_GetCircleHomePosition
 NT_GetCircleHomePosition.restype = c_short
-NT_GetCircleHomePosition.argtypes = [POINTER(c_char)]
+NT_GetCircleHomePosition.argtypes = []
 
 
 def get_circle_home_position(serial_number):
@@ -272,7 +277,7 @@ def get_circle_home_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = NT_HVComponent()
 
     output = NT_GetCircleHomePosition(serial_number)
@@ -282,7 +287,7 @@ def get_circle_home_position(serial_number):
 
 NT_GetCircleParams = lib.NT_GetCircleParams
 NT_GetCircleParams.restype = c_short
-NT_GetCircleParams.argtypes = [POINTER(c_char)]
+NT_GetCircleParams.argtypes = []
 
 
 def get_circle_params(serial_number):
@@ -299,7 +304,7 @@ def get_circle_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = NT_CircleParameters()
 
     output = NT_GetCircleParams(serial_number)
@@ -309,7 +314,7 @@ def get_circle_params(serial_number):
 
 NT_GetCirclePosition = lib.NT_GetCirclePosition
 NT_GetCirclePosition.restype = c_short
-NT_GetCirclePosition.argtypes = [POINTER(c_char)]
+NT_GetCirclePosition.argtypes = []
 
 
 def get_circle_position(serial_number):
@@ -326,7 +331,7 @@ def get_circle_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = NT_HVComponent()
 
     output = NT_GetCirclePosition(serial_number)
@@ -336,7 +341,7 @@ def get_circle_position(serial_number):
 
 NT_GetControlMode = lib.NT_GetControlMode
 NT_GetControlMode.restype = NT_ControlMode
-NT_GetControlMode.argtypes = [POINTER(c_char)]
+NT_GetControlMode.argtypes = []
 
 
 def get_control_mode(serial_number):
@@ -353,7 +358,7 @@ def get_control_mode(serial_number):
         NT_ControlMode
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_long()
 
     output = NT_GetControlMode(serial_number)
@@ -363,7 +368,7 @@ def get_control_mode(serial_number):
 
 NT_GetFeedbackSource = lib.NT_GetFeedbackSource
 NT_GetFeedbackSource.restype = NT_FeedbackSource
-NT_GetFeedbackSource.argtypes = [POINTER(c_char)]
+NT_GetFeedbackSource.argtypes = []
 
 
 def get_feedback_source(serial_number):
@@ -379,7 +384,7 @@ def get_feedback_source(serial_number):
         NT_FeedbackSource
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_GetFeedbackSource(serial_number)
 
@@ -388,7 +393,7 @@ def get_feedback_source(serial_number):
 
 NT_GetFirmwareVersion = lib.NT_GetFirmwareVersion
 NT_GetFirmwareVersion.restype = c_ulong
-NT_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+NT_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serial_number):
@@ -404,7 +409,7 @@ def get_firmware_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_GetFirmwareVersion(serial_number)
 
@@ -413,7 +418,7 @@ def get_firmware_version(serial_number):
 
 NT_GetGain = lib.NT_GetGain
 NT_GetGain.restype = c_short
-NT_GetGain.argtypes = [POINTER(c_char)]
+NT_GetGain.argtypes = []
 
 
 def get_gain(serial_number):
@@ -429,7 +434,7 @@ def get_gain(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_GetGain(serial_number)
 
@@ -447,23 +452,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -490,15 +487,15 @@ def get_hardware_info_block(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     hardwareInfo = TLI_HardwareInformation()
 
     output = NT_GetHardwareInfoBlock(serial_number)
@@ -508,7 +505,7 @@ def get_hardware_info_block(serial_number):
 
 NT_GetMaxTravel = lib.NT_GetMaxTravel
 NT_GetMaxTravel.restype = c_short
-NT_GetMaxTravel.argtypes = [POINTER(c_char)]
+NT_GetMaxTravel.argtypes = []
 
 
 def get_max_travel(serial_number):
@@ -526,7 +523,7 @@ def get_max_travel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     chanA = c_double()
     chanB = c_double()
 
@@ -537,7 +534,7 @@ def get_max_travel(serial_number):
 
 NT_GetMode = lib.NT_GetMode
 NT_GetMode.restype = NT_Mode
-NT_GetMode.argtypes = [POINTER(c_char)]
+NT_GetMode.argtypes = []
 
 
 def get_mode(serial_number):
@@ -553,7 +550,7 @@ def get_mode(serial_number):
         NT_Mode
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_GetMode(serial_number)
 
@@ -562,7 +559,7 @@ def get_mode(serial_number):
 
 NT_GetNTChannels = lib.NT_GetNTChannels
 NT_GetNTChannels.restype = c_short
-NT_GetNTChannels.argtypes = [POINTER(c_char)]
+NT_GetNTChannels.argtypes = []
 
 
 def get_n_t_channels(serial_number):
@@ -580,7 +577,7 @@ def get_n_t_channels(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     chanA = c_short()
     chanB = c_short()
 
@@ -591,7 +588,7 @@ def get_n_t_channels(serial_number):
 
 NT_GetNextMessage = lib.NT_GetNextMessage
 NT_GetNextMessage.restype = c_bool
-NT_GetNextMessage.argtypes = [POINTER(c_char)]
+NT_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -610,7 +607,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -622,7 +619,7 @@ def get_next_message(serial_number):
 
 NT_GetPhaseCompensationParams = lib.NT_GetPhaseCompensationParams
 NT_GetPhaseCompensationParams.restype = c_short
-NT_GetPhaseCompensationParams.argtypes = [POINTER(c_char)]
+NT_GetPhaseCompensationParams.argtypes = []
 
 
 def get_phase_compensation_params(serial_number):
@@ -639,7 +636,7 @@ def get_phase_compensation_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = NT_HVComponent()
 
     output = NT_GetPhaseCompensationParams(serial_number)
@@ -649,7 +646,7 @@ def get_phase_compensation_params(serial_number):
 
 NT_GetRangeMode = lib.NT_GetRangeMode
 NT_GetRangeMode.restype = c_short
-NT_GetRangeMode.argtypes = [POINTER(c_char)]
+NT_GetRangeMode.argtypes = []
 
 
 def get_range_mode(serial_number):
@@ -667,7 +664,7 @@ def get_range_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = NT_TIARangeMode()
     oddOrEven = NT_OddOrEven()
 
@@ -678,7 +675,7 @@ def get_range_mode(serial_number):
 
 NT_GetReading = lib.NT_GetReading
 NT_GetReading.restype = c_short
-NT_GetReading.argtypes = [POINTER(c_char)]
+NT_GetReading.argtypes = []
 
 
 def get_reading(serial_number):
@@ -696,7 +693,7 @@ def get_reading(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     reading = NT_TIAReading()
     reading = KNA_TIAReading()
 
@@ -707,7 +704,7 @@ def get_reading(serial_number):
 
 NT_GetSignalState = lib.NT_GetSignalState
 NT_GetSignalState.restype = NT_SignalState
-NT_GetSignalState.argtypes = [POINTER(c_char)]
+NT_GetSignalState.argtypes = []
 
 
 def get_signal_state(serial_number):
@@ -723,7 +720,7 @@ def get_signal_state(serial_number):
         NT_SignalState
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_GetSignalState(serial_number)
 
@@ -732,7 +729,7 @@ def get_signal_state(serial_number):
 
 NT_GetSoftwareVersion = lib.NT_GetSoftwareVersion
 NT_GetSoftwareVersion.restype = c_ulong
-NT_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+NT_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -748,7 +745,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_GetSoftwareVersion(serial_number)
 
@@ -757,7 +754,7 @@ def get_software_version(serial_number):
 
 NT_GetStatusBits = lib.NT_GetStatusBits
 NT_GetStatusBits.restype = c_ulong
-NT_GetStatusBits.argtypes = [POINTER(c_char)]
+NT_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -773,7 +770,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_GetStatusBits(serial_number)
 
@@ -782,7 +779,7 @@ def get_status_bits(serial_number):
 
 NT_GetTIALPFilterParams = lib.NT_GetTIALPFilterParams
 NT_GetTIALPFilterParams.restype = c_short
-NT_GetTIALPFilterParams.argtypes = [POINTER(c_char)]
+NT_GetTIALPFilterParams.argtypes = []
 
 
 def get_t_i_a_l_p_filter_params(serial_number):
@@ -799,7 +796,7 @@ def get_t_i_a_l_p_filter_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = NT_LowPassFilterParameters()
 
     output = NT_GetTIALPFilterParams(serial_number)
@@ -809,7 +806,7 @@ def get_t_i_a_l_p_filter_params(serial_number):
 
 NT_GetTIARange = lib.NT_GetTIARange
 NT_GetTIARange.restype = NT_TIARange
-NT_GetTIARange.argtypes = [POINTER(c_char)]
+NT_GetTIARange.argtypes = []
 
 
 def get_t_i_a_range(serial_number):
@@ -825,7 +822,7 @@ def get_t_i_a_range(serial_number):
         NT_TIARange
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_GetTIARange(serial_number)
 
@@ -834,7 +831,7 @@ def get_t_i_a_range(serial_number):
 
 NT_GetTIArangeParams = lib.NT_GetTIArangeParams
 NT_GetTIArangeParams.restype = c_short
-NT_GetTIArangeParams.argtypes = [POINTER(c_char)]
+NT_GetTIArangeParams.argtypes = []
 
 
 def get_t_i_arange_params(serial_number):
@@ -852,7 +849,7 @@ def get_t_i_arange_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = NT_TIARangeParameters()
     params = KNA_TIARangeParameters()
 
@@ -863,7 +860,7 @@ def get_t_i_arange_params(serial_number):
 
 NT_GetTrackingThresholdSignal = lib.NT_GetTrackingThresholdSignal
 NT_GetTrackingThresholdSignal.restype = c_float
-NT_GetTrackingThresholdSignal.argtypes = [POINTER(c_char)]
+NT_GetTrackingThresholdSignal.argtypes = []
 
 
 def get_tracking_threshold_signal(serial_number):
@@ -879,7 +876,7 @@ def get_tracking_threshold_signal(serial_number):
         c_float
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_GetTrackingThresholdSignal(serial_number)
 
@@ -888,7 +885,7 @@ def get_tracking_threshold_signal(serial_number):
 
 NT_HasLastMsgTimerOverrun = lib.NT_HasLastMsgTimerOverrun
 NT_HasLastMsgTimerOverrun.restype = c_bool
-NT_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+NT_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serial_number):
@@ -904,7 +901,7 @@ def has_last_msg_timer_overrun(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_HasLastMsgTimerOverrun(serial_number)
 
@@ -913,7 +910,7 @@ def has_last_msg_timer_overrun(serial_number):
 
 NT_HomeCircle = lib.NT_HomeCircle
 NT_HomeCircle.restype = c_short
-NT_HomeCircle.argtypes = [POINTER(c_char)]
+NT_HomeCircle.argtypes = []
 
 
 def home_circle(serial_number):
@@ -929,7 +926,7 @@ def home_circle(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_HomeCircle(serial_number)
 
@@ -938,7 +935,7 @@ def home_circle(serial_number):
 
 NT_Identify = lib.NT_Identify
 NT_Identify.restype = c_void_p
-NT_Identify.argtypes = [POINTER(c_char)]
+NT_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -954,7 +951,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_Identify(serial_number)
 
@@ -963,7 +960,7 @@ def identify(serial_number):
 
 NT_IsChannelEnabled = lib.NT_IsChannelEnabled
 NT_IsChannelEnabled.restype = c_bool
-NT_IsChannelEnabled.argtypes = [POINTER(c_char)]
+NT_IsChannelEnabled.argtypes = []
 
 
 def is_channel_enabled(serial_number):
@@ -980,7 +977,7 @@ def is_channel_enabled(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_long()
 
     output = NT_IsChannelEnabled(serial_number)
@@ -990,7 +987,7 @@ def is_channel_enabled(serial_number):
 
 NT_LoadNamedSettings = lib.NT_LoadNamedSettings
 NT_LoadNamedSettings.restype = c_bool
-NT_LoadNamedSettings.argtypes = [POINTER(c_char)]
+NT_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -1007,7 +1004,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settingsName = POINTER(c_char)()
 
     output = NT_LoadNamedSettings(serial_number)
@@ -1017,7 +1014,7 @@ def load_named_settings(serial_number):
 
 NT_LoadSettings = lib.NT_LoadSettings
 NT_LoadSettings.restype = c_bool
-NT_LoadSettings.argtypes = [POINTER(c_char)]
+NT_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -1033,7 +1030,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_LoadSettings(serial_number)
 
@@ -1042,7 +1039,7 @@ def load_settings(serial_number):
 
 NT_MessageQueueSize = lib.NT_MessageQueueSize
 NT_MessageQueueSize.restype = c_int
-NT_MessageQueueSize.argtypes = [POINTER(c_char)]
+NT_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -1058,7 +1055,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_MessageQueueSize(serial_number)
 
@@ -1067,7 +1064,7 @@ def message_queue_size(serial_number):
 
 NT_Open = lib.NT_Open
 NT_Open.restype = c_short
-NT_Open.argtypes = [POINTER(c_char)]
+NT_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -1083,7 +1080,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_Open(serial_number)
 
@@ -1092,7 +1089,7 @@ def open_device(serial_number):
 
 NT_PollingDuration = lib.NT_PollingDuration
 NT_PollingDuration.restype = c_long
-NT_PollingDuration.argtypes = [POINTER(c_char)]
+NT_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -1108,7 +1105,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_PollingDuration(serial_number)
 
@@ -1117,7 +1114,7 @@ def polling_duration(serial_number):
 
 NT_RegisterMessageCallback = lib.NT_RegisterMessageCallback
 NT_RegisterMessageCallback.restype = c_void_p
-NT_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+NT_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -1134,7 +1131,7 @@ def register_message_callback(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RegisterMessageCallback(serial_number)
 
@@ -1143,7 +1140,7 @@ def register_message_callback(serial_number):
 
 NT_RequestChannelStates = lib.NT_RequestChannelStates
 NT_RequestChannelStates.restype = c_short
-NT_RequestChannelStates.argtypes = [POINTER(c_char)]
+NT_RequestChannelStates.argtypes = []
 
 
 def request_channel_states(serial_number):
@@ -1159,7 +1156,7 @@ def request_channel_states(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestChannelStates(serial_number)
 
@@ -1168,7 +1165,7 @@ def request_channel_states(serial_number):
 
 NT_RequestCircleDiameterLUT = lib.NT_RequestCircleDiameterLUT
 NT_RequestCircleDiameterLUT.restype = c_short
-NT_RequestCircleDiameterLUT.argtypes = [POINTER(c_char)]
+NT_RequestCircleDiameterLUT.argtypes = []
 
 
 def request_circle_diameter_l_u_t(serial_number):
@@ -1184,7 +1181,7 @@ def request_circle_diameter_l_u_t(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestCircleDiameterLUT(serial_number)
 
@@ -1193,7 +1190,7 @@ def request_circle_diameter_l_u_t(serial_number):
 
 NT_RequestCircleHomePosition = lib.NT_RequestCircleHomePosition
 NT_RequestCircleHomePosition.restype = c_short
-NT_RequestCircleHomePosition.argtypes = [POINTER(c_char)]
+NT_RequestCircleHomePosition.argtypes = []
 
 
 def request_circle_home_position(serial_number):
@@ -1209,7 +1206,7 @@ def request_circle_home_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestCircleHomePosition(serial_number)
 
@@ -1218,7 +1215,7 @@ def request_circle_home_position(serial_number):
 
 NT_RequestCircleParams = lib.NT_RequestCircleParams
 NT_RequestCircleParams.restype = c_short
-NT_RequestCircleParams.argtypes = [POINTER(c_char)]
+NT_RequestCircleParams.argtypes = []
 
 
 def request_circle_params(serial_number):
@@ -1234,7 +1231,7 @@ def request_circle_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestCircleParams(serial_number)
 
@@ -1243,7 +1240,7 @@ def request_circle_params(serial_number):
 
 NT_RequestCirclePosition = lib.NT_RequestCirclePosition
 NT_RequestCirclePosition.restype = c_short
-NT_RequestCirclePosition.argtypes = [POINTER(c_char)]
+NT_RequestCirclePosition.argtypes = []
 
 
 def request_circle_position(serial_number):
@@ -1259,7 +1256,7 @@ def request_circle_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestCirclePosition(serial_number)
 
@@ -1268,7 +1265,7 @@ def request_circle_position(serial_number):
 
 NT_RequestControlMode = lib.NT_RequestControlMode
 NT_RequestControlMode.restype = c_short
-NT_RequestControlMode.argtypes = [POINTER(c_char)]
+NT_RequestControlMode.argtypes = []
 
 
 def request_control_mode(serial_number):
@@ -1284,7 +1281,7 @@ def request_control_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestControlMode(serial_number)
 
@@ -1293,7 +1290,7 @@ def request_control_mode(serial_number):
 
 NT_RequestFeedbackSource = lib.NT_RequestFeedbackSource
 NT_RequestFeedbackSource.restype = c_short
-NT_RequestFeedbackSource.argtypes = [POINTER(c_char)]
+NT_RequestFeedbackSource.argtypes = []
 
 
 def request_feedback_source(serial_number):
@@ -1309,7 +1306,7 @@ def request_feedback_source(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestFeedbackSource(serial_number)
 
@@ -1318,7 +1315,7 @@ def request_feedback_source(serial_number):
 
 NT_RequestGain = lib.NT_RequestGain
 NT_RequestGain.restype = c_short
-NT_RequestGain.argtypes = [POINTER(c_char)]
+NT_RequestGain.argtypes = []
 
 
 def request_gain(serial_number):
@@ -1334,7 +1331,7 @@ def request_gain(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestGain(serial_number)
 
@@ -1343,7 +1340,7 @@ def request_gain(serial_number):
 
 NT_RequestMaxTravel = lib.NT_RequestMaxTravel
 NT_RequestMaxTravel.restype = c_short
-NT_RequestMaxTravel.argtypes = [POINTER(c_char)]
+NT_RequestMaxTravel.argtypes = []
 
 
 def request_max_travel(serial_number):
@@ -1359,7 +1356,7 @@ def request_max_travel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestMaxTravel(serial_number)
 
@@ -1368,7 +1365,7 @@ def request_max_travel(serial_number):
 
 NT_RequestMode = lib.NT_RequestMode
 NT_RequestMode.restype = c_short
-NT_RequestMode.argtypes = [POINTER(c_char)]
+NT_RequestMode.argtypes = []
 
 
 def request_mode(serial_number):
@@ -1384,7 +1381,7 @@ def request_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestMode(serial_number)
 
@@ -1393,7 +1390,7 @@ def request_mode(serial_number):
 
 NT_RequestNTChannels = lib.NT_RequestNTChannels
 NT_RequestNTChannels.restype = c_short
-NT_RequestNTChannels.argtypes = [POINTER(c_char)]
+NT_RequestNTChannels.argtypes = []
 
 
 def request_n_t_channels(serial_number):
@@ -1409,7 +1406,7 @@ def request_n_t_channels(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestNTChannels(serial_number)
 
@@ -1418,7 +1415,7 @@ def request_n_t_channels(serial_number):
 
 NT_RequestPhaseCompensationParams = lib.NT_RequestPhaseCompensationParams
 NT_RequestPhaseCompensationParams.restype = c_short
-NT_RequestPhaseCompensationParams.argtypes = [POINTER(c_char)]
+NT_RequestPhaseCompensationParams.argtypes = []
 
 
 def request_phase_compensation_params(serial_number):
@@ -1434,7 +1431,7 @@ def request_phase_compensation_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestPhaseCompensationParams(serial_number)
 
@@ -1443,7 +1440,7 @@ def request_phase_compensation_params(serial_number):
 
 NT_RequestReading = lib.NT_RequestReading
 NT_RequestReading.restype = c_short
-NT_RequestReading.argtypes = [POINTER(c_char)]
+NT_RequestReading.argtypes = []
 
 
 def request_reading(serial_number):
@@ -1459,7 +1456,7 @@ def request_reading(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestReading(serial_number)
 
@@ -1468,7 +1465,7 @@ def request_reading(serial_number):
 
 NT_RequestSettings = lib.NT_RequestSettings
 NT_RequestSettings.restype = c_short
-NT_RequestSettings.argtypes = [POINTER(c_char)]
+NT_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -1484,7 +1481,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestSettings(serial_number)
 
@@ -1493,7 +1490,7 @@ def request_settings(serial_number):
 
 NT_RequestSignalState = lib.NT_RequestSignalState
 NT_RequestSignalState.restype = c_short
-NT_RequestSignalState.argtypes = [POINTER(c_char)]
+NT_RequestSignalState.argtypes = []
 
 
 def request_signal_state(serial_number):
@@ -1509,7 +1506,7 @@ def request_signal_state(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestSignalState(serial_number)
 
@@ -1518,7 +1515,7 @@ def request_signal_state(serial_number):
 
 NT_RequestStatus = lib.NT_RequestStatus
 NT_RequestStatus.restype = c_short
-NT_RequestStatus.argtypes = [POINTER(c_char)]
+NT_RequestStatus.argtypes = []
 
 
 def request_status(serial_number):
@@ -1534,7 +1531,7 @@ def request_status(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestStatus(serial_number)
 
@@ -1543,7 +1540,7 @@ def request_status(serial_number):
 
 NT_RequestStatusBits = lib.NT_RequestStatusBits
 NT_RequestStatusBits.restype = c_short
-NT_RequestStatusBits.argtypes = [POINTER(c_char)]
+NT_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serial_number):
@@ -1559,7 +1556,7 @@ def request_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestStatusBits(serial_number)
 
@@ -1568,7 +1565,7 @@ def request_status_bits(serial_number):
 
 NT_RequestTIALPFilterParams = lib.NT_RequestTIALPFilterParams
 NT_RequestTIALPFilterParams.restype = c_short
-NT_RequestTIALPFilterParams.argtypes = [POINTER(c_char)]
+NT_RequestTIALPFilterParams.argtypes = []
 
 
 def request_t_i_a_l_p_filter_params(serial_number):
@@ -1584,7 +1581,7 @@ def request_t_i_a_l_p_filter_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestTIALPFilterParams(serial_number)
 
@@ -1593,7 +1590,7 @@ def request_t_i_a_l_p_filter_params(serial_number):
 
 NT_RequestTIArangeParams = lib.NT_RequestTIArangeParams
 NT_RequestTIArangeParams.restype = c_short
-NT_RequestTIArangeParams.argtypes = [POINTER(c_char)]
+NT_RequestTIArangeParams.argtypes = []
 
 
 def request_t_i_arange_params(serial_number):
@@ -1609,7 +1606,7 @@ def request_t_i_arange_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestTIArangeParams(serial_number)
 
@@ -1618,7 +1615,7 @@ def request_t_i_arange_params(serial_number):
 
 NT_RequestTrackingThresholdSignal = lib.NT_RequestTrackingThresholdSignal
 NT_RequestTrackingThresholdSignal.restype = c_short
-NT_RequestTrackingThresholdSignal.argtypes = [POINTER(c_char)]
+NT_RequestTrackingThresholdSignal.argtypes = []
 
 
 def request_tracking_threshold_signal(serial_number):
@@ -1634,7 +1631,7 @@ def request_tracking_threshold_signal(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_RequestTrackingThresholdSignal(serial_number)
 
@@ -1643,7 +1640,7 @@ def request_tracking_threshold_signal(serial_number):
 
 NT_SetCircleDiameter = lib.NT_SetCircleDiameter
 NT_SetCircleDiameter.restype = c_short
-NT_SetCircleDiameter.argtypes = [POINTER(c_char)]
+NT_SetCircleDiameter.argtypes = []
 
 
 def set_circle_diameter(serial_number):
@@ -1660,7 +1657,7 @@ def set_circle_diameter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     diameter = c_long()
 
     output = NT_SetCircleDiameter(serial_number)
@@ -1670,7 +1667,7 @@ def set_circle_diameter(serial_number):
 
 NT_SetCircleDiameterLUT = lib.NT_SetCircleDiameterLUT
 NT_SetCircleDiameterLUT.restype = c_short
-NT_SetCircleDiameterLUT.argtypes = [POINTER(c_char)]
+NT_SetCircleDiameterLUT.argtypes = []
 
 
 def set_circle_diameter_l_u_t(serial_number):
@@ -1687,7 +1684,7 @@ def set_circle_diameter_l_u_t(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     LUT = NT_CircleDiameterLUT()
 
     output = NT_SetCircleDiameterLUT(serial_number)
@@ -1697,7 +1694,7 @@ def set_circle_diameter_l_u_t(serial_number):
 
 NT_SetCircleHomePosition = lib.NT_SetCircleHomePosition
 NT_SetCircleHomePosition.restype = c_short
-NT_SetCircleHomePosition.argtypes = [POINTER(c_char)]
+NT_SetCircleHomePosition.argtypes = []
 
 
 def set_circle_home_position(serial_number):
@@ -1714,7 +1711,7 @@ def set_circle_home_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = NT_HVComponent()
 
     output = NT_SetCircleHomePosition(serial_number)
@@ -1724,7 +1721,7 @@ def set_circle_home_position(serial_number):
 
 NT_SetCircleParams = lib.NT_SetCircleParams
 NT_SetCircleParams.restype = c_short
-NT_SetCircleParams.argtypes = [POINTER(c_char)]
+NT_SetCircleParams.argtypes = []
 
 
 def set_circle_params(serial_number):
@@ -1741,7 +1738,7 @@ def set_circle_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = NT_CircleParameters()
 
     output = NT_SetCircleParams(serial_number)
@@ -1751,7 +1748,7 @@ def set_circle_params(serial_number):
 
 NT_SetControlMode = lib.NT_SetControlMode
 NT_SetControlMode.restype = c_short
-NT_SetControlMode.argtypes = [POINTER(c_char)]
+NT_SetControlMode.argtypes = []
 
 
 def set_control_mode(serial_number):
@@ -1769,7 +1766,7 @@ def set_control_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_long()
     mode = NT_ControlMode()
 
@@ -1780,7 +1777,7 @@ def set_control_mode(serial_number):
 
 NT_SetFeedbackSource = lib.NT_SetFeedbackSource
 NT_SetFeedbackSource.restype = c_short
-NT_SetFeedbackSource.argtypes = [POINTER(c_char)]
+NT_SetFeedbackSource.argtypes = []
 
 
 def set_feedback_source(serial_number):
@@ -1798,7 +1795,7 @@ def set_feedback_source(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     input = NT_FeedbackSource()
     input = KNA_FeedbackSource()
 
@@ -1809,7 +1806,7 @@ def set_feedback_source(serial_number):
 
 NT_SetGain = lib.NT_SetGain
 NT_SetGain.restype = c_short
-NT_SetGain.argtypes = [POINTER(c_char)]
+NT_SetGain.argtypes = []
 
 
 def set_gain(serial_number):
@@ -1826,7 +1823,7 @@ def set_gain(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     gain = c_short()
 
     output = NT_SetGain(serial_number)
@@ -1836,7 +1833,7 @@ def set_gain(serial_number):
 
 NT_SetMode = lib.NT_SetMode
 NT_SetMode.restype = c_short
-NT_SetMode.argtypes = [POINTER(c_char)]
+NT_SetMode.argtypes = []
 
 
 def set_mode(serial_number):
@@ -1853,7 +1850,7 @@ def set_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = NT_Mode()
 
     output = NT_SetMode(serial_number)
@@ -1863,7 +1860,7 @@ def set_mode(serial_number):
 
 NT_SetNTChannels = lib.NT_SetNTChannels
 NT_SetNTChannels.restype = c_short
-NT_SetNTChannels.argtypes = [POINTER(c_char)]
+NT_SetNTChannels.argtypes = []
 
 
 def set_n_t_channels(serial_number):
@@ -1881,7 +1878,7 @@ def set_n_t_channels(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     chanA = c_short()
     chanB = c_short()
 
@@ -1892,7 +1889,7 @@ def set_n_t_channels(serial_number):
 
 NT_SetPhaseCompensationParams = lib.NT_SetPhaseCompensationParams
 NT_SetPhaseCompensationParams.restype = c_short
-NT_SetPhaseCompensationParams.argtypes = [POINTER(c_char)]
+NT_SetPhaseCompensationParams.argtypes = []
 
 
 def set_phase_compensation_params(serial_number):
@@ -1909,7 +1906,7 @@ def set_phase_compensation_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = NT_HVComponent()
 
     output = NT_SetPhaseCompensationParams(serial_number)
@@ -1919,7 +1916,7 @@ def set_phase_compensation_params(serial_number):
 
 NT_SetRangeMode = lib.NT_SetRangeMode
 NT_SetRangeMode.restype = c_short
-NT_SetRangeMode.argtypes = [POINTER(c_char)]
+NT_SetRangeMode.argtypes = []
 
 
 def set_range_mode(serial_number):
@@ -1937,7 +1934,7 @@ def set_range_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = NT_TIARangeMode()
     oddOrEven = NT_OddOrEven()
 
@@ -1948,7 +1945,7 @@ def set_range_mode(serial_number):
 
 NT_SetTIALPFilterParams = lib.NT_SetTIALPFilterParams
 NT_SetTIALPFilterParams.restype = c_short
-NT_SetTIALPFilterParams.argtypes = [POINTER(c_char)]
+NT_SetTIALPFilterParams.argtypes = []
 
 
 def set_t_i_a_l_p_filter_params(serial_number):
@@ -1965,7 +1962,7 @@ def set_t_i_a_l_p_filter_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = NT_LowPassFilterParameters()
 
     output = NT_SetTIALPFilterParams(serial_number)
@@ -1975,7 +1972,7 @@ def set_t_i_a_l_p_filter_params(serial_number):
 
 NT_SetTIARange = lib.NT_SetTIARange
 NT_SetTIARange.restype = c_short
-NT_SetTIARange.argtypes = [POINTER(c_char)]
+NT_SetTIARange.argtypes = []
 
 
 def set_t_i_a_range(serial_number):
@@ -1993,7 +1990,7 @@ def set_t_i_a_range(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     range = NT_TIARange()
     range = KNA_TIARange()
 
@@ -2004,7 +2001,7 @@ def set_t_i_a_range(serial_number):
 
 NT_SetTIArangeParams = lib.NT_SetTIArangeParams
 NT_SetTIArangeParams.restype = c_short
-NT_SetTIArangeParams.argtypes = [POINTER(c_char)]
+NT_SetTIArangeParams.argtypes = []
 
 
 def set_t_i_arange_params(serial_number):
@@ -2022,7 +2019,7 @@ def set_t_i_arange_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = NT_TIARangeParameters()
     params = KNA_TIARangeParameters()
 
@@ -2033,7 +2030,7 @@ def set_t_i_arange_params(serial_number):
 
 NT_SetTrackingThresholdSignal = lib.NT_SetTrackingThresholdSignal
 NT_SetTrackingThresholdSignal.restype = c_short
-NT_SetTrackingThresholdSignal.argtypes = [POINTER(c_char)]
+NT_SetTrackingThresholdSignal.argtypes = []
 
 
 def set_tracking_threshold_signal(serial_number):
@@ -2050,7 +2047,7 @@ def set_tracking_threshold_signal(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     threshold = c_float()
 
     output = NT_SetTrackingThresholdSignal(serial_number)
@@ -2060,7 +2057,7 @@ def set_tracking_threshold_signal(serial_number):
 
 NT_StartPolling = lib.NT_StartPolling
 NT_StartPolling.restype = c_bool
-NT_StartPolling.argtypes = [POINTER(c_char)]
+NT_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -2077,7 +2074,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     milliseconds = c_int()
 
     output = NT_StartPolling(serial_number)
@@ -2087,7 +2084,7 @@ def start_polling(serial_number):
 
 NT_StopPolling = lib.NT_StopPolling
 NT_StopPolling.restype = c_void_p
-NT_StopPolling.argtypes = [POINTER(c_char)]
+NT_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -2103,7 +2100,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = NT_StopPolling(serial_number)
 
@@ -2112,7 +2109,7 @@ def stop_polling(serial_number):
 
 NT_TimeSinceLastMsgReceived = lib.NT_TimeSinceLastMsgReceived
 NT_TimeSinceLastMsgReceived.restype = c_bool
-NT_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+NT_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serial_number):
@@ -2129,7 +2126,7 @@ def time_since_last_msg_received(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     lastUpdateTimeMS = c_int64()
 
     output = NT_TimeSinceLastMsgReceived(serial_number)

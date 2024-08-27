@@ -46,6 +46,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -56,7 +60,7 @@ lib = cdll.LoadLibrary(
 
 BMC_CanDeviceLockFrontPanel = lib.BMC_CanDeviceLockFrontPanel
 BMC_CanDeviceLockFrontPanel.restype = c_bool
-BMC_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
+BMC_CanDeviceLockFrontPanel.argtypes = []
 
 
 def can_device_lock_front_panel(serial_number):
@@ -72,7 +76,7 @@ def can_device_lock_front_panel(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BMC_CanDeviceLockFrontPanel(serial_number)
 
@@ -81,7 +85,7 @@ def can_device_lock_front_panel(serial_number):
 
 BMC_CanHome = lib.BMC_CanHome
 BMC_CanHome.restype = c_bool
-BMC_CanHome.argtypes = [POINTER(c_char)]
+BMC_CanHome.argtypes = []
 
 
 def can_home(serial_number):
@@ -98,7 +102,7 @@ def can_home(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_CanHome(serial_number)
@@ -108,7 +112,7 @@ def can_home(serial_number):
 
 BMC_CanMoveWithoutHomingFirst = lib.BMC_CanMoveWithoutHomingFirst
 BMC_CanMoveWithoutHomingFirst.restype = c_bool
-BMC_CanMoveWithoutHomingFirst.argtypes = [POINTER(c_char)]
+BMC_CanMoveWithoutHomingFirst.argtypes = []
 
 
 def can_move_without_homing_first(serial_number):
@@ -125,7 +129,7 @@ def can_move_without_homing_first(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_CanMoveWithoutHomingFirst(serial_number)
@@ -144,14 +148,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BMC_CheckConnection(serial_number)
 
@@ -160,7 +165,7 @@ def check_connection(serial_number):
 
 BMC_ClearMessageQueue = lib.BMC_ClearMessageQueue
 BMC_ClearMessageQueue.restype = c_short
-BMC_ClearMessageQueue.argtypes = [POINTER(c_char)]
+BMC_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -177,7 +182,7 @@ def clear_message_queue(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_ClearMessageQueue(serial_number)
@@ -187,7 +192,7 @@ def clear_message_queue(serial_number):
 
 BMC_Close = lib.BMC_Close
 BMC_Close.restype = c_short
-BMC_Close.argtypes = [POINTER(c_char)]
+BMC_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -203,7 +208,7 @@ def close_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BMC_Close(serial_number)
 
@@ -212,7 +217,7 @@ def close_device(serial_number):
 
 BMC_DisableChannel = lib.BMC_DisableChannel
 BMC_DisableChannel.restype = c_short
-BMC_DisableChannel.argtypes = [POINTER(c_char)]
+BMC_DisableChannel.argtypes = []
 
 
 def disable_channel(serial_number):
@@ -229,7 +234,7 @@ def disable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_DisableChannel(serial_number)
@@ -239,7 +244,7 @@ def disable_channel(serial_number):
 
 BMC_EnableChannel = lib.BMC_EnableChannel
 BMC_EnableChannel.restype = c_short
-BMC_EnableChannel.argtypes = [POINTER(c_char)]
+BMC_EnableChannel.argtypes = []
 
 
 def enable_channel(serial_number):
@@ -256,7 +261,7 @@ def enable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_EnableChannel(serial_number)
@@ -266,7 +271,7 @@ def enable_channel(serial_number):
 
 BMC_EnableLastMsgTimer = lib.BMC_EnableLastMsgTimer
 BMC_EnableLastMsgTimer.restype = c_void_p
-BMC_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+BMC_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serial_number):
@@ -285,7 +290,7 @@ def enable_last_msg_timer(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     enable = c_bool()
     lastMsgTimeout = c_int32()
@@ -297,7 +302,7 @@ def enable_last_msg_timer(serial_number):
 
 BMC_GetBacklash = lib.BMC_GetBacklash
 BMC_GetBacklash.restype = c_long
-BMC_GetBacklash.argtypes = [POINTER(c_char)]
+BMC_GetBacklash.argtypes = []
 
 
 def get_backlash(serial_number):
@@ -314,7 +319,7 @@ def get_backlash(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetBacklash(serial_number)
@@ -324,7 +329,7 @@ def get_backlash(serial_number):
 
 BMC_GetCurrentLoopParams = lib.BMC_GetCurrentLoopParams
 BMC_GetCurrentLoopParams.restype = c_short
-BMC_GetCurrentLoopParams.argtypes = [POINTER(c_char)]
+BMC_GetCurrentLoopParams.argtypes = []
 
 
 def get_current_loop_params(serial_number):
@@ -342,7 +347,7 @@ def get_current_loop_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     currentLoopParams = MOT_BrushlessCurrentLoopParameters()
 
@@ -353,7 +358,7 @@ def get_current_loop_params(serial_number):
 
 BMC_GetDeviceUnitFromRealValue = lib.BMC_GetDeviceUnitFromRealValue
 BMC_GetDeviceUnitFromRealValue.restype = c_short
-BMC_GetDeviceUnitFromRealValue.argtypes = [POINTER(c_char)]
+BMC_GetDeviceUnitFromRealValue.argtypes = []
 
 
 def get_device_unit_from_real_value(serial_number):
@@ -373,7 +378,7 @@ def get_device_unit_from_real_value(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     real_unit = c_double()
     device_unit = c_int()
@@ -386,7 +391,7 @@ def get_device_unit_from_real_value(serial_number):
 
 BMC_GetDigitalOutputs = lib.BMC_GetDigitalOutputs
 BMC_GetDigitalOutputs.restype = c_byte
-BMC_GetDigitalOutputs.argtypes = [POINTER(c_char)]
+BMC_GetDigitalOutputs.argtypes = []
 
 
 def get_digital_outputs(serial_number):
@@ -403,7 +408,7 @@ def get_digital_outputs(serial_number):
         c_byte
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetDigitalOutputs(serial_number)
@@ -413,7 +418,7 @@ def get_digital_outputs(serial_number):
 
 BMC_GetElectricOutputParams = lib.BMC_GetElectricOutputParams
 BMC_GetElectricOutputParams.restype = c_short
-BMC_GetElectricOutputParams.argtypes = [POINTER(c_char)]
+BMC_GetElectricOutputParams.argtypes = []
 
 
 def get_electric_output_params(serial_number):
@@ -431,7 +436,7 @@ def get_electric_output_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     electricOutputParams = MOT_BrushlessElectricOutputParameters()
 
@@ -442,7 +447,7 @@ def get_electric_output_params(serial_number):
 
 BMC_GetEncoderCounter = lib.BMC_GetEncoderCounter
 BMC_GetEncoderCounter.restype = c_long
-BMC_GetEncoderCounter.argtypes = [POINTER(c_char)]
+BMC_GetEncoderCounter.argtypes = []
 
 
 def get_encoder_counter(serial_number):
@@ -459,7 +464,7 @@ def get_encoder_counter(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetEncoderCounter(serial_number)
@@ -469,7 +474,7 @@ def get_encoder_counter(serial_number):
 
 BMC_GetFirmwareVersion = lib.BMC_GetFirmwareVersion
 BMC_GetFirmwareVersion.restype = c_ulong
-BMC_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+BMC_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serial_number):
@@ -486,7 +491,7 @@ def get_firmware_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetFirmwareVersion(serial_number)
@@ -496,7 +501,7 @@ def get_firmware_version(serial_number):
 
 BMC_GetFrontPanelLocked = lib.BMC_GetFrontPanelLocked
 BMC_GetFrontPanelLocked.restype = c_bool
-BMC_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
+BMC_GetFrontPanelLocked.argtypes = []
 
 
 def get_front_panel_locked(serial_number):
@@ -512,7 +517,7 @@ def get_front_panel_locked(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BMC_GetFrontPanelLocked(serial_number)
 
@@ -530,24 +535,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        channel: c_short
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_short
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
@@ -575,16 +571,15 @@ def get_hardware_info_block(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        channel: c_short
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     hardwareInfo = TLI_HardwareInformation()
 
@@ -595,7 +590,7 @@ def get_hardware_info_block(serial_number):
 
 BMC_GetHomingParamsBlock = lib.BMC_GetHomingParamsBlock
 BMC_GetHomingParamsBlock.restype = c_short
-BMC_GetHomingParamsBlock.argtypes = [POINTER(c_char)]
+BMC_GetHomingParamsBlock.argtypes = []
 
 
 def get_homing_params_block(serial_number):
@@ -613,7 +608,7 @@ def get_homing_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     homingParams = MOT_HomingParameters()
 
@@ -624,7 +619,7 @@ def get_homing_params_block(serial_number):
 
 BMC_GetHomingVelocity = lib.BMC_GetHomingVelocity
 BMC_GetHomingVelocity.restype = c_uint
-BMC_GetHomingVelocity.argtypes = [POINTER(c_char)]
+BMC_GetHomingVelocity.argtypes = []
 
 
 def get_homing_velocity(serial_number):
@@ -641,7 +636,7 @@ def get_homing_velocity(serial_number):
         c_uint
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetHomingVelocity(serial_number)
@@ -651,7 +646,7 @@ def get_homing_velocity(serial_number):
 
 BMC_GetJogMode = lib.BMC_GetJogMode
 BMC_GetJogMode.restype = c_short
-BMC_GetJogMode.argtypes = [POINTER(c_char)]
+BMC_GetJogMode.argtypes = []
 
 
 def get_jog_mode(serial_number):
@@ -670,7 +665,7 @@ def get_jog_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     mode = MOT_JogModes()
     stopMode = MOT_StopModes()
@@ -682,7 +677,7 @@ def get_jog_mode(serial_number):
 
 BMC_GetJogParamsBlock = lib.BMC_GetJogParamsBlock
 BMC_GetJogParamsBlock.restype = c_short
-BMC_GetJogParamsBlock.argtypes = [POINTER(c_char)]
+BMC_GetJogParamsBlock.argtypes = []
 
 
 def get_jog_params_block(serial_number):
@@ -700,7 +695,7 @@ def get_jog_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     jogParams = MOT_JogParameters()
 
@@ -711,7 +706,7 @@ def get_jog_params_block(serial_number):
 
 BMC_GetJogStepSize = lib.BMC_GetJogStepSize
 BMC_GetJogStepSize.restype = c_uint
-BMC_GetJogStepSize.argtypes = [POINTER(c_char)]
+BMC_GetJogStepSize.argtypes = []
 
 
 def get_jog_step_size(serial_number):
@@ -728,7 +723,7 @@ def get_jog_step_size(serial_number):
         c_uint
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetJogStepSize(serial_number)
@@ -738,7 +733,7 @@ def get_jog_step_size(serial_number):
 
 BMC_GetJogVelParams = lib.BMC_GetJogVelParams
 BMC_GetJogVelParams.restype = c_short
-BMC_GetJogVelParams.argtypes = [POINTER(c_char)]
+BMC_GetJogVelParams.argtypes = []
 
 
 def get_jog_vel_params(serial_number):
@@ -757,7 +752,7 @@ def get_jog_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     acceleration = c_int()
     maxVelocity = c_int()
@@ -769,7 +764,7 @@ def get_jog_vel_params(serial_number):
 
 BMC_GetMMIParams = lib.BMC_GetMMIParams
 BMC_GetMMIParams.restype = c_short
-BMC_GetMMIParams.argtypes = [POINTER(c_char)]
+BMC_GetMMIParams.argtypes = []
 
 
 def get_m_m_i_params(serial_number):
@@ -792,7 +787,7 @@ def get_m_m_i_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KMOT_WheelMode()
     wheelMaxVelocity = c_int32()
     wheelAcceleration = c_int32()
@@ -808,7 +803,7 @@ def get_m_m_i_params(serial_number):
 
 BMC_GetMMIParamsBlock = lib.BMC_GetMMIParamsBlock
 BMC_GetMMIParamsBlock.restype = c_short
-BMC_GetMMIParamsBlock.argtypes = [POINTER(c_char)]
+BMC_GetMMIParamsBlock.argtypes = []
 
 
 def get_m_m_i_params_block(serial_number):
@@ -825,7 +820,7 @@ def get_m_m_i_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mmiParams = KMOT_MMIParams()
 
     output = BMC_GetMMIParamsBlock(serial_number)
@@ -835,7 +830,7 @@ def get_m_m_i_params_block(serial_number):
 
 BMC_GetMMIParamsExt = lib.BMC_GetMMIParamsExt
 BMC_GetMMIParamsExt.restype = c_short
-BMC_GetMMIParamsExt.argtypes = [POINTER(c_char)]
+BMC_GetMMIParamsExt.argtypes = []
 
 
 def get_m_m_i_params_ext(serial_number):
@@ -860,7 +855,7 @@ def get_m_m_i_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KMOT_WheelMode()
     wheelMaxVelocity = c_int32()
     wheelAcceleration = c_int32()
@@ -878,7 +873,7 @@ def get_m_m_i_params_ext(serial_number):
 
 BMC_GetMotorParams = lib.BMC_GetMotorParams
 BMC_GetMotorParams.restype = c_short
-BMC_GetMotorParams.argtypes = [POINTER(c_char)]
+BMC_GetMotorParams.argtypes = []
 
 
 def get_motor_params(serial_number):
@@ -896,7 +891,7 @@ def get_motor_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     countsPerUnit = c_long()
 
@@ -907,7 +902,7 @@ def get_motor_params(serial_number):
 
 BMC_GetMotorParamsExt = lib.BMC_GetMotorParamsExt
 BMC_GetMotorParamsExt.restype = c_short
-BMC_GetMotorParamsExt.argtypes = [POINTER(c_char)]
+BMC_GetMotorParamsExt.argtypes = []
 
 
 def get_motor_params_ext(serial_number):
@@ -925,7 +920,7 @@ def get_motor_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     countsPerUnit = c_double()
 
@@ -936,7 +931,7 @@ def get_motor_params_ext(serial_number):
 
 BMC_GetMotorTravelLimits = lib.BMC_GetMotorTravelLimits
 BMC_GetMotorTravelLimits.restype = c_short
-BMC_GetMotorTravelLimits.argtypes = [POINTER(c_char)]
+BMC_GetMotorTravelLimits.argtypes = []
 
 
 def get_motor_travel_limits(serial_number):
@@ -955,7 +950,7 @@ def get_motor_travel_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     minPosition = c_double()
     maxPosition = c_double()
@@ -967,7 +962,7 @@ def get_motor_travel_limits(serial_number):
 
 BMC_GetMotorTravelMode = lib.BMC_GetMotorTravelMode
 BMC_GetMotorTravelMode.restype = MOT_TravelModes
-BMC_GetMotorTravelMode.argtypes = [POINTER(c_char)]
+BMC_GetMotorTravelMode.argtypes = []
 
 
 def get_motor_travel_mode(serial_number):
@@ -984,7 +979,7 @@ def get_motor_travel_mode(serial_number):
         MOT_TravelModes
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetMotorTravelMode(serial_number)
@@ -994,7 +989,7 @@ def get_motor_travel_mode(serial_number):
 
 BMC_GetMotorVelocityLimits = lib.BMC_GetMotorVelocityLimits
 BMC_GetMotorVelocityLimits.restype = c_short
-BMC_GetMotorVelocityLimits.argtypes = [POINTER(c_char)]
+BMC_GetMotorVelocityLimits.argtypes = []
 
 
 def get_motor_velocity_limits(serial_number):
@@ -1013,7 +1008,7 @@ def get_motor_velocity_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     maxVelocity = c_double()
     maxAcceleration = c_double()
@@ -1025,7 +1020,7 @@ def get_motor_velocity_limits(serial_number):
 
 BMC_GetMoveAbsolutePosition = lib.BMC_GetMoveAbsolutePosition
 BMC_GetMoveAbsolutePosition.restype = c_int
-BMC_GetMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+BMC_GetMoveAbsolutePosition.argtypes = []
 
 
 def get_move_absolute_position(serial_number):
@@ -1042,7 +1037,7 @@ def get_move_absolute_position(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetMoveAbsolutePosition(serial_number)
@@ -1052,7 +1047,7 @@ def get_move_absolute_position(serial_number):
 
 BMC_GetMoveRelativeDistance = lib.BMC_GetMoveRelativeDistance
 BMC_GetMoveRelativeDistance.restype = c_int
-BMC_GetMoveRelativeDistance.argtypes = [POINTER(c_char)]
+BMC_GetMoveRelativeDistance.argtypes = []
 
 
 def get_move_relative_distance(serial_number):
@@ -1069,7 +1064,7 @@ def get_move_relative_distance(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetMoveRelativeDistance(serial_number)
@@ -1079,7 +1074,7 @@ def get_move_relative_distance(serial_number):
 
 BMC_GetNextMessage = lib.BMC_GetNextMessage
 BMC_GetNextMessage.restype = c_bool
-BMC_GetNextMessage.argtypes = [POINTER(c_char)]
+BMC_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -1099,7 +1094,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     messageType = c_long()
     messageID = c_long()
@@ -1112,7 +1107,7 @@ def get_next_message(serial_number):
 
 BMC_GetNumberPositions = lib.BMC_GetNumberPositions
 BMC_GetNumberPositions.restype = c_int
-BMC_GetNumberPositions.argtypes = [POINTER(c_char)]
+BMC_GetNumberPositions.argtypes = []
 
 
 def get_number_positions(serial_number):
@@ -1129,7 +1124,7 @@ def get_number_positions(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetNumberPositions(serial_number)
@@ -1139,7 +1134,7 @@ def get_number_positions(serial_number):
 
 BMC_GetPosLoopParams = lib.BMC_GetPosLoopParams
 BMC_GetPosLoopParams.restype = c_short
-BMC_GetPosLoopParams.argtypes = [POINTER(c_char)]
+BMC_GetPosLoopParams.argtypes = []
 
 
 def get_pos_loop_params(serial_number):
@@ -1157,7 +1152,7 @@ def get_pos_loop_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     positionLoopParams = MOT_BrushlessPositionLoopParameters()
 
@@ -1168,7 +1163,7 @@ def get_pos_loop_params(serial_number):
 
 BMC_GetPosition = lib.BMC_GetPosition
 BMC_GetPosition.restype = c_int
-BMC_GetPosition.argtypes = [POINTER(c_char)]
+BMC_GetPosition.argtypes = []
 
 
 def get_position(serial_number):
@@ -1185,7 +1180,7 @@ def get_position(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetPosition(serial_number)
@@ -1195,7 +1190,7 @@ def get_position(serial_number):
 
 BMC_GetPositionCounter = lib.BMC_GetPositionCounter
 BMC_GetPositionCounter.restype = c_long
-BMC_GetPositionCounter.argtypes = [POINTER(c_char)]
+BMC_GetPositionCounter.argtypes = []
 
 
 def get_position_counter(serial_number):
@@ -1212,7 +1207,7 @@ def get_position_counter(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetPositionCounter(serial_number)
@@ -1222,7 +1217,7 @@ def get_position_counter(serial_number):
 
 BMC_GetRealValueFromDeviceUnit = lib.BMC_GetRealValueFromDeviceUnit
 BMC_GetRealValueFromDeviceUnit.restype = c_short
-BMC_GetRealValueFromDeviceUnit.argtypes = [POINTER(c_char)]
+BMC_GetRealValueFromDeviceUnit.argtypes = []
 
 
 def get_real_value_from_device_unit(serial_number):
@@ -1242,7 +1237,7 @@ def get_real_value_from_device_unit(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     device_unit = c_int()
     real_unit = c_double()
@@ -1255,7 +1250,7 @@ def get_real_value_from_device_unit(serial_number):
 
 BMC_GetSoftLimitMode = lib.BMC_GetSoftLimitMode
 BMC_GetSoftLimitMode.restype = MOT_LimitsSoftwareApproachPolicy
-BMC_GetSoftLimitMode.argtypes = [POINTER(c_char)]
+BMC_GetSoftLimitMode.argtypes = []
 
 
 def get_soft_limit_mode(serial_number):
@@ -1272,7 +1267,7 @@ def get_soft_limit_mode(serial_number):
         MOT_LimitsSoftwareApproachPolicy
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetSoftLimitMode(serial_number)
@@ -1282,7 +1277,7 @@ def get_soft_limit_mode(serial_number):
 
 BMC_GetSoftwareVersion = lib.BMC_GetSoftwareVersion
 BMC_GetSoftwareVersion.restype = c_ulong
-BMC_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+BMC_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -1298,7 +1293,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BMC_GetSoftwareVersion(serial_number)
 
@@ -1307,7 +1302,7 @@ def get_software_version(serial_number):
 
 BMC_GetStageAxisMaxPos = lib.BMC_GetStageAxisMaxPos
 BMC_GetStageAxisMaxPos.restype = c_int
-BMC_GetStageAxisMaxPos.argtypes = [POINTER(c_char)]
+BMC_GetStageAxisMaxPos.argtypes = []
 
 
 def get_stage_axis_max_pos(serial_number):
@@ -1324,7 +1319,7 @@ def get_stage_axis_max_pos(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetStageAxisMaxPos(serial_number)
@@ -1334,7 +1329,7 @@ def get_stage_axis_max_pos(serial_number):
 
 BMC_GetStageAxisMinPos = lib.BMC_GetStageAxisMinPos
 BMC_GetStageAxisMinPos.restype = c_int
-BMC_GetStageAxisMinPos.argtypes = [POINTER(c_char)]
+BMC_GetStageAxisMinPos.argtypes = []
 
 
 def get_stage_axis_min_pos(serial_number):
@@ -1351,7 +1346,7 @@ def get_stage_axis_min_pos(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetStageAxisMinPos(serial_number)
@@ -1361,7 +1356,7 @@ def get_stage_axis_min_pos(serial_number):
 
 BMC_GetStageAxisParams = lib.BMC_GetStageAxisParams
 BMC_GetStageAxisParams.restype = c_short
-BMC_GetStageAxisParams.argtypes = [POINTER(c_char)]
+BMC_GetStageAxisParams.argtypes = []
 
 
 def get_stage_axis_params(serial_number):
@@ -1389,7 +1384,7 @@ def get_stage_axis_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     stageID = c_long()
     axisID = c_long()
@@ -1410,7 +1405,7 @@ def get_stage_axis_params(serial_number):
 
 BMC_GetStageAxisParamsBlock = lib.BMC_GetStageAxisParamsBlock
 BMC_GetStageAxisParamsBlock.restype = c_short
-BMC_GetStageAxisParamsBlock.argtypes = [POINTER(c_char)]
+BMC_GetStageAxisParamsBlock.argtypes = []
 
 
 def get_stage_axis_params_block(serial_number):
@@ -1428,7 +1423,7 @@ def get_stage_axis_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     stageAxisParams = MOT_StageAxisParameters()
 
@@ -1439,7 +1434,7 @@ def get_stage_axis_params_block(serial_number):
 
 BMC_GetStatusBits = lib.BMC_GetStatusBits
 BMC_GetStatusBits.restype = c_ulong
-BMC_GetStatusBits.argtypes = [POINTER(c_char)]
+BMC_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -1456,7 +1451,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetStatusBits(serial_number)
@@ -1466,7 +1461,7 @@ def get_status_bits(serial_number):
 
 BMC_GetTrackSettleParams = lib.BMC_GetTrackSettleParams
 BMC_GetTrackSettleParams.restype = c_short
-BMC_GetTrackSettleParams.argtypes = [POINTER(c_char)]
+BMC_GetTrackSettleParams.argtypes = []
 
 
 def get_track_settle_params(serial_number):
@@ -1484,7 +1479,7 @@ def get_track_settle_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     settleParams = MOT_BrushlessTrackSettleParameters()
 
@@ -1495,7 +1490,7 @@ def get_track_settle_params(serial_number):
 
 BMC_GetTriggerConfigParams = lib.BMC_GetTriggerConfigParams
 BMC_GetTriggerConfigParams.restype = c_short
-BMC_GetTriggerConfigParams.argtypes = [POINTER(c_char)]
+BMC_GetTriggerConfigParams.argtypes = []
 
 
 def get_trigger_config_params(serial_number):
@@ -1515,7 +1510,7 @@ def get_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     trigger1Mode = KMOT_TriggerPortMode()
     trigger1Polarity = KMOT_TriggerPortPolarity()
     trigger2Mode = KMOT_TriggerPortMode()
@@ -1528,7 +1523,7 @@ def get_trigger_config_params(serial_number):
 
 BMC_GetTriggerConfigParamsBlock = lib.BMC_GetTriggerConfigParamsBlock
 BMC_GetTriggerConfigParamsBlock.restype = c_short
-BMC_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
+BMC_GetTriggerConfigParamsBlock.argtypes = []
 
 
 def get_trigger_config_params_block(serial_number):
@@ -1545,7 +1540,7 @@ def get_trigger_config_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerConfigParams = KMOT_TriggerConfig()
 
     output = BMC_GetTriggerConfigParamsBlock(serial_number)
@@ -1555,7 +1550,7 @@ def get_trigger_config_params_block(serial_number):
 
 BMC_GetTriggerParamsParams = lib.BMC_GetTriggerParamsParams
 BMC_GetTriggerParamsParams.restype = c_short
-BMC_GetTriggerParamsParams.argtypes = [POINTER(c_char)]
+BMC_GetTriggerParamsParams.argtypes = []
 
 
 def get_trigger_params_params(serial_number):
@@ -1579,7 +1574,7 @@ def get_trigger_params_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerStartPositionFwd = c_int32()
     triggerIntervalFwd = c_int32()
     triggerPulseCountFwd = c_int32()
@@ -1596,7 +1591,7 @@ def get_trigger_params_params(serial_number):
 
 BMC_GetTriggerParamsParamsBlock = lib.BMC_GetTriggerParamsParamsBlock
 BMC_GetTriggerParamsParamsBlock.restype = c_short
-BMC_GetTriggerParamsParamsBlock.argtypes = [POINTER(c_char)]
+BMC_GetTriggerParamsParamsBlock.argtypes = []
 
 
 def get_trigger_params_params_block(serial_number):
@@ -1613,7 +1608,7 @@ def get_trigger_params_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerParamsParams = KMOT_TriggerParams()
 
     output = BMC_GetTriggerParamsParamsBlock(serial_number)
@@ -1623,7 +1618,7 @@ def get_trigger_params_params_block(serial_number):
 
 BMC_GetTriggerSwitches = lib.BMC_GetTriggerSwitches
 BMC_GetTriggerSwitches.restype = c_byte
-BMC_GetTriggerSwitches.argtypes = [POINTER(c_char)]
+BMC_GetTriggerSwitches.argtypes = []
 
 
 def get_trigger_switches(serial_number):
@@ -1640,7 +1635,7 @@ def get_trigger_switches(serial_number):
         c_byte
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_GetTriggerSwitches(serial_number)
@@ -1650,7 +1645,7 @@ def get_trigger_switches(serial_number):
 
 BMC_GetVelParams = lib.BMC_GetVelParams
 BMC_GetVelParams.restype = c_short
-BMC_GetVelParams.argtypes = [POINTER(c_char)]
+BMC_GetVelParams.argtypes = []
 
 
 def get_vel_params(serial_number):
@@ -1669,7 +1664,7 @@ def get_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     acceleration = c_int()
     maxVelocity = c_int()
@@ -1681,7 +1676,7 @@ def get_vel_params(serial_number):
 
 BMC_GetVelParamsBlock = lib.BMC_GetVelParamsBlock
 BMC_GetVelParamsBlock.restype = c_short
-BMC_GetVelParamsBlock.argtypes = [POINTER(c_char)]
+BMC_GetVelParamsBlock.argtypes = []
 
 
 def get_vel_params_block(serial_number):
@@ -1699,7 +1694,7 @@ def get_vel_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     velocityParams = MOT_VelocityParameters()
 
@@ -1710,7 +1705,7 @@ def get_vel_params_block(serial_number):
 
 BMC_GetVelocityProfileParams = lib.BMC_GetVelocityProfileParams
 BMC_GetVelocityProfileParams.restype = c_short
-BMC_GetVelocityProfileParams.argtypes = [POINTER(c_char)]
+BMC_GetVelocityProfileParams.argtypes = []
 
 
 def get_velocity_profile_params(serial_number):
@@ -1728,7 +1723,7 @@ def get_velocity_profile_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     velocityProfileParams = MOT_VelocityProfileParameters()
 
@@ -1739,7 +1734,7 @@ def get_velocity_profile_params(serial_number):
 
 BMC_HasLastMsgTimerOverrun = lib.BMC_HasLastMsgTimerOverrun
 BMC_HasLastMsgTimerOverrun.restype = c_bool
-BMC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+BMC_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serial_number):
@@ -1756,7 +1751,7 @@ def has_last_msg_timer_overrun(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_HasLastMsgTimerOverrun(serial_number)
@@ -1766,7 +1761,7 @@ def has_last_msg_timer_overrun(serial_number):
 
 BMC_Home = lib.BMC_Home
 BMC_Home.restype = c_short
-BMC_Home.argtypes = [POINTER(c_char)]
+BMC_Home.argtypes = []
 
 
 def home(serial_number):
@@ -1783,7 +1778,7 @@ def home(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_Home(serial_number)
@@ -1793,7 +1788,7 @@ def home(serial_number):
 
 BMC_Identify = lib.BMC_Identify
 BMC_Identify.restype = c_void_p
-BMC_Identify.argtypes = [POINTER(c_char)]
+BMC_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -1809,7 +1804,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BMC_Identify(serial_number)
 
@@ -1818,7 +1813,7 @@ def identify(serial_number):
 
 BMC_LoadNamedSettings = lib.BMC_LoadNamedSettings
 BMC_LoadNamedSettings.restype = c_bool
-BMC_LoadNamedSettings.argtypes = [POINTER(c_char)]
+BMC_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -1836,7 +1831,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     settingsName = POINTER(c_char)()
 
@@ -1847,7 +1842,7 @@ def load_named_settings(serial_number):
 
 BMC_LoadSettings = lib.BMC_LoadSettings
 BMC_LoadSettings.restype = c_bool
-BMC_LoadSettings.argtypes = [POINTER(c_char)]
+BMC_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -1864,7 +1859,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_LoadSettings(serial_number)
@@ -1874,7 +1869,7 @@ def load_settings(serial_number):
 
 BMC_MessageQueueSize = lib.BMC_MessageQueueSize
 BMC_MessageQueueSize.restype = c_int
-BMC_MessageQueueSize.argtypes = [POINTER(c_char)]
+BMC_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -1891,7 +1886,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_MessageQueueSize(serial_number)
@@ -1901,7 +1896,7 @@ def message_queue_size(serial_number):
 
 BMC_MoveAbsolute = lib.BMC_MoveAbsolute
 BMC_MoveAbsolute.restype = c_short
-BMC_MoveAbsolute.argtypes = [POINTER(c_char)]
+BMC_MoveAbsolute.argtypes = []
 
 
 def move_absolute(serial_number):
@@ -1918,7 +1913,7 @@ def move_absolute(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_MoveAbsolute(serial_number)
@@ -1928,7 +1923,7 @@ def move_absolute(serial_number):
 
 BMC_MoveAtVelocity = lib.BMC_MoveAtVelocity
 BMC_MoveAtVelocity.restype = c_short
-BMC_MoveAtVelocity.argtypes = [POINTER(c_char)]
+BMC_MoveAtVelocity.argtypes = []
 
 
 def move_at_velocity(serial_number):
@@ -1946,7 +1941,7 @@ def move_at_velocity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     direction = MOT_TravelDirection()
 
@@ -1957,7 +1952,7 @@ def move_at_velocity(serial_number):
 
 BMC_MoveJog = lib.BMC_MoveJog
 BMC_MoveJog.restype = c_short
-BMC_MoveJog.argtypes = [POINTER(c_char)]
+BMC_MoveJog.argtypes = []
 
 
 def move_jog(serial_number):
@@ -1975,7 +1970,7 @@ def move_jog(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     jogDirection = MOT_TravelDirection()
 
@@ -1986,7 +1981,7 @@ def move_jog(serial_number):
 
 BMC_MoveRelative = lib.BMC_MoveRelative
 BMC_MoveRelative.restype = c_short
-BMC_MoveRelative.argtypes = [POINTER(c_char)]
+BMC_MoveRelative.argtypes = []
 
 
 def move_relative(serial_number):
@@ -2004,7 +1999,7 @@ def move_relative(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     displacement = c_int()
 
@@ -2015,7 +2010,7 @@ def move_relative(serial_number):
 
 BMC_MoveRelativeDistance = lib.BMC_MoveRelativeDistance
 BMC_MoveRelativeDistance.restype = c_short
-BMC_MoveRelativeDistance.argtypes = [POINTER(c_char)]
+BMC_MoveRelativeDistance.argtypes = []
 
 
 def move_relative_distance(serial_number):
@@ -2032,7 +2027,7 @@ def move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_MoveRelativeDistance(serial_number)
@@ -2042,7 +2037,7 @@ def move_relative_distance(serial_number):
 
 BMC_MoveToPosition = lib.BMC_MoveToPosition
 BMC_MoveToPosition.restype = c_short
-BMC_MoveToPosition.argtypes = [POINTER(c_char)]
+BMC_MoveToPosition.argtypes = []
 
 
 def move_to_position(serial_number):
@@ -2060,7 +2055,7 @@ def move_to_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     index = c_int()
 
@@ -2071,7 +2066,7 @@ def move_to_position(serial_number):
 
 BMC_NeedsHoming = lib.BMC_NeedsHoming
 BMC_NeedsHoming.restype = c_bool
-BMC_NeedsHoming.argtypes = [POINTER(c_char)]
+BMC_NeedsHoming.argtypes = []
 
 
 def needs_homing(serial_number):
@@ -2088,7 +2083,7 @@ def needs_homing(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_NeedsHoming(serial_number)
@@ -2098,7 +2093,7 @@ def needs_homing(serial_number):
 
 BMC_Open = lib.BMC_Open
 BMC_Open.restype = c_short
-BMC_Open.argtypes = [POINTER(c_char)]
+BMC_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -2114,7 +2109,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BMC_Open(serial_number)
 
@@ -2123,7 +2118,7 @@ def open_device(serial_number):
 
 BMC_OverrideHomeRequirement = lib.BMC_OverrideHomeRequirement
 BMC_OverrideHomeRequirement.restype = c_short
-BMC_OverrideHomeRequirement.argtypes = [POINTER(c_char)]
+BMC_OverrideHomeRequirement.argtypes = []
 
 
 def override_home_requirement(serial_number):
@@ -2140,7 +2135,7 @@ def override_home_requirement(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_OverrideHomeRequirement(serial_number)
@@ -2150,7 +2145,7 @@ def override_home_requirement(serial_number):
 
 BMC_PersistSettings = lib.BMC_PersistSettings
 BMC_PersistSettings.restype = c_bool
-BMC_PersistSettings.argtypes = [POINTER(c_char)]
+BMC_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -2167,7 +2162,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_PersistSettings(serial_number)
@@ -2177,7 +2172,7 @@ def persist_settings(serial_number):
 
 BMC_PollingDuration = lib.BMC_PollingDuration
 BMC_PollingDuration.restype = c_long
-BMC_PollingDuration.argtypes = [POINTER(c_char)]
+BMC_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -2194,7 +2189,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_PollingDuration(serial_number)
@@ -2204,7 +2199,7 @@ def polling_duration(serial_number):
 
 BMC_RegisterMessageCallback = lib.BMC_RegisterMessageCallback
 BMC_RegisterMessageCallback.restype = c_short
-BMC_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+BMC_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -2222,7 +2217,7 @@ def register_message_callback(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RegisterMessageCallback(serial_number)
@@ -2232,7 +2227,7 @@ def register_message_callback(serial_number):
 
 BMC_RequestBacklash = lib.BMC_RequestBacklash
 BMC_RequestBacklash.restype = c_short
-BMC_RequestBacklash.argtypes = [POINTER(c_char)]
+BMC_RequestBacklash.argtypes = []
 
 
 def request_backlash(serial_number):
@@ -2249,7 +2244,7 @@ def request_backlash(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestBacklash(serial_number)
@@ -2259,7 +2254,7 @@ def request_backlash(serial_number):
 
 BMC_RequestCurrentLoopParams = lib.BMC_RequestCurrentLoopParams
 BMC_RequestCurrentLoopParams.restype = c_short
-BMC_RequestCurrentLoopParams.argtypes = [POINTER(c_char)]
+BMC_RequestCurrentLoopParams.argtypes = []
 
 
 def request_current_loop_params(serial_number):
@@ -2276,7 +2271,7 @@ def request_current_loop_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestCurrentLoopParams(serial_number)
@@ -2286,7 +2281,7 @@ def request_current_loop_params(serial_number):
 
 BMC_RequestDigitalOutputs = lib.BMC_RequestDigitalOutputs
 BMC_RequestDigitalOutputs.restype = c_short
-BMC_RequestDigitalOutputs.argtypes = [POINTER(c_char)]
+BMC_RequestDigitalOutputs.argtypes = []
 
 
 def request_digital_outputs(serial_number):
@@ -2303,7 +2298,7 @@ def request_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestDigitalOutputs(serial_number)
@@ -2313,7 +2308,7 @@ def request_digital_outputs(serial_number):
 
 BMC_RequestElectricOutputParams = lib.BMC_RequestElectricOutputParams
 BMC_RequestElectricOutputParams.restype = c_short
-BMC_RequestElectricOutputParams.argtypes = [POINTER(c_char)]
+BMC_RequestElectricOutputParams.argtypes = []
 
 
 def request_electric_output_params(serial_number):
@@ -2330,7 +2325,7 @@ def request_electric_output_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestElectricOutputParams(serial_number)
@@ -2340,7 +2335,7 @@ def request_electric_output_params(serial_number):
 
 BMC_RequestEncoderCounter = lib.BMC_RequestEncoderCounter
 BMC_RequestEncoderCounter.restype = c_short
-BMC_RequestEncoderCounter.argtypes = [POINTER(c_char)]
+BMC_RequestEncoderCounter.argtypes = []
 
 
 def request_encoder_counter(serial_number):
@@ -2357,7 +2352,7 @@ def request_encoder_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestEncoderCounter(serial_number)
@@ -2367,7 +2362,7 @@ def request_encoder_counter(serial_number):
 
 BMC_RequestFrontPanelLocked = lib.BMC_RequestFrontPanelLocked
 BMC_RequestFrontPanelLocked.restype = c_short
-BMC_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
+BMC_RequestFrontPanelLocked.argtypes = []
 
 
 def request_front_panel_locked(serial_number):
@@ -2383,7 +2378,7 @@ def request_front_panel_locked(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BMC_RequestFrontPanelLocked(serial_number)
 
@@ -2392,7 +2387,7 @@ def request_front_panel_locked(serial_number):
 
 BMC_RequestHomingParams = lib.BMC_RequestHomingParams
 BMC_RequestHomingParams.restype = c_short
-BMC_RequestHomingParams.argtypes = [POINTER(c_char)]
+BMC_RequestHomingParams.argtypes = []
 
 
 def request_homing_params(serial_number):
@@ -2409,7 +2404,7 @@ def request_homing_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestHomingParams(serial_number)
@@ -2419,7 +2414,7 @@ def request_homing_params(serial_number):
 
 BMC_RequestJogParams = lib.BMC_RequestJogParams
 BMC_RequestJogParams.restype = c_short
-BMC_RequestJogParams.argtypes = [POINTER(c_char)]
+BMC_RequestJogParams.argtypes = []
 
 
 def request_jog_params(serial_number):
@@ -2436,7 +2431,7 @@ def request_jog_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestJogParams(serial_number)
@@ -2446,7 +2441,7 @@ def request_jog_params(serial_number):
 
 BMC_RequestMMIparams = lib.BMC_RequestMMIparams
 BMC_RequestMMIparams.restype = c_short
-BMC_RequestMMIparams.argtypes = [POINTER(c_char)]
+BMC_RequestMMIparams.argtypes = []
 
 
 def request_m_m_iparams(serial_number):
@@ -2462,7 +2457,7 @@ def request_m_m_iparams(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BMC_RequestMMIparams(serial_number)
 
@@ -2471,7 +2466,7 @@ def request_m_m_iparams(serial_number):
 
 BMC_RequestMoveAbsolutePosition = lib.BMC_RequestMoveAbsolutePosition
 BMC_RequestMoveAbsolutePosition.restype = c_short
-BMC_RequestMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+BMC_RequestMoveAbsolutePosition.argtypes = []
 
 
 def request_move_absolute_position(serial_number):
@@ -2488,7 +2483,7 @@ def request_move_absolute_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestMoveAbsolutePosition(serial_number)
@@ -2498,7 +2493,7 @@ def request_move_absolute_position(serial_number):
 
 BMC_RequestMoveRelativeDistance = lib.BMC_RequestMoveRelativeDistance
 BMC_RequestMoveRelativeDistance.restype = c_short
-BMC_RequestMoveRelativeDistance.argtypes = [POINTER(c_char)]
+BMC_RequestMoveRelativeDistance.argtypes = []
 
 
 def request_move_relative_distance(serial_number):
@@ -2515,7 +2510,7 @@ def request_move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestMoveRelativeDistance(serial_number)
@@ -2525,7 +2520,7 @@ def request_move_relative_distance(serial_number):
 
 BMC_RequestPosLoopParams = lib.BMC_RequestPosLoopParams
 BMC_RequestPosLoopParams.restype = c_short
-BMC_RequestPosLoopParams.argtypes = [POINTER(c_char)]
+BMC_RequestPosLoopParams.argtypes = []
 
 
 def request_pos_loop_params(serial_number):
@@ -2542,7 +2537,7 @@ def request_pos_loop_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestPosLoopParams(serial_number)
@@ -2552,7 +2547,7 @@ def request_pos_loop_params(serial_number):
 
 BMC_RequestPosTriggerParams = lib.BMC_RequestPosTriggerParams
 BMC_RequestPosTriggerParams.restype = c_short
-BMC_RequestPosTriggerParams.argtypes = [POINTER(c_char)]
+BMC_RequestPosTriggerParams.argtypes = []
 
 
 def request_pos_trigger_params(serial_number):
@@ -2568,7 +2563,7 @@ def request_pos_trigger_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BMC_RequestPosTriggerParams(serial_number)
 
@@ -2577,7 +2572,7 @@ def request_pos_trigger_params(serial_number):
 
 BMC_RequestPosition = lib.BMC_RequestPosition
 BMC_RequestPosition.restype = c_short
-BMC_RequestPosition.argtypes = [POINTER(c_char)]
+BMC_RequestPosition.argtypes = []
 
 
 def request_position(serial_number):
@@ -2594,7 +2589,7 @@ def request_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestPosition(serial_number)
@@ -2604,7 +2599,7 @@ def request_position(serial_number):
 
 BMC_RequestSettings = lib.BMC_RequestSettings
 BMC_RequestSettings.restype = c_short
-BMC_RequestSettings.argtypes = [POINTER(c_char)]
+BMC_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -2621,7 +2616,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestSettings(serial_number)
@@ -2631,7 +2626,7 @@ def request_settings(serial_number):
 
 BMC_RequestStageAxisParams = lib.BMC_RequestStageAxisParams
 BMC_RequestStageAxisParams.restype = c_short
-BMC_RequestStageAxisParams.argtypes = [POINTER(c_char)]
+BMC_RequestStageAxisParams.argtypes = []
 
 
 def request_stage_axis_params(serial_number):
@@ -2648,7 +2643,7 @@ def request_stage_axis_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestStageAxisParams(serial_number)
@@ -2658,7 +2653,7 @@ def request_stage_axis_params(serial_number):
 
 BMC_RequestStatusBits = lib.BMC_RequestStatusBits
 BMC_RequestStatusBits.restype = c_short
-BMC_RequestStatusBits.argtypes = [POINTER(c_char)]
+BMC_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serial_number):
@@ -2675,7 +2670,7 @@ def request_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestStatusBits(serial_number)
@@ -2685,7 +2680,7 @@ def request_status_bits(serial_number):
 
 BMC_RequestTrackSettleParams = lib.BMC_RequestTrackSettleParams
 BMC_RequestTrackSettleParams.restype = c_short
-BMC_RequestTrackSettleParams.argtypes = [POINTER(c_char)]
+BMC_RequestTrackSettleParams.argtypes = []
 
 
 def request_track_settle_params(serial_number):
@@ -2702,7 +2697,7 @@ def request_track_settle_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestTrackSettleParams(serial_number)
@@ -2712,7 +2707,7 @@ def request_track_settle_params(serial_number):
 
 BMC_RequestTriggerConfigParams = lib.BMC_RequestTriggerConfigParams
 BMC_RequestTriggerConfigParams.restype = c_short
-BMC_RequestTriggerConfigParams.argtypes = [POINTER(c_char)]
+BMC_RequestTriggerConfigParams.argtypes = []
 
 
 def request_trigger_config_params(serial_number):
@@ -2728,7 +2723,7 @@ def request_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = BMC_RequestTriggerConfigParams(serial_number)
 
@@ -2737,7 +2732,7 @@ def request_trigger_config_params(serial_number):
 
 BMC_RequestTriggerSwitches = lib.BMC_RequestTriggerSwitches
 BMC_RequestTriggerSwitches.restype = c_short
-BMC_RequestTriggerSwitches.argtypes = [POINTER(c_char)]
+BMC_RequestTriggerSwitches.argtypes = []
 
 
 def request_trigger_switches(serial_number):
@@ -2754,7 +2749,7 @@ def request_trigger_switches(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestTriggerSwitches(serial_number)
@@ -2764,7 +2759,7 @@ def request_trigger_switches(serial_number):
 
 BMC_RequestVelParams = lib.BMC_RequestVelParams
 BMC_RequestVelParams.restype = c_short
-BMC_RequestVelParams.argtypes = [POINTER(c_char)]
+BMC_RequestVelParams.argtypes = []
 
 
 def request_vel_params(serial_number):
@@ -2781,7 +2776,7 @@ def request_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestVelParams(serial_number)
@@ -2791,7 +2786,7 @@ def request_vel_params(serial_number):
 
 BMC_RequestVelocityProfileParams = lib.BMC_RequestVelocityProfileParams
 BMC_RequestVelocityProfileParams.restype = c_short
-BMC_RequestVelocityProfileParams.argtypes = [POINTER(c_char)]
+BMC_RequestVelocityProfileParams.argtypes = []
 
 
 def request_velocity_profile_params(serial_number):
@@ -2808,7 +2803,7 @@ def request_velocity_profile_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_RequestVelocityProfileParams(serial_number)
@@ -2818,7 +2813,7 @@ def request_velocity_profile_params(serial_number):
 
 BMC_ResetRotationModes = lib.BMC_ResetRotationModes
 BMC_ResetRotationModes.restype = c_short
-BMC_ResetRotationModes.argtypes = [POINTER(c_char)]
+BMC_ResetRotationModes.argtypes = []
 
 
 def reset_rotation_modes(serial_number):
@@ -2835,7 +2830,7 @@ def reset_rotation_modes(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_ResetRotationModes(serial_number)
@@ -2845,7 +2840,7 @@ def reset_rotation_modes(serial_number):
 
 BMC_ResetStageToDefaults = lib.BMC_ResetStageToDefaults
 BMC_ResetStageToDefaults.restype = c_short
-BMC_ResetStageToDefaults.argtypes = [POINTER(c_char)]
+BMC_ResetStageToDefaults.argtypes = []
 
 
 def reset_stage_to_defaults(serial_number):
@@ -2862,7 +2857,7 @@ def reset_stage_to_defaults(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_ResetStageToDefaults(serial_number)
@@ -2872,7 +2867,7 @@ def reset_stage_to_defaults(serial_number):
 
 BMC_ResumeMoveMessages = lib.BMC_ResumeMoveMessages
 BMC_ResumeMoveMessages.restype = c_short
-BMC_ResumeMoveMessages.argtypes = [POINTER(c_char)]
+BMC_ResumeMoveMessages.argtypes = []
 
 
 def resume_move_messages(serial_number):
@@ -2889,7 +2884,7 @@ def resume_move_messages(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_ResumeMoveMessages(serial_number)
@@ -2899,7 +2894,7 @@ def resume_move_messages(serial_number):
 
 BMC_SetBacklash = lib.BMC_SetBacklash
 BMC_SetBacklash.restype = c_short
-BMC_SetBacklash.argtypes = [POINTER(c_char)]
+BMC_SetBacklash.argtypes = []
 
 
 def set_backlash(serial_number):
@@ -2917,7 +2912,7 @@ def set_backlash(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     distance = c_long()
 
@@ -2928,7 +2923,7 @@ def set_backlash(serial_number):
 
 BMC_SetCurrentLoopParams = lib.BMC_SetCurrentLoopParams
 BMC_SetCurrentLoopParams.restype = c_short
-BMC_SetCurrentLoopParams.argtypes = [POINTER(c_char)]
+BMC_SetCurrentLoopParams.argtypes = []
 
 
 def set_current_loop_params(serial_number):
@@ -2946,7 +2941,7 @@ def set_current_loop_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     currentLoopParams = MOT_BrushlessCurrentLoopParameters()
 
@@ -2957,7 +2952,7 @@ def set_current_loop_params(serial_number):
 
 BMC_SetDigitalOutputs = lib.BMC_SetDigitalOutputs
 BMC_SetDigitalOutputs.restype = c_short
-BMC_SetDigitalOutputs.argtypes = [POINTER(c_char)]
+BMC_SetDigitalOutputs.argtypes = []
 
 
 def set_digital_outputs(serial_number):
@@ -2975,7 +2970,7 @@ def set_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     outputsBits = c_byte()
 
@@ -2986,7 +2981,7 @@ def set_digital_outputs(serial_number):
 
 BMC_SetDirection = lib.BMC_SetDirection
 BMC_SetDirection.restype = c_short
-BMC_SetDirection.argtypes = [POINTER(c_char)]
+BMC_SetDirection.argtypes = []
 
 
 def set_direction(serial_number):
@@ -3004,7 +2999,7 @@ def set_direction(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     reverse = c_bool()
 
@@ -3015,7 +3010,7 @@ def set_direction(serial_number):
 
 BMC_SetElectricOutputParams = lib.BMC_SetElectricOutputParams
 BMC_SetElectricOutputParams.restype = c_short
-BMC_SetElectricOutputParams.argtypes = [POINTER(c_char)]
+BMC_SetElectricOutputParams.argtypes = []
 
 
 def set_electric_output_params(serial_number):
@@ -3033,7 +3028,7 @@ def set_electric_output_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     electricOutputParams = MOT_BrushlessElectricOutputParameters()
 
@@ -3044,7 +3039,7 @@ def set_electric_output_params(serial_number):
 
 BMC_SetEncoderCounter = lib.BMC_SetEncoderCounter
 BMC_SetEncoderCounter.restype = c_short
-BMC_SetEncoderCounter.argtypes = [POINTER(c_char)]
+BMC_SetEncoderCounter.argtypes = []
 
 
 def set_encoder_counter(serial_number):
@@ -3062,7 +3057,7 @@ def set_encoder_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     count = c_long()
 
@@ -3073,7 +3068,7 @@ def set_encoder_counter(serial_number):
 
 BMC_SetFrontPanelLock = lib.BMC_SetFrontPanelLock
 BMC_SetFrontPanelLock.restype = c_short
-BMC_SetFrontPanelLock.argtypes = [POINTER(c_char)]
+BMC_SetFrontPanelLock.argtypes = []
 
 
 def set_front_panel_lock(serial_number):
@@ -3090,7 +3085,7 @@ def set_front_panel_lock(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     locked = c_bool()
 
     output = BMC_SetFrontPanelLock(serial_number)
@@ -3100,7 +3095,7 @@ def set_front_panel_lock(serial_number):
 
 BMC_SetHomingParamsBlock = lib.BMC_SetHomingParamsBlock
 BMC_SetHomingParamsBlock.restype = c_short
-BMC_SetHomingParamsBlock.argtypes = [POINTER(c_char)]
+BMC_SetHomingParamsBlock.argtypes = []
 
 
 def set_homing_params_block(serial_number):
@@ -3118,7 +3113,7 @@ def set_homing_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     homingParams = MOT_HomingParameters()
 
@@ -3129,7 +3124,7 @@ def set_homing_params_block(serial_number):
 
 BMC_SetHomingVelocity = lib.BMC_SetHomingVelocity
 BMC_SetHomingVelocity.restype = c_short
-BMC_SetHomingVelocity.argtypes = [POINTER(c_char)]
+BMC_SetHomingVelocity.argtypes = []
 
 
 def set_homing_velocity(serial_number):
@@ -3147,7 +3142,7 @@ def set_homing_velocity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     velocity = c_uint()
 
@@ -3158,7 +3153,7 @@ def set_homing_velocity(serial_number):
 
 BMC_SetJogMode = lib.BMC_SetJogMode
 BMC_SetJogMode.restype = c_short
-BMC_SetJogMode.argtypes = [POINTER(c_char)]
+BMC_SetJogMode.argtypes = []
 
 
 def set_jog_mode(serial_number):
@@ -3177,7 +3172,7 @@ def set_jog_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     mode = MOT_JogModes()
     stopMode = MOT_StopModes()
@@ -3189,7 +3184,7 @@ def set_jog_mode(serial_number):
 
 BMC_SetJogParamsBlock = lib.BMC_SetJogParamsBlock
 BMC_SetJogParamsBlock.restype = c_short
-BMC_SetJogParamsBlock.argtypes = [POINTER(c_char)]
+BMC_SetJogParamsBlock.argtypes = []
 
 
 def set_jog_params_block(serial_number):
@@ -3207,7 +3202,7 @@ def set_jog_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     jogParams = MOT_JogParameters()
 
@@ -3218,7 +3213,7 @@ def set_jog_params_block(serial_number):
 
 BMC_SetJogStepSize = lib.BMC_SetJogStepSize
 BMC_SetJogStepSize.restype = c_short
-BMC_SetJogStepSize.argtypes = [POINTER(c_char)]
+BMC_SetJogStepSize.argtypes = []
 
 
 def set_jog_step_size(serial_number):
@@ -3236,7 +3231,7 @@ def set_jog_step_size(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     stepSize = c_uint()
 
@@ -3247,7 +3242,7 @@ def set_jog_step_size(serial_number):
 
 BMC_SetJogVelParams = lib.BMC_SetJogVelParams
 BMC_SetJogVelParams.restype = c_short
-BMC_SetJogVelParams.argtypes = [POINTER(c_char)]
+BMC_SetJogVelParams.argtypes = []
 
 
 def set_jog_vel_params(serial_number):
@@ -3266,7 +3261,7 @@ def set_jog_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     acceleration = c_int()
     maxVelocity = c_int()
@@ -3278,7 +3273,7 @@ def set_jog_vel_params(serial_number):
 
 BMC_SetLimitsSoftwareApproachPolicy = lib.BMC_SetLimitsSoftwareApproachPolicy
 BMC_SetLimitsSoftwareApproachPolicy.restype = c_void_p
-BMC_SetLimitsSoftwareApproachPolicy.argtypes = [POINTER(c_char)]
+BMC_SetLimitsSoftwareApproachPolicy.argtypes = []
 
 
 def set_limits_software_approach_policy(serial_number):
@@ -3296,7 +3291,7 @@ def set_limits_software_approach_policy(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     limitsSoftwareApproachPolicy = MOT_LimitsSoftwareApproachPolicy()
 
@@ -3307,7 +3302,7 @@ def set_limits_software_approach_policy(serial_number):
 
 BMC_SetMMIParams = lib.BMC_SetMMIParams
 BMC_SetMMIParams.restype = c_short
-BMC_SetMMIParams.argtypes = [POINTER(c_char)]
+BMC_SetMMIParams.argtypes = []
 
 
 def set_m_m_i_params(serial_number):
@@ -3330,7 +3325,7 @@ def set_m_m_i_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KMOT_WheelMode()
     wheelMaxVelocity = c_int32()
     wheelAcceleration = c_int32()
@@ -3346,7 +3341,7 @@ def set_m_m_i_params(serial_number):
 
 BMC_SetMMIParamsBlock = lib.BMC_SetMMIParamsBlock
 BMC_SetMMIParamsBlock.restype = c_short
-BMC_SetMMIParamsBlock.argtypes = [POINTER(c_char)]
+BMC_SetMMIParamsBlock.argtypes = []
 
 
 def set_m_m_i_params_block(serial_number):
@@ -3363,7 +3358,7 @@ def set_m_m_i_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mmiParams = KMOT_MMIParams()
 
     output = BMC_SetMMIParamsBlock(serial_number)
@@ -3373,7 +3368,7 @@ def set_m_m_i_params_block(serial_number):
 
 BMC_SetMMIParamsExt = lib.BMC_SetMMIParamsExt
 BMC_SetMMIParamsExt.restype = c_short
-BMC_SetMMIParamsExt.argtypes = [POINTER(c_char)]
+BMC_SetMMIParamsExt.argtypes = []
 
 
 def set_m_m_i_params_ext(serial_number):
@@ -3398,7 +3393,7 @@ def set_m_m_i_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KMOT_WheelMode()
     wheelMaxVelocity = c_int32()
     wheelAcceleration = c_int32()
@@ -3416,7 +3411,7 @@ def set_m_m_i_params_ext(serial_number):
 
 BMC_SetMotorParams = lib.BMC_SetMotorParams
 BMC_SetMotorParams.restype = c_short
-BMC_SetMotorParams.argtypes = [POINTER(c_char)]
+BMC_SetMotorParams.argtypes = []
 
 
 def set_motor_params(serial_number):
@@ -3434,7 +3429,7 @@ def set_motor_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     countsPerUnit = c_long()
 
@@ -3445,7 +3440,7 @@ def set_motor_params(serial_number):
 
 BMC_SetMotorParamsExt = lib.BMC_SetMotorParamsExt
 BMC_SetMotorParamsExt.restype = c_short
-BMC_SetMotorParamsExt.argtypes = [POINTER(c_char)]
+BMC_SetMotorParamsExt.argtypes = []
 
 
 def set_motor_params_ext(serial_number):
@@ -3463,7 +3458,7 @@ def set_motor_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     countsPerUnit = c_double()
 
@@ -3474,7 +3469,7 @@ def set_motor_params_ext(serial_number):
 
 BMC_SetMotorTravelLimits = lib.BMC_SetMotorTravelLimits
 BMC_SetMotorTravelLimits.restype = c_short
-BMC_SetMotorTravelLimits.argtypes = [POINTER(c_char)]
+BMC_SetMotorTravelLimits.argtypes = []
 
 
 def set_motor_travel_limits(serial_number):
@@ -3493,7 +3488,7 @@ def set_motor_travel_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     minPosition = c_double()
     maxPosition = c_double()
@@ -3505,7 +3500,7 @@ def set_motor_travel_limits(serial_number):
 
 BMC_SetMotorTravelMode = lib.BMC_SetMotorTravelMode
 BMC_SetMotorTravelMode.restype = c_short
-BMC_SetMotorTravelMode.argtypes = [POINTER(c_char)]
+BMC_SetMotorTravelMode.argtypes = []
 
 
 def set_motor_travel_mode(serial_number):
@@ -3523,7 +3518,7 @@ def set_motor_travel_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     travelMode = MOT_TravelModes()
 
@@ -3534,7 +3529,7 @@ def set_motor_travel_mode(serial_number):
 
 BMC_SetMotorVelocityLimits = lib.BMC_SetMotorVelocityLimits
 BMC_SetMotorVelocityLimits.restype = c_short
-BMC_SetMotorVelocityLimits.argtypes = [POINTER(c_char)]
+BMC_SetMotorVelocityLimits.argtypes = []
 
 
 def set_motor_velocity_limits(serial_number):
@@ -3553,7 +3548,7 @@ def set_motor_velocity_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     maxVelocity = c_double()
     maxAcceleration = c_double()
@@ -3565,7 +3560,7 @@ def set_motor_velocity_limits(serial_number):
 
 BMC_SetMoveAbsolutePosition = lib.BMC_SetMoveAbsolutePosition
 BMC_SetMoveAbsolutePosition.restype = c_short
-BMC_SetMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+BMC_SetMoveAbsolutePosition.argtypes = []
 
 
 def set_move_absolute_position(serial_number):
@@ -3583,7 +3578,7 @@ def set_move_absolute_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     position = c_int()
 
@@ -3594,7 +3589,7 @@ def set_move_absolute_position(serial_number):
 
 BMC_SetMoveRelativeDistance = lib.BMC_SetMoveRelativeDistance
 BMC_SetMoveRelativeDistance.restype = c_short
-BMC_SetMoveRelativeDistance.argtypes = [POINTER(c_char)]
+BMC_SetMoveRelativeDistance.argtypes = []
 
 
 def set_move_relative_distance(serial_number):
@@ -3612,7 +3607,7 @@ def set_move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     distance = c_int()
 
@@ -3623,7 +3618,7 @@ def set_move_relative_distance(serial_number):
 
 BMC_SetPosLoopParams = lib.BMC_SetPosLoopParams
 BMC_SetPosLoopParams.restype = c_short
-BMC_SetPosLoopParams.argtypes = [POINTER(c_char)]
+BMC_SetPosLoopParams.argtypes = []
 
 
 def set_pos_loop_params(serial_number):
@@ -3641,7 +3636,7 @@ def set_pos_loop_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     positionLoopParams = MOT_BrushlessPositionLoopParameters()
 
@@ -3652,7 +3647,7 @@ def set_pos_loop_params(serial_number):
 
 BMC_SetPositionCounter = lib.BMC_SetPositionCounter
 BMC_SetPositionCounter.restype = c_short
-BMC_SetPositionCounter.argtypes = [POINTER(c_char)]
+BMC_SetPositionCounter.argtypes = []
 
 
 def set_position_counter(serial_number):
@@ -3670,7 +3665,7 @@ def set_position_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     count = c_long()
 
@@ -3681,7 +3676,7 @@ def set_position_counter(serial_number):
 
 BMC_SetRotationModes = lib.BMC_SetRotationModes
 BMC_SetRotationModes.restype = c_short
-BMC_SetRotationModes.argtypes = [POINTER(c_char)]
+BMC_SetRotationModes.argtypes = []
 
 
 def set_rotation_modes(serial_number):
@@ -3700,7 +3695,7 @@ def set_rotation_modes(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     mode = MOT_MovementModes()
     direction = MOT_MovementDirections()
@@ -3712,7 +3707,7 @@ def set_rotation_modes(serial_number):
 
 BMC_SetStageAxisLimits = lib.BMC_SetStageAxisLimits
 BMC_SetStageAxisLimits.restype = c_short
-BMC_SetStageAxisLimits.argtypes = [POINTER(c_char)]
+BMC_SetStageAxisLimits.argtypes = []
 
 
 def set_stage_axis_limits(serial_number):
@@ -3731,7 +3726,7 @@ def set_stage_axis_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     minPosition = c_int()
     maxPosition = c_int()
@@ -3743,7 +3738,7 @@ def set_stage_axis_limits(serial_number):
 
 BMC_SetTrackSettleParams = lib.BMC_SetTrackSettleParams
 BMC_SetTrackSettleParams.restype = c_short
-BMC_SetTrackSettleParams.argtypes = [POINTER(c_char)]
+BMC_SetTrackSettleParams.argtypes = []
 
 
 def set_track_settle_params(serial_number):
@@ -3761,7 +3756,7 @@ def set_track_settle_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     settleParams = MOT_BrushlessTrackSettleParameters()
 
@@ -3772,7 +3767,7 @@ def set_track_settle_params(serial_number):
 
 BMC_SetTriggerConfigParams = lib.BMC_SetTriggerConfigParams
 BMC_SetTriggerConfigParams.restype = c_short
-BMC_SetTriggerConfigParams.argtypes = [POINTER(c_char)]
+BMC_SetTriggerConfigParams.argtypes = []
 
 
 def set_trigger_config_params(serial_number):
@@ -3792,7 +3787,7 @@ def set_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     trigger1Mode = KMOT_TriggerPortMode()
     trigger1Polarity = KMOT_TriggerPortPolarity()
     trigger2Mode = KMOT_TriggerPortMode()
@@ -3805,7 +3800,7 @@ def set_trigger_config_params(serial_number):
 
 BMC_SetTriggerConfigParamsBlock = lib.BMC_SetTriggerConfigParamsBlock
 BMC_SetTriggerConfigParamsBlock.restype = c_short
-BMC_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
+BMC_SetTriggerConfigParamsBlock.argtypes = []
 
 
 def set_trigger_config_params_block(serial_number):
@@ -3822,7 +3817,7 @@ def set_trigger_config_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerConfigParams = KMOT_TriggerConfig()
 
     output = BMC_SetTriggerConfigParamsBlock(serial_number)
@@ -3832,7 +3827,7 @@ def set_trigger_config_params_block(serial_number):
 
 BMC_SetTriggerParamsParams = lib.BMC_SetTriggerParamsParams
 BMC_SetTriggerParamsParams.restype = c_short
-BMC_SetTriggerParamsParams.argtypes = [POINTER(c_char)]
+BMC_SetTriggerParamsParams.argtypes = []
 
 
 def set_trigger_params_params(serial_number):
@@ -3856,7 +3851,7 @@ def set_trigger_params_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerStartPositionFwd = c_int32()
     triggerIntervalFwd = c_int32()
     triggerPulseCountFwd = c_int32()
@@ -3873,7 +3868,7 @@ def set_trigger_params_params(serial_number):
 
 BMC_SetTriggerParamsParamsBlock = lib.BMC_SetTriggerParamsParamsBlock
 BMC_SetTriggerParamsParamsBlock.restype = c_short
-BMC_SetTriggerParamsParamsBlock.argtypes = [POINTER(c_char)]
+BMC_SetTriggerParamsParamsBlock.argtypes = []
 
 
 def set_trigger_params_params_block(serial_number):
@@ -3890,7 +3885,7 @@ def set_trigger_params_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerParamsParams = KMOT_TriggerParams()
 
     output = BMC_SetTriggerParamsParamsBlock(serial_number)
@@ -3900,7 +3895,7 @@ def set_trigger_params_params_block(serial_number):
 
 BMC_SetTriggerSwitches = lib.BMC_SetTriggerSwitches
 BMC_SetTriggerSwitches.restype = c_short
-BMC_SetTriggerSwitches.argtypes = [POINTER(c_char)]
+BMC_SetTriggerSwitches.argtypes = []
 
 
 def set_trigger_switches(serial_number):
@@ -3918,7 +3913,7 @@ def set_trigger_switches(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     indicatorBits = c_byte()
 
@@ -3929,7 +3924,7 @@ def set_trigger_switches(serial_number):
 
 BMC_SetVelParams = lib.BMC_SetVelParams
 BMC_SetVelParams.restype = c_short
-BMC_SetVelParams.argtypes = [POINTER(c_char)]
+BMC_SetVelParams.argtypes = []
 
 
 def set_vel_params(serial_number):
@@ -3948,7 +3943,7 @@ def set_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     acceleration = c_int()
     maxVelocity = c_int()
@@ -3960,7 +3955,7 @@ def set_vel_params(serial_number):
 
 BMC_SetVelParamsBlock = lib.BMC_SetVelParamsBlock
 BMC_SetVelParamsBlock.restype = c_short
-BMC_SetVelParamsBlock.argtypes = [POINTER(c_char)]
+BMC_SetVelParamsBlock.argtypes = []
 
 
 def set_vel_params_block(serial_number):
@@ -3978,7 +3973,7 @@ def set_vel_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     velocityParams = MOT_VelocityParameters()
 
@@ -3989,7 +3984,7 @@ def set_vel_params_block(serial_number):
 
 BMC_SetVelocityProfileParams = lib.BMC_SetVelocityProfileParams
 BMC_SetVelocityProfileParams.restype = c_short
-BMC_SetVelocityProfileParams.argtypes = [POINTER(c_char)]
+BMC_SetVelocityProfileParams.argtypes = []
 
 
 def set_velocity_profile_params(serial_number):
@@ -4007,7 +4002,7 @@ def set_velocity_profile_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     velocityProfileParams = MOT_VelocityProfileParameters()
 
@@ -4018,7 +4013,7 @@ def set_velocity_profile_params(serial_number):
 
 BMC_StartPolling = lib.BMC_StartPolling
 BMC_StartPolling.restype = c_bool
-BMC_StartPolling.argtypes = [POINTER(c_char)]
+BMC_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -4036,7 +4031,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     milliseconds = c_int()
 
@@ -4047,7 +4042,7 @@ def start_polling(serial_number):
 
 BMC_StopImmediate = lib.BMC_StopImmediate
 BMC_StopImmediate.restype = c_short
-BMC_StopImmediate.argtypes = [POINTER(c_char)]
+BMC_StopImmediate.argtypes = []
 
 
 def stop_immediate(serial_number):
@@ -4064,7 +4059,7 @@ def stop_immediate(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_StopImmediate(serial_number)
@@ -4074,7 +4069,7 @@ def stop_immediate(serial_number):
 
 BMC_StopPolling = lib.BMC_StopPolling
 BMC_StopPolling.restype = c_void_p
-BMC_StopPolling.argtypes = [POINTER(c_char)]
+BMC_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -4091,7 +4086,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_StopPolling(serial_number)
@@ -4101,7 +4096,7 @@ def stop_polling(serial_number):
 
 BMC_StopProfiled = lib.BMC_StopProfiled
 BMC_StopProfiled.restype = c_short
-BMC_StopProfiled.argtypes = [POINTER(c_char)]
+BMC_StopProfiled.argtypes = []
 
 
 def stop_profiled(serial_number):
@@ -4118,7 +4113,7 @@ def stop_profiled(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_StopProfiled(serial_number)
@@ -4128,7 +4123,7 @@ def stop_profiled(serial_number):
 
 BMC_SuspendMoveMessages = lib.BMC_SuspendMoveMessages
 BMC_SuspendMoveMessages.restype = c_short
-BMC_SuspendMoveMessages.argtypes = [POINTER(c_char)]
+BMC_SuspendMoveMessages.argtypes = []
 
 
 def suspend_move_messages(serial_number):
@@ -4145,7 +4140,7 @@ def suspend_move_messages(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = BMC_SuspendMoveMessages(serial_number)
@@ -4155,7 +4150,7 @@ def suspend_move_messages(serial_number):
 
 BMC_TimeSinceLastMsgReceived = lib.BMC_TimeSinceLastMsgReceived
 BMC_TimeSinceLastMsgReceived.restype = c_bool
-BMC_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+BMC_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serial_number):
@@ -4173,7 +4168,7 @@ def time_since_last_msg_received(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     lastUpdateTimeMS = c_int64()
 
@@ -4184,7 +4179,7 @@ def time_since_last_msg_received(serial_number):
 
 BMC_WaitForMessage = lib.BMC_WaitForMessage
 BMC_WaitForMessage.restype = c_bool
-BMC_WaitForMessage.argtypes = [POINTER(c_char)]
+BMC_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -4204,7 +4199,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     messageType = c_long()
     messageID = c_long()
@@ -4243,7 +4238,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -4261,18 +4256,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -4299,7 +4296,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -4321,12 +4318,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -4350,12 +4349,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -4379,12 +4380,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -4410,12 +4413,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -4437,7 +4442,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -4460,7 +4467,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations

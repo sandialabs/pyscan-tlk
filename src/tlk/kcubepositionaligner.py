@@ -30,6 +30,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -40,7 +44,7 @@ lib = cdll.LoadLibrary(
 
 QD_CanDeviceLockFrontPanel = lib.QD_CanDeviceLockFrontPanel
 QD_CanDeviceLockFrontPanel.restype = c_bool
-QD_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
+QD_CanDeviceLockFrontPanel.argtypes = []
 
 
 def can_device_lock_front_panel(serial_number):
@@ -56,7 +60,7 @@ def can_device_lock_front_panel(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_CanDeviceLockFrontPanel(serial_number)
 
@@ -74,14 +78,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_CheckConnection(serial_number)
 
@@ -90,7 +95,7 @@ def check_connection(serial_number):
 
 QD_ClearMessageQueue = lib.QD_ClearMessageQueue
 QD_ClearMessageQueue.restype = c_void_p
-QD_ClearMessageQueue.argtypes = [POINTER(c_char)]
+QD_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -106,7 +111,7 @@ def clear_message_queue(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_ClearMessageQueue(serial_number)
 
@@ -115,7 +120,7 @@ def clear_message_queue(serial_number):
 
 QD_Close = lib.QD_Close
 QD_Close.restype = c_void_p
-QD_Close.argtypes = [POINTER(c_char)]
+QD_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -131,7 +136,7 @@ def close_device(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_Close(serial_number)
 
@@ -140,7 +145,7 @@ def close_device(serial_number):
 
 QD_EnableLastMsgTimer = lib.QD_EnableLastMsgTimer
 QD_EnableLastMsgTimer.restype = c_void_p
-QD_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+QD_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serial_number):
@@ -158,7 +163,7 @@ def enable_last_msg_timer(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     enable = c_bool()
     lastMsgTimeout = c_int32()
 
@@ -169,7 +174,7 @@ def enable_last_msg_timer(serial_number):
 
 QD_GetClosedLoopPosition = lib.QD_GetClosedLoopPosition
 QD_GetClosedLoopPosition.restype = c_short
-QD_GetClosedLoopPosition.argtypes = [POINTER(c_char)]
+QD_GetClosedLoopPosition.argtypes = []
 
 
 def get_closed_loop_position(serial_number):
@@ -186,7 +191,7 @@ def get_closed_loop_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = QD_ClosedLoopPosition()
 
     output = QD_GetClosedLoopPosition(serial_number)
@@ -196,7 +201,7 @@ def get_closed_loop_position(serial_number):
 
 QD_GetDemandedPosition = lib.QD_GetDemandedPosition
 QD_GetDemandedPosition.restype = c_short
-QD_GetDemandedPosition.argtypes = [POINTER(c_char)]
+QD_GetDemandedPosition.argtypes = []
 
 
 def get_demanded_position(serial_number):
@@ -213,7 +218,7 @@ def get_demanded_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = QD_Position()
 
     output = QD_GetDemandedPosition(serial_number)
@@ -223,7 +228,7 @@ def get_demanded_position(serial_number):
 
 QD_GetDigitalOutput = lib.QD_GetDigitalOutput
 QD_GetDigitalOutput.restype = c_short
-QD_GetDigitalOutput.argtypes = [POINTER(c_char)]
+QD_GetDigitalOutput.argtypes = []
 
 
 def get_digital_output(serial_number):
@@ -240,7 +245,7 @@ def get_digital_output(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     digitalIO = QD_KPA_DigitalIO()
 
     output = QD_GetDigitalOutput(serial_number)
@@ -250,7 +255,7 @@ def get_digital_output(serial_number):
 
 QD_GetFirmwareVersion = lib.QD_GetFirmwareVersion
 QD_GetFirmwareVersion.restype = c_ulong
-QD_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+QD_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serial_number):
@@ -266,7 +271,7 @@ def get_firmware_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_GetFirmwareVersion(serial_number)
 
@@ -275,7 +280,7 @@ def get_firmware_version(serial_number):
 
 QD_GetFrontPanelLocked = lib.QD_GetFrontPanelLocked
 QD_GetFrontPanelLocked.restype = c_bool
-QD_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
+QD_GetFrontPanelLocked.argtypes = []
 
 
 def get_front_panel_locked(serial_number):
@@ -291,7 +296,7 @@ def get_front_panel_locked(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_GetFrontPanelLocked(serial_number)
 
@@ -309,23 +314,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -352,15 +349,15 @@ def get_hardware_info_block(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     hardwareInfo = TLI_HardwareInformation()
 
     output = QD_GetHardwareInfoBlock(serial_number)
@@ -370,7 +367,7 @@ def get_hardware_info_block(serial_number):
 
 QD_GetLEDBrightness = lib.QD_GetLEDBrightness
 QD_GetLEDBrightness.restype = c_long
-QD_GetLEDBrightness.argtypes = [POINTER(c_char)]
+QD_GetLEDBrightness.argtypes = []
 
 
 def get_l_e_d_brightness(serial_number):
@@ -386,7 +383,7 @@ def get_l_e_d_brightness(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_GetLEDBrightness(serial_number)
 
@@ -395,7 +392,7 @@ def get_l_e_d_brightness(serial_number):
 
 QD_GetLoopPIDparams = lib.QD_GetLoopPIDparams
 QD_GetLoopPIDparams.restype = c_short
-QD_GetLoopPIDparams.argtypes = [POINTER(c_char)]
+QD_GetLoopPIDparams.argtypes = []
 
 
 def get_loop_p_i_dparams(serial_number):
@@ -412,7 +409,7 @@ def get_loop_p_i_dparams(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     loopParams = QD_LoopParameters()
 
     output = QD_GetLoopPIDparams(serial_number)
@@ -422,7 +419,7 @@ def get_loop_p_i_dparams(serial_number):
 
 QD_GetLowPassFilterparams = lib.QD_GetLowPassFilterparams
 QD_GetLowPassFilterparams.restype = c_short
-QD_GetLowPassFilterparams.argtypes = [POINTER(c_char)]
+QD_GetLowPassFilterparams.argtypes = []
 
 
 def get_low_pass_filterparams(serial_number):
@@ -439,7 +436,7 @@ def get_low_pass_filterparams(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     lowPassParams = QD_LowPassFilterParameters()
 
     output = QD_GetLowPassFilterparams(serial_number)
@@ -449,7 +446,7 @@ def get_low_pass_filterparams(serial_number):
 
 QD_GetNextMessage = lib.QD_GetNextMessage
 QD_GetNextMessage.restype = c_bool
-QD_GetNextMessage.argtypes = [POINTER(c_char)]
+QD_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -468,7 +465,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -480,7 +477,7 @@ def get_next_message(serial_number):
 
 QD_GetNotchFilterparams = lib.QD_GetNotchFilterparams
 QD_GetNotchFilterparams.restype = c_short
-QD_GetNotchFilterparams.argtypes = [POINTER(c_char)]
+QD_GetNotchFilterparams.argtypes = []
 
 
 def get_notch_filterparams(serial_number):
@@ -497,7 +494,7 @@ def get_notch_filterparams(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     notchParams = QD_NotchFilterParameters()
 
     output = QD_GetNotchFilterparams(serial_number)
@@ -507,7 +504,7 @@ def get_notch_filterparams(serial_number):
 
 QD_GetOperatingMode = lib.QD_GetOperatingMode
 QD_GetOperatingMode.restype = QD_OperatingMode
-QD_GetOperatingMode.argtypes = [POINTER(c_char)]
+QD_GetOperatingMode.argtypes = []
 
 
 def get_operating_mode(serial_number):
@@ -523,7 +520,7 @@ def get_operating_mode(serial_number):
         QD_OperatingMode
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_GetOperatingMode(serial_number)
 
@@ -532,7 +529,7 @@ def get_operating_mode(serial_number):
 
 QD_GetPIDparams = lib.QD_GetPIDparams
 QD_GetPIDparams.restype = c_short
-QD_GetPIDparams.argtypes = [POINTER(c_char)]
+QD_GetPIDparams.argtypes = []
 
 
 def get_p_i_dparams(serial_number):
@@ -549,7 +546,7 @@ def get_p_i_dparams(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     proportionalIntegralDerivativeParams = QD_PIDParameters()
 
     output = QD_GetPIDparams(serial_number)
@@ -559,7 +556,7 @@ def get_p_i_dparams(serial_number):
 
 QD_GetPosDemandParams = lib.QD_GetPosDemandParams
 QD_GetPosDemandParams.restype = c_short
-QD_GetPosDemandParams.argtypes = [POINTER(c_char)]
+QD_GetPosDemandParams.argtypes = []
 
 
 def get_pos_demand_params(serial_number):
@@ -576,7 +573,7 @@ def get_pos_demand_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     demandParams = QD_PositionDemandParameters()
 
     output = QD_GetPosDemandParams(serial_number)
@@ -586,7 +583,7 @@ def get_pos_demand_params(serial_number):
 
 QD_GetReading = lib.QD_GetReading
 QD_GetReading.restype = c_short
-QD_GetReading.argtypes = [POINTER(c_char)]
+QD_GetReading.argtypes = []
 
 
 def get_reading(serial_number):
@@ -603,7 +600,7 @@ def get_reading(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     reading = QD_Readings()
 
     output = QD_GetReading(serial_number)
@@ -613,7 +610,7 @@ def get_reading(serial_number):
 
 QD_GetSoftwareVersion = lib.QD_GetSoftwareVersion
 QD_GetSoftwareVersion.restype = c_ulong
-QD_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+QD_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -629,7 +626,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_GetSoftwareVersion(serial_number)
 
@@ -638,7 +635,7 @@ def get_software_version(serial_number):
 
 QD_GetStatusBits = lib.QD_GetStatusBits
 QD_GetStatusBits.restype = c_ulong
-QD_GetStatusBits.argtypes = [POINTER(c_char)]
+QD_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -654,7 +651,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_GetStatusBits(serial_number)
 
@@ -663,7 +660,7 @@ def get_status_bits(serial_number):
 
 QD_GetTriggerConfigParams = lib.QD_GetTriggerConfigParams
 QD_GetTriggerConfigParams.restype = c_short
-QD_GetTriggerConfigParams.argtypes = [POINTER(c_char)]
+QD_GetTriggerConfigParams.argtypes = []
 
 
 def get_trigger_config_params(serial_number):
@@ -680,7 +677,7 @@ def get_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerParams = QD_KPA_TrigIOConfig()
 
     output = QD_GetTriggerConfigParams(serial_number)
@@ -690,7 +687,7 @@ def get_trigger_config_params(serial_number):
 
 QD_HasLastMsgTimerOverrun = lib.QD_HasLastMsgTimerOverrun
 QD_HasLastMsgTimerOverrun.restype = c_bool
-QD_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+QD_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serial_number):
@@ -706,7 +703,7 @@ def has_last_msg_timer_overrun(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_HasLastMsgTimerOverrun(serial_number)
 
@@ -715,7 +712,7 @@ def has_last_msg_timer_overrun(serial_number):
 
 QD_Identify = lib.QD_Identify
 QD_Identify.restype = c_void_p
-QD_Identify.argtypes = [POINTER(c_char)]
+QD_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -731,7 +728,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_Identify(serial_number)
 
@@ -740,7 +737,7 @@ def identify(serial_number):
 
 QD_LoadNamedSettings = lib.QD_LoadNamedSettings
 QD_LoadNamedSettings.restype = c_bool
-QD_LoadNamedSettings.argtypes = [POINTER(c_char)]
+QD_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -757,7 +754,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settingsName = POINTER(c_char)()
 
     output = QD_LoadNamedSettings(serial_number)
@@ -767,7 +764,7 @@ def load_named_settings(serial_number):
 
 QD_LoadSettings = lib.QD_LoadSettings
 QD_LoadSettings.restype = c_bool
-QD_LoadSettings.argtypes = [POINTER(c_char)]
+QD_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -783,7 +780,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_LoadSettings(serial_number)
 
@@ -792,7 +789,7 @@ def load_settings(serial_number):
 
 QD_MessageQueueSize = lib.QD_MessageQueueSize
 QD_MessageQueueSize.restype = c_int
-QD_MessageQueueSize.argtypes = [POINTER(c_char)]
+QD_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -808,7 +805,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_MessageQueueSize(serial_number)
 
@@ -817,7 +814,7 @@ def message_queue_size(serial_number):
 
 QD_Open = lib.QD_Open
 QD_Open.restype = c_short
-QD_Open.argtypes = [POINTER(c_char)]
+QD_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -833,7 +830,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_Open(serial_number)
 
@@ -842,7 +839,7 @@ def open_device(serial_number):
 
 QD_PersistSettings = lib.QD_PersistSettings
 QD_PersistSettings.restype = c_bool
-QD_PersistSettings.argtypes = [POINTER(c_char)]
+QD_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -858,7 +855,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_PersistSettings(serial_number)
 
@@ -867,7 +864,7 @@ def persist_settings(serial_number):
 
 QD_PollingDuration = lib.QD_PollingDuration
 QD_PollingDuration.restype = c_long
-QD_PollingDuration.argtypes = [POINTER(c_char)]
+QD_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -883,7 +880,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_PollingDuration(serial_number)
 
@@ -892,7 +889,7 @@ def polling_duration(serial_number):
 
 QD_RegisterMessageCallback = lib.QD_RegisterMessageCallback
 QD_RegisterMessageCallback.restype = c_void_p
-QD_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+QD_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -909,7 +906,7 @@ def register_message_callback(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RegisterMessageCallback(serial_number)
 
@@ -918,7 +915,7 @@ def register_message_callback(serial_number):
 
 QD_RequestClosedLoopPosition = lib.QD_RequestClosedLoopPosition
 QD_RequestClosedLoopPosition.restype = c_short
-QD_RequestClosedLoopPosition.argtypes = [POINTER(c_char)]
+QD_RequestClosedLoopPosition.argtypes = []
 
 
 def request_closed_loop_position(serial_number):
@@ -934,7 +931,7 @@ def request_closed_loop_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestClosedLoopPosition(serial_number)
 
@@ -943,7 +940,7 @@ def request_closed_loop_position(serial_number):
 
 QD_RequestDigitalOutput = lib.QD_RequestDigitalOutput
 QD_RequestDigitalOutput.restype = c_short
-QD_RequestDigitalOutput.argtypes = [POINTER(c_char)]
+QD_RequestDigitalOutput.argtypes = []
 
 
 def request_digital_output(serial_number):
@@ -959,7 +956,7 @@ def request_digital_output(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestDigitalOutput(serial_number)
 
@@ -968,7 +965,7 @@ def request_digital_output(serial_number):
 
 QD_RequestFrontPanelLocked = lib.QD_RequestFrontPanelLocked
 QD_RequestFrontPanelLocked.restype = c_short
-QD_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
+QD_RequestFrontPanelLocked.argtypes = []
 
 
 def request_front_panel_locked(serial_number):
@@ -984,7 +981,7 @@ def request_front_panel_locked(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestFrontPanelLocked(serial_number)
 
@@ -993,7 +990,7 @@ def request_front_panel_locked(serial_number):
 
 QD_RequestLEDBrightness = lib.QD_RequestLEDBrightness
 QD_RequestLEDBrightness.restype = c_short
-QD_RequestLEDBrightness.argtypes = [POINTER(c_char)]
+QD_RequestLEDBrightness.argtypes = []
 
 
 def request_l_e_d_brightness(serial_number):
@@ -1009,7 +1006,7 @@ def request_l_e_d_brightness(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestLEDBrightness(serial_number)
 
@@ -1018,7 +1015,7 @@ def request_l_e_d_brightness(serial_number):
 
 QD_RequestLoopPIDparams = lib.QD_RequestLoopPIDparams
 QD_RequestLoopPIDparams.restype = c_short
-QD_RequestLoopPIDparams.argtypes = [POINTER(c_char)]
+QD_RequestLoopPIDparams.argtypes = []
 
 
 def request_loop_p_i_dparams(serial_number):
@@ -1034,7 +1031,7 @@ def request_loop_p_i_dparams(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestLoopPIDparams(serial_number)
 
@@ -1043,7 +1040,7 @@ def request_loop_p_i_dparams(serial_number):
 
 QD_RequestOperatingMode = lib.QD_RequestOperatingMode
 QD_RequestOperatingMode.restype = c_short
-QD_RequestOperatingMode.argtypes = [POINTER(c_char)]
+QD_RequestOperatingMode.argtypes = []
 
 
 def request_operating_mode(serial_number):
@@ -1059,7 +1056,7 @@ def request_operating_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestOperatingMode(serial_number)
 
@@ -1068,7 +1065,7 @@ def request_operating_mode(serial_number):
 
 QD_RequestPosDemandParams = lib.QD_RequestPosDemandParams
 QD_RequestPosDemandParams.restype = c_short
-QD_RequestPosDemandParams.argtypes = [POINTER(c_char)]
+QD_RequestPosDemandParams.argtypes = []
 
 
 def request_pos_demand_params(serial_number):
@@ -1084,7 +1081,7 @@ def request_pos_demand_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestPosDemandParams(serial_number)
 
@@ -1093,7 +1090,7 @@ def request_pos_demand_params(serial_number):
 
 QD_RequestReading = lib.QD_RequestReading
 QD_RequestReading.restype = c_short
-QD_RequestReading.argtypes = [POINTER(c_char)]
+QD_RequestReading.argtypes = []
 
 
 def request_reading(serial_number):
@@ -1109,7 +1106,7 @@ def request_reading(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestReading(serial_number)
 
@@ -1118,7 +1115,7 @@ def request_reading(serial_number):
 
 QD_RequestSettings = lib.QD_RequestSettings
 QD_RequestSettings.restype = c_short
-QD_RequestSettings.argtypes = [POINTER(c_char)]
+QD_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -1134,7 +1131,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestSettings(serial_number)
 
@@ -1143,7 +1140,7 @@ def request_settings(serial_number):
 
 QD_RequestStatus = lib.QD_RequestStatus
 QD_RequestStatus.restype = c_short
-QD_RequestStatus.argtypes = [POINTER(c_char)]
+QD_RequestStatus.argtypes = []
 
 
 def request_status(serial_number):
@@ -1159,7 +1156,7 @@ def request_status(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestStatus(serial_number)
 
@@ -1168,7 +1165,7 @@ def request_status(serial_number):
 
 QD_RequestStatusBits = lib.QD_RequestStatusBits
 QD_RequestStatusBits.restype = c_short
-QD_RequestStatusBits.argtypes = [POINTER(c_char)]
+QD_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serial_number):
@@ -1184,7 +1181,7 @@ def request_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestStatusBits(serial_number)
 
@@ -1193,7 +1190,7 @@ def request_status_bits(serial_number):
 
 QD_RequestTriggerConfigParams = lib.QD_RequestTriggerConfigParams
 QD_RequestTriggerConfigParams.restype = c_short
-QD_RequestTriggerConfigParams.argtypes = [POINTER(c_char)]
+QD_RequestTriggerConfigParams.argtypes = []
 
 
 def request_trigger_config_params(serial_number):
@@ -1209,7 +1206,7 @@ def request_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_RequestTriggerConfigParams(serial_number)
 
@@ -1218,7 +1215,7 @@ def request_trigger_config_params(serial_number):
 
 QD_SetClosedLoopPosition = lib.QD_SetClosedLoopPosition
 QD_SetClosedLoopPosition.restype = c_short
-QD_SetClosedLoopPosition.argtypes = [POINTER(c_char)]
+QD_SetClosedLoopPosition.argtypes = []
 
 
 def set_closed_loop_position(serial_number):
@@ -1235,7 +1232,7 @@ def set_closed_loop_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = QD_ClosedLoopPosition()
 
     output = QD_SetClosedLoopPosition(serial_number)
@@ -1245,7 +1242,7 @@ def set_closed_loop_position(serial_number):
 
 QD_SetDigitalOutput = lib.QD_SetDigitalOutput
 QD_SetDigitalOutput.restype = c_short
-QD_SetDigitalOutput.argtypes = [POINTER(c_char)]
+QD_SetDigitalOutput.argtypes = []
 
 
 def set_digital_output(serial_number):
@@ -1262,7 +1259,7 @@ def set_digital_output(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     digitalIO = QD_KPA_DigitalIO()
 
     output = QD_SetDigitalOutput(serial_number)
@@ -1272,7 +1269,7 @@ def set_digital_output(serial_number):
 
 QD_SetFrontPanelLock = lib.QD_SetFrontPanelLock
 QD_SetFrontPanelLock.restype = c_short
-QD_SetFrontPanelLock.argtypes = [POINTER(c_char)]
+QD_SetFrontPanelLock.argtypes = []
 
 
 def set_front_panel_lock(serial_number):
@@ -1289,7 +1286,7 @@ def set_front_panel_lock(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     locked = c_bool()
 
     output = QD_SetFrontPanelLock(serial_number)
@@ -1299,7 +1296,7 @@ def set_front_panel_lock(serial_number):
 
 QD_SetLEDBrightness = lib.QD_SetLEDBrightness
 QD_SetLEDBrightness.restype = c_short
-QD_SetLEDBrightness.argtypes = [POINTER(c_char)]
+QD_SetLEDBrightness.argtypes = []
 
 
 def set_l_e_d_brightness(serial_number):
@@ -1316,7 +1313,7 @@ def set_l_e_d_brightness(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     brightness = c_short()
 
     output = QD_SetLEDBrightness(serial_number)
@@ -1326,7 +1323,7 @@ def set_l_e_d_brightness(serial_number):
 
 QD_SetLoopPIDparams = lib.QD_SetLoopPIDparams
 QD_SetLoopPIDparams.restype = c_short
-QD_SetLoopPIDparams.argtypes = [POINTER(c_char)]
+QD_SetLoopPIDparams.argtypes = []
 
 
 def set_loop_p_i_dparams(serial_number):
@@ -1343,7 +1340,7 @@ def set_loop_p_i_dparams(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     loopParams = QD_LoopParameters()
 
     output = QD_SetLoopPIDparams(serial_number)
@@ -1353,7 +1350,7 @@ def set_loop_p_i_dparams(serial_number):
 
 QD_SetLowPassFilterparams = lib.QD_SetLowPassFilterparams
 QD_SetLowPassFilterparams.restype = c_short
-QD_SetLowPassFilterparams.argtypes = [POINTER(c_char)]
+QD_SetLowPassFilterparams.argtypes = []
 
 
 def set_low_pass_filterparams(serial_number):
@@ -1370,7 +1367,7 @@ def set_low_pass_filterparams(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     lowPassParams = QD_LowPassFilterParameters()
 
     output = QD_SetLowPassFilterparams(serial_number)
@@ -1380,7 +1377,7 @@ def set_low_pass_filterparams(serial_number):
 
 QD_SetNotchFilterparams = lib.QD_SetNotchFilterparams
 QD_SetNotchFilterparams.restype = c_short
-QD_SetNotchFilterparams.argtypes = [POINTER(c_char)]
+QD_SetNotchFilterparams.argtypes = []
 
 
 def set_notch_filterparams(serial_number):
@@ -1397,7 +1394,7 @@ def set_notch_filterparams(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     proportionalIntegralDerivativeParams = QD_NotchFilterParameters()
 
     output = QD_SetNotchFilterparams(serial_number)
@@ -1407,7 +1404,7 @@ def set_notch_filterparams(serial_number):
 
 QD_SetOperatingMode = lib.QD_SetOperatingMode
 QD_SetOperatingMode.restype = c_short
-QD_SetOperatingMode.argtypes = [POINTER(c_char)]
+QD_SetOperatingMode.argtypes = []
 
 
 def set_operating_mode(serial_number):
@@ -1425,7 +1422,7 @@ def set_operating_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = QD_OperatingMode()
     autoOpenCloseLoop = c_bool()
 
@@ -1436,7 +1433,7 @@ def set_operating_mode(serial_number):
 
 QD_SetPIDparams = lib.QD_SetPIDparams
 QD_SetPIDparams.restype = c_short
-QD_SetPIDparams.argtypes = [POINTER(c_char)]
+QD_SetPIDparams.argtypes = []
 
 
 def set_p_i_dparams(serial_number):
@@ -1453,7 +1450,7 @@ def set_p_i_dparams(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     proportionalIntegralDerivativeParams = QD_PIDParameters()
 
     output = QD_SetPIDparams(serial_number)
@@ -1463,7 +1460,7 @@ def set_p_i_dparams(serial_number):
 
 QD_SetPosDemandParams = lib.QD_SetPosDemandParams
 QD_SetPosDemandParams.restype = c_short
-QD_SetPosDemandParams.argtypes = [POINTER(c_char)]
+QD_SetPosDemandParams.argtypes = []
 
 
 def set_pos_demand_params(serial_number):
@@ -1480,7 +1477,7 @@ def set_pos_demand_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     demandParams = QD_PositionDemandParameters()
 
     output = QD_SetPosDemandParams(serial_number)
@@ -1490,7 +1487,7 @@ def set_pos_demand_params(serial_number):
 
 QD_SetPosition = lib.QD_SetPosition
 QD_SetPosition.restype = c_short
-QD_SetPosition.argtypes = [POINTER(c_char)]
+QD_SetPosition.argtypes = []
 
 
 def set_position(serial_number):
@@ -1507,7 +1504,7 @@ def set_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = QD_Position()
 
     output = QD_SetPosition(serial_number)
@@ -1517,7 +1514,7 @@ def set_position(serial_number):
 
 QD_SetTriggerConfigParams = lib.QD_SetTriggerConfigParams
 QD_SetTriggerConfigParams.restype = c_short
-QD_SetTriggerConfigParams.argtypes = [POINTER(c_char)]
+QD_SetTriggerConfigParams.argtypes = []
 
 
 def set_trigger_config_params(serial_number):
@@ -1534,7 +1531,7 @@ def set_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerParams = QD_KPA_TrigIOConfig()
 
     output = QD_SetTriggerConfigParams(serial_number)
@@ -1544,7 +1541,7 @@ def set_trigger_config_params(serial_number):
 
 QD_StartPolling = lib.QD_StartPolling
 QD_StartPolling.restype = c_bool
-QD_StartPolling.argtypes = [POINTER(c_char)]
+QD_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -1561,7 +1558,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     milliseconds = c_int()
 
     output = QD_StartPolling(serial_number)
@@ -1571,7 +1568,7 @@ def start_polling(serial_number):
 
 QD_StopPolling = lib.QD_StopPolling
 QD_StopPolling.restype = c_void_p
-QD_StopPolling.argtypes = [POINTER(c_char)]
+QD_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -1587,7 +1584,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = QD_StopPolling(serial_number)
 
@@ -1596,7 +1593,7 @@ def stop_polling(serial_number):
 
 QD_TimeSinceLastMsgReceived = lib.QD_TimeSinceLastMsgReceived
 QD_TimeSinceLastMsgReceived.restype = c_bool
-QD_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+QD_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serial_number):
@@ -1613,7 +1610,7 @@ def time_since_last_msg_received(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     lastUpdateTimeMS = c_int64()
 
     output = QD_TimeSinceLastMsgReceived(serial_number)
@@ -1623,7 +1620,7 @@ def time_since_last_msg_received(serial_number):
 
 QD_WaitForMessage = lib.QD_WaitForMessage
 QD_WaitForMessage.restype = c_bool
-QD_WaitForMessage.argtypes = [POINTER(c_char)]
+QD_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -1642,7 +1639,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -1680,7 +1677,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -1698,18 +1695,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -1736,7 +1735,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -1758,12 +1757,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -1787,12 +1788,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -1816,12 +1819,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -1847,12 +1852,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -1874,7 +1881,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -1897,7 +1906,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations

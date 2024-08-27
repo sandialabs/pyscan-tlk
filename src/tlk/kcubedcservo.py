@@ -37,6 +37,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -47,7 +51,7 @@ lib = cdll.LoadLibrary(
 
 KVS_CanDeviceLockFrontPanel = lib.KVS_CanDeviceLockFrontPanel
 KVS_CanDeviceLockFrontPanel.restype = c_bool
-KVS_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
+KVS_CanDeviceLockFrontPanel.argtypes = []
 
 
 def can_device_lock_front_panel(serial_number):
@@ -63,7 +67,7 @@ def can_device_lock_front_panel(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_CanDeviceLockFrontPanel(serial_number)
 
@@ -72,7 +76,7 @@ def can_device_lock_front_panel(serial_number):
 
 KVS_CanHome = lib.KVS_CanHome
 KVS_CanHome.restype = c_bool
-KVS_CanHome.argtypes = [POINTER(c_char)]
+KVS_CanHome.argtypes = []
 
 
 def can_home(serial_number):
@@ -88,7 +92,7 @@ def can_home(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_CanHome(serial_number)
 
@@ -97,7 +101,7 @@ def can_home(serial_number):
 
 KVS_CanMoveWithoutHomingFirst = lib.KVS_CanMoveWithoutHomingFirst
 KVS_CanMoveWithoutHomingFirst.restype = c_bool
-KVS_CanMoveWithoutHomingFirst.argtypes = [POINTER(c_char)]
+KVS_CanMoveWithoutHomingFirst.argtypes = []
 
 
 def can_move_without_homing_first(serial_number):
@@ -113,7 +117,7 @@ def can_move_without_homing_first(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_CanMoveWithoutHomingFirst(serial_number)
 
@@ -131,14 +135,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_CheckConnection(serial_number)
 
@@ -147,7 +152,7 @@ def check_connection(serial_number):
 
 KVS_ClearMessageQueue = lib.KVS_ClearMessageQueue
 KVS_ClearMessageQueue.restype = c_void_p
-KVS_ClearMessageQueue.argtypes = [POINTER(c_char)]
+KVS_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -163,7 +168,7 @@ def clear_message_queue(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_ClearMessageQueue(serial_number)
 
@@ -172,7 +177,7 @@ def clear_message_queue(serial_number):
 
 KVS_Close = lib.KVS_Close
 KVS_Close.restype = c_void_p
-KVS_Close.argtypes = [POINTER(c_char)]
+KVS_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -188,7 +193,7 @@ def close_device(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_Close(serial_number)
 
@@ -197,7 +202,7 @@ def close_device(serial_number):
 
 KVS_DisableChannel = lib.KVS_DisableChannel
 KVS_DisableChannel.restype = c_short
-KVS_DisableChannel.argtypes = [POINTER(c_char)]
+KVS_DisableChannel.argtypes = []
 
 
 def disable_channel(serial_number):
@@ -213,7 +218,7 @@ def disable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_DisableChannel(serial_number)
 
@@ -222,7 +227,7 @@ def disable_channel(serial_number):
 
 KVS_EnableChannel = lib.KVS_EnableChannel
 KVS_EnableChannel.restype = c_short
-KVS_EnableChannel.argtypes = [POINTER(c_char)]
+KVS_EnableChannel.argtypes = []
 
 
 def enable_channel(serial_number):
@@ -238,7 +243,7 @@ def enable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_EnableChannel(serial_number)
 
@@ -247,7 +252,7 @@ def enable_channel(serial_number):
 
 KVS_EnableLastMsgTimer = lib.KVS_EnableLastMsgTimer
 KVS_EnableLastMsgTimer.restype = c_void_p
-KVS_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+KVS_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serial_number):
@@ -265,7 +270,7 @@ def enable_last_msg_timer(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     enable = c_bool()
     lastMsgTimeout = c_int32()
 
@@ -276,7 +281,7 @@ def enable_last_msg_timer(serial_number):
 
 KVS_GetBacklash = lib.KVS_GetBacklash
 KVS_GetBacklash.restype = c_long
-KVS_GetBacklash.argtypes = [POINTER(c_char)]
+KVS_GetBacklash.argtypes = []
 
 
 def get_backlash(serial_number):
@@ -292,7 +297,7 @@ def get_backlash(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetBacklash(serial_number)
 
@@ -301,7 +306,7 @@ def get_backlash(serial_number):
 
 KVS_GetDCPIDParams = lib.KVS_GetDCPIDParams
 KVS_GetDCPIDParams.restype = c_short
-KVS_GetDCPIDParams.argtypes = [POINTER(c_char)]
+KVS_GetDCPIDParams.argtypes = []
 
 
 def get_d_c_p_i_d_params(serial_number):
@@ -318,7 +323,7 @@ def get_d_c_p_i_d_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     DCproportionalIntegralDerivativeParams = MOT_DC_PIDParameters()
 
     output = KVS_GetDCPIDParams(serial_number)
@@ -328,7 +333,7 @@ def get_d_c_p_i_d_params(serial_number):
 
 KVS_GetDeviceUnitFromRealValue = lib.KVS_GetDeviceUnitFromRealValue
 KVS_GetDeviceUnitFromRealValue.restype = c_short
-KVS_GetDeviceUnitFromRealValue.argtypes = [POINTER(c_char)]
+KVS_GetDeviceUnitFromRealValue.argtypes = []
 
 
 def get_device_unit_from_real_value(serial_number):
@@ -347,7 +352,7 @@ def get_device_unit_from_real_value(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     real_unit = c_double()
     device_unit = c_int()
     unitType = c_int()
@@ -359,7 +364,7 @@ def get_device_unit_from_real_value(serial_number):
 
 KVS_GetDigitalOutputs = lib.KVS_GetDigitalOutputs
 KVS_GetDigitalOutputs.restype = c_byte
-KVS_GetDigitalOutputs.argtypes = [POINTER(c_char)]
+KVS_GetDigitalOutputs.argtypes = []
 
 
 def get_digital_outputs(serial_number):
@@ -375,7 +380,7 @@ def get_digital_outputs(serial_number):
         c_byte
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetDigitalOutputs(serial_number)
 
@@ -384,7 +389,7 @@ def get_digital_outputs(serial_number):
 
 KVS_GetEncoderCounter = lib.KVS_GetEncoderCounter
 KVS_GetEncoderCounter.restype = c_long
-KVS_GetEncoderCounter.argtypes = [POINTER(c_char)]
+KVS_GetEncoderCounter.argtypes = []
 
 
 def get_encoder_counter(serial_number):
@@ -400,7 +405,7 @@ def get_encoder_counter(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetEncoderCounter(serial_number)
 
@@ -409,7 +414,7 @@ def get_encoder_counter(serial_number):
 
 KVS_GetEncoderResolutionParams = lib.KVS_GetEncoderResolutionParams
 KVS_GetEncoderResolutionParams.restype = c_short
-KVS_GetEncoderResolutionParams.argtypes = [POINTER(c_char)]
+KVS_GetEncoderResolutionParams.argtypes = []
 
 
 def get_encoder_resolution_params(serial_number):
@@ -426,7 +431,7 @@ def get_encoder_resolution_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     resolutionParams = MOT_EncoderResolutionParams()
 
     output = KVS_GetEncoderResolutionParams(serial_number)
@@ -436,7 +441,7 @@ def get_encoder_resolution_params(serial_number):
 
 KVS_GetFrontPanelLocked = lib.KVS_GetFrontPanelLocked
 KVS_GetFrontPanelLocked.restype = c_bool
-KVS_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
+KVS_GetFrontPanelLocked.argtypes = []
 
 
 def get_front_panel_locked(serial_number):
@@ -452,7 +457,7 @@ def get_front_panel_locked(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetFrontPanelLocked(serial_number)
 
@@ -470,23 +475,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -513,15 +510,15 @@ def get_hardware_info_block(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     hardwareInfo = TLI_HardwareInformation()
 
     output = KVS_GetHardwareInfoBlock(serial_number)
@@ -531,7 +528,7 @@ def get_hardware_info_block(serial_number):
 
 KVS_GetHomingParamsBlock = lib.KVS_GetHomingParamsBlock
 KVS_GetHomingParamsBlock.restype = c_short
-KVS_GetHomingParamsBlock.argtypes = [POINTER(c_char)]
+KVS_GetHomingParamsBlock.argtypes = []
 
 
 def get_homing_params_block(serial_number):
@@ -548,7 +545,7 @@ def get_homing_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     homingParams = MOT_HomingParameters()
 
     output = KVS_GetHomingParamsBlock(serial_number)
@@ -558,7 +555,7 @@ def get_homing_params_block(serial_number):
 
 KVS_GetHomingVelocity = lib.KVS_GetHomingVelocity
 KVS_GetHomingVelocity.restype = c_uint
-KVS_GetHomingVelocity.argtypes = [POINTER(c_char)]
+KVS_GetHomingVelocity.argtypes = []
 
 
 def get_homing_velocity(serial_number):
@@ -574,7 +571,7 @@ def get_homing_velocity(serial_number):
         c_uint
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetHomingVelocity(serial_number)
 
@@ -583,7 +580,7 @@ def get_homing_velocity(serial_number):
 
 KVS_GetHubBay = lib.KVS_GetHubBay
 KVS_GetHubBay.restype = POINTER(c_char)
-KVS_GetHubBay.argtypes = [POINTER(c_char)]
+KVS_GetHubBay.argtypes = []
 
 
 def get_hub_bay(serial_number):
@@ -599,7 +596,7 @@ def get_hub_bay(serial_number):
         POINTER(c_char)
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetHubBay(serial_number)
 
@@ -608,7 +605,7 @@ def get_hub_bay(serial_number):
 
 KVS_GetJogMode = lib.KVS_GetJogMode
 KVS_GetJogMode.restype = c_short
-KVS_GetJogMode.argtypes = [POINTER(c_char)]
+KVS_GetJogMode.argtypes = []
 
 
 def get_jog_mode(serial_number):
@@ -626,7 +623,7 @@ def get_jog_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = MOT_JogModes()
     stopMode = MOT_StopModes()
 
@@ -637,7 +634,7 @@ def get_jog_mode(serial_number):
 
 KVS_GetJogParamsBlock = lib.KVS_GetJogParamsBlock
 KVS_GetJogParamsBlock.restype = c_short
-KVS_GetJogParamsBlock.argtypes = [POINTER(c_char)]
+KVS_GetJogParamsBlock.argtypes = []
 
 
 def get_jog_params_block(serial_number):
@@ -654,7 +651,7 @@ def get_jog_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     jogParams = MOT_JogParameters()
 
     output = KVS_GetJogParamsBlock(serial_number)
@@ -664,7 +661,7 @@ def get_jog_params_block(serial_number):
 
 KVS_GetJogStepSize = lib.KVS_GetJogStepSize
 KVS_GetJogStepSize.restype = c_uint
-KVS_GetJogStepSize.argtypes = [POINTER(c_char)]
+KVS_GetJogStepSize.argtypes = []
 
 
 def get_jog_step_size(serial_number):
@@ -680,7 +677,7 @@ def get_jog_step_size(serial_number):
         c_uint
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetJogStepSize(serial_number)
 
@@ -689,7 +686,7 @@ def get_jog_step_size(serial_number):
 
 KVS_GetJogVelParams = lib.KVS_GetJogVelParams
 KVS_GetJogVelParams.restype = c_short
-KVS_GetJogVelParams.argtypes = [POINTER(c_char)]
+KVS_GetJogVelParams.argtypes = []
 
 
 def get_jog_vel_params(serial_number):
@@ -707,7 +704,7 @@ def get_jog_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     acceleration = c_int()
     maxVelocity = c_int()
 
@@ -718,7 +715,7 @@ def get_jog_vel_params(serial_number):
 
 KVS_GetLEDswitches = lib.KVS_GetLEDswitches
 KVS_GetLEDswitches.restype = c_long
-KVS_GetLEDswitches.argtypes = [POINTER(c_char)]
+KVS_GetLEDswitches.argtypes = []
 
 
 def get_l_e_dswitches(serial_number):
@@ -734,7 +731,7 @@ def get_l_e_dswitches(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetLEDswitches(serial_number)
 
@@ -743,7 +740,7 @@ def get_l_e_dswitches(serial_number):
 
 KVS_GetMotorParams = lib.KVS_GetMotorParams
 KVS_GetMotorParams.restype = c_short
-KVS_GetMotorParams.argtypes = [POINTER(c_char)]
+KVS_GetMotorParams.argtypes = []
 
 
 def get_motor_params(serial_number):
@@ -762,7 +759,7 @@ def get_motor_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     stepsPerRev = c_long()
     gearBoxRatio = c_long()
     pitch = c_float()
@@ -774,7 +771,7 @@ def get_motor_params(serial_number):
 
 KVS_GetMotorParamsExt = lib.KVS_GetMotorParamsExt
 KVS_GetMotorParamsExt.restype = c_short
-KVS_GetMotorParamsExt.argtypes = [POINTER(c_char)]
+KVS_GetMotorParamsExt.argtypes = []
 
 
 def get_motor_params_ext(serial_number):
@@ -793,7 +790,7 @@ def get_motor_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     stepsPerRev = c_double()
     gearBoxRatio = c_double()
     pitch = c_double()
@@ -805,7 +802,7 @@ def get_motor_params_ext(serial_number):
 
 KVS_GetMotorTravelLimits = lib.KVS_GetMotorTravelLimits
 KVS_GetMotorTravelLimits.restype = c_short
-KVS_GetMotorTravelLimits.argtypes = [POINTER(c_char)]
+KVS_GetMotorTravelLimits.argtypes = []
 
 
 def get_motor_travel_limits(serial_number):
@@ -823,7 +820,7 @@ def get_motor_travel_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     minPosition = c_double()
     maxPosition = c_double()
 
@@ -834,7 +831,7 @@ def get_motor_travel_limits(serial_number):
 
 KVS_GetMotorTravelMode = lib.KVS_GetMotorTravelMode
 KVS_GetMotorTravelMode.restype = MOT_TravelModes
-KVS_GetMotorTravelMode.argtypes = [POINTER(c_char)]
+KVS_GetMotorTravelMode.argtypes = []
 
 
 def get_motor_travel_mode(serial_number):
@@ -850,7 +847,7 @@ def get_motor_travel_mode(serial_number):
         MOT_TravelModes
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetMotorTravelMode(serial_number)
 
@@ -859,7 +856,7 @@ def get_motor_travel_mode(serial_number):
 
 KVS_GetMotorVelocityLimits = lib.KVS_GetMotorVelocityLimits
 KVS_GetMotorVelocityLimits.restype = c_short
-KVS_GetMotorVelocityLimits.argtypes = [POINTER(c_char)]
+KVS_GetMotorVelocityLimits.argtypes = []
 
 
 def get_motor_velocity_limits(serial_number):
@@ -877,7 +874,7 @@ def get_motor_velocity_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     maxVelocity = c_double()
     maxAcceleration = c_double()
 
@@ -888,7 +885,7 @@ def get_motor_velocity_limits(serial_number):
 
 KVS_GetMoveAbsolutePosition = lib.KVS_GetMoveAbsolutePosition
 KVS_GetMoveAbsolutePosition.restype = c_int
-KVS_GetMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+KVS_GetMoveAbsolutePosition.argtypes = []
 
 
 def get_move_absolute_position(serial_number):
@@ -904,7 +901,7 @@ def get_move_absolute_position(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetMoveAbsolutePosition(serial_number)
 
@@ -913,7 +910,7 @@ def get_move_absolute_position(serial_number):
 
 KVS_GetMoveRelativeDistance = lib.KVS_GetMoveRelativeDistance
 KVS_GetMoveRelativeDistance.restype = c_int
-KVS_GetMoveRelativeDistance.argtypes = [POINTER(c_char)]
+KVS_GetMoveRelativeDistance.argtypes = []
 
 
 def get_move_relative_distance(serial_number):
@@ -929,7 +926,7 @@ def get_move_relative_distance(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetMoveRelativeDistance(serial_number)
 
@@ -938,7 +935,7 @@ def get_move_relative_distance(serial_number):
 
 KVS_GetNextMessage = lib.KVS_GetNextMessage
 KVS_GetNextMessage.restype = c_bool
-KVS_GetNextMessage.argtypes = [POINTER(c_char)]
+KVS_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -957,7 +954,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -969,7 +966,7 @@ def get_next_message(serial_number):
 
 KVS_GetNumberPositions = lib.KVS_GetNumberPositions
 KVS_GetNumberPositions.restype = c_int
-KVS_GetNumberPositions.argtypes = [POINTER(c_char)]
+KVS_GetNumberPositions.argtypes = []
 
 
 def get_number_positions(serial_number):
@@ -985,7 +982,7 @@ def get_number_positions(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetNumberPositions(serial_number)
 
@@ -994,7 +991,7 @@ def get_number_positions(serial_number):
 
 KVS_GetPosition = lib.KVS_GetPosition
 KVS_GetPosition.restype = c_int
-KVS_GetPosition.argtypes = [POINTER(c_char)]
+KVS_GetPosition.argtypes = []
 
 
 def get_position(serial_number):
@@ -1010,7 +1007,7 @@ def get_position(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetPosition(serial_number)
 
@@ -1019,7 +1016,7 @@ def get_position(serial_number):
 
 KVS_GetPositionCounter = lib.KVS_GetPositionCounter
 KVS_GetPositionCounter.restype = c_long
-KVS_GetPositionCounter.argtypes = [POINTER(c_char)]
+KVS_GetPositionCounter.argtypes = []
 
 
 def get_position_counter(serial_number):
@@ -1035,7 +1032,7 @@ def get_position_counter(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetPositionCounter(serial_number)
 
@@ -1044,7 +1041,7 @@ def get_position_counter(serial_number):
 
 KVS_GetRealValueFromDeviceUnit = lib.KVS_GetRealValueFromDeviceUnit
 KVS_GetRealValueFromDeviceUnit.restype = c_short
-KVS_GetRealValueFromDeviceUnit.argtypes = [POINTER(c_char)]
+KVS_GetRealValueFromDeviceUnit.argtypes = []
 
 
 def get_real_value_from_device_unit(serial_number):
@@ -1063,7 +1060,7 @@ def get_real_value_from_device_unit(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     device_unit = c_int()
     real_unit = c_double()
     unitType = c_int()
@@ -1075,7 +1072,7 @@ def get_real_value_from_device_unit(serial_number):
 
 KVS_GetSoftLimitMode = lib.KVS_GetSoftLimitMode
 KVS_GetSoftLimitMode.restype = MOT_LimitsSoftwareApproachPolicy
-KVS_GetSoftLimitMode.argtypes = [POINTER(c_char)]
+KVS_GetSoftLimitMode.argtypes = []
 
 
 def get_soft_limit_mode(serial_number):
@@ -1091,7 +1088,7 @@ def get_soft_limit_mode(serial_number):
         MOT_LimitsSoftwareApproachPolicy
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetSoftLimitMode(serial_number)
 
@@ -1100,7 +1097,7 @@ def get_soft_limit_mode(serial_number):
 
 KVS_GetSoftwareVersion = lib.KVS_GetSoftwareVersion
 KVS_GetSoftwareVersion.restype = c_ulong
-KVS_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+KVS_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -1116,7 +1113,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetSoftwareVersion(serial_number)
 
@@ -1125,7 +1122,7 @@ def get_software_version(serial_number):
 
 KVS_GetStageAxisMaxPos = lib.KVS_GetStageAxisMaxPos
 KVS_GetStageAxisMaxPos.restype = c_int
-KVS_GetStageAxisMaxPos.argtypes = [POINTER(c_char)]
+KVS_GetStageAxisMaxPos.argtypes = []
 
 
 def get_stage_axis_max_pos(serial_number):
@@ -1141,7 +1138,7 @@ def get_stage_axis_max_pos(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetStageAxisMaxPos(serial_number)
 
@@ -1150,7 +1147,7 @@ def get_stage_axis_max_pos(serial_number):
 
 KVS_GetStageAxisMinPos = lib.KVS_GetStageAxisMinPos
 KVS_GetStageAxisMinPos.restype = c_int
-KVS_GetStageAxisMinPos.argtypes = [POINTER(c_char)]
+KVS_GetStageAxisMinPos.argtypes = []
 
 
 def get_stage_axis_min_pos(serial_number):
@@ -1166,7 +1163,7 @@ def get_stage_axis_min_pos(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetStageAxisMinPos(serial_number)
 
@@ -1175,7 +1172,7 @@ def get_stage_axis_min_pos(serial_number):
 
 KVS_GetStatusBits = lib.KVS_GetStatusBits
 KVS_GetStatusBits.restype = c_ulong
-KVS_GetStatusBits.argtypes = [POINTER(c_char)]
+KVS_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -1191,7 +1188,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_GetStatusBits(serial_number)
 
@@ -1200,7 +1197,7 @@ def get_status_bits(serial_number):
 
 KVS_GetTrackSettleParams = lib.KVS_GetTrackSettleParams
 KVS_GetTrackSettleParams.restype = c_short
-KVS_GetTrackSettleParams.argtypes = [POINTER(c_char)]
+KVS_GetTrackSettleParams.argtypes = []
 
 
 def get_track_settle_params(serial_number):
@@ -1217,7 +1214,7 @@ def get_track_settle_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settleParams = MOT_BrushlessTrackSettleParameters()
 
     output = KVS_GetTrackSettleParams(serial_number)
@@ -1227,7 +1224,7 @@ def get_track_settle_params(serial_number):
 
 KVS_GetTriggerConfigParams = lib.KVS_GetTriggerConfigParams
 KVS_GetTriggerConfigParams.restype = c_short
-KVS_GetTriggerConfigParams.argtypes = [POINTER(c_char)]
+KVS_GetTriggerConfigParams.argtypes = []
 
 
 def get_trigger_config_params(serial_number):
@@ -1247,7 +1244,7 @@ def get_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     trigger1Mode = KMOT_TriggerPortMode()
     trigger1Polarity = KMOT_TriggerPortPolarity()
     trigger2Mode = KMOT_TriggerPortMode()
@@ -1260,7 +1257,7 @@ def get_trigger_config_params(serial_number):
 
 KVS_GetTriggerConfigParamsBlock = lib.KVS_GetTriggerConfigParamsBlock
 KVS_GetTriggerConfigParamsBlock.restype = c_short
-KVS_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
+KVS_GetTriggerConfigParamsBlock.argtypes = []
 
 
 def get_trigger_config_params_block(serial_number):
@@ -1277,7 +1274,7 @@ def get_trigger_config_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerConfigParams = KMOT_TriggerConfig()
 
     output = KVS_GetTriggerConfigParamsBlock(serial_number)
@@ -1287,7 +1284,7 @@ def get_trigger_config_params_block(serial_number):
 
 KVS_GetTriggerParamsParams = lib.KVS_GetTriggerParamsParams
 KVS_GetTriggerParamsParams.restype = c_short
-KVS_GetTriggerParamsParams.argtypes = [POINTER(c_char)]
+KVS_GetTriggerParamsParams.argtypes = []
 
 
 def get_trigger_params_params(serial_number):
@@ -1311,7 +1308,7 @@ def get_trigger_params_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerStartPositionFwd = c_int32()
     triggerIntervalFwd = c_int32()
     triggerPulseCountFwd = c_int32()
@@ -1328,7 +1325,7 @@ def get_trigger_params_params(serial_number):
 
 KVS_GetTriggerParamsParamsBlock = lib.KVS_GetTriggerParamsParamsBlock
 KVS_GetTriggerParamsParamsBlock.restype = c_short
-KVS_GetTriggerParamsParamsBlock.argtypes = [POINTER(c_char)]
+KVS_GetTriggerParamsParamsBlock.argtypes = []
 
 
 def get_trigger_params_params_block(serial_number):
@@ -1345,7 +1342,7 @@ def get_trigger_params_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerParamsParams = KMOT_TriggerParams()
 
     output = KVS_GetTriggerParamsParamsBlock(serial_number)
@@ -1355,7 +1352,7 @@ def get_trigger_params_params_block(serial_number):
 
 KVS_GetVelParams = lib.KVS_GetVelParams
 KVS_GetVelParams.restype = c_short
-KVS_GetVelParams.argtypes = [POINTER(c_char)]
+KVS_GetVelParams.argtypes = []
 
 
 def get_vel_params(serial_number):
@@ -1373,7 +1370,7 @@ def get_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     acceleration = c_int()
     maxVelocity = c_int()
 
@@ -1384,7 +1381,7 @@ def get_vel_params(serial_number):
 
 KVS_GetVelParamsBlock = lib.KVS_GetVelParamsBlock
 KVS_GetVelParamsBlock.restype = c_short
-KVS_GetVelParamsBlock.argtypes = [POINTER(c_char)]
+KVS_GetVelParamsBlock.argtypes = []
 
 
 def get_vel_params_block(serial_number):
@@ -1401,7 +1398,7 @@ def get_vel_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     velocityParams = MOT_VelocityParameters()
 
     output = KVS_GetVelParamsBlock(serial_number)
@@ -1411,7 +1408,7 @@ def get_vel_params_block(serial_number):
 
 KVS_HasLastMsgTimerOverrun = lib.KVS_HasLastMsgTimerOverrun
 KVS_HasLastMsgTimerOverrun.restype = c_bool
-KVS_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+KVS_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serial_number):
@@ -1427,7 +1424,7 @@ def has_last_msg_timer_overrun(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_HasLastMsgTimerOverrun(serial_number)
 
@@ -1436,7 +1433,7 @@ def has_last_msg_timer_overrun(serial_number):
 
 KVS_Home = lib.KVS_Home
 KVS_Home.restype = c_short
-KVS_Home.argtypes = [POINTER(c_char)]
+KVS_Home.argtypes = []
 
 
 def home(serial_number):
@@ -1452,7 +1449,7 @@ def home(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_Home(serial_number)
 
@@ -1461,7 +1458,7 @@ def home(serial_number):
 
 KVS_Identify = lib.KVS_Identify
 KVS_Identify.restype = c_void_p
-KVS_Identify.argtypes = [POINTER(c_char)]
+KVS_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -1477,7 +1474,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_Identify(serial_number)
 
@@ -1486,7 +1483,7 @@ def identify(serial_number):
 
 KVS_LoadNamedSettings = lib.KVS_LoadNamedSettings
 KVS_LoadNamedSettings.restype = c_bool
-KVS_LoadNamedSettings.argtypes = [POINTER(c_char)]
+KVS_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -1503,7 +1500,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settingsName = POINTER(c_char)()
 
     output = KVS_LoadNamedSettings(serial_number)
@@ -1513,7 +1510,7 @@ def load_named_settings(serial_number):
 
 KVS_LoadSettings = lib.KVS_LoadSettings
 KVS_LoadSettings.restype = c_bool
-KVS_LoadSettings.argtypes = [POINTER(c_char)]
+KVS_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -1529,7 +1526,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_LoadSettings(serial_number)
 
@@ -1538,7 +1535,7 @@ def load_settings(serial_number):
 
 KVS_MessageQueueSize = lib.KVS_MessageQueueSize
 KVS_MessageQueueSize.restype = c_int
-KVS_MessageQueueSize.argtypes = [POINTER(c_char)]
+KVS_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -1554,7 +1551,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_MessageQueueSize(serial_number)
 
@@ -1563,7 +1560,7 @@ def message_queue_size(serial_number):
 
 KVS_MoveAbsolute = lib.KVS_MoveAbsolute
 KVS_MoveAbsolute.restype = c_short
-KVS_MoveAbsolute.argtypes = [POINTER(c_char)]
+KVS_MoveAbsolute.argtypes = []
 
 
 def move_absolute(serial_number):
@@ -1579,7 +1576,7 @@ def move_absolute(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_MoveAbsolute(serial_number)
 
@@ -1588,7 +1585,7 @@ def move_absolute(serial_number):
 
 KVS_MoveAtVelocity = lib.KVS_MoveAtVelocity
 KVS_MoveAtVelocity.restype = c_short
-KVS_MoveAtVelocity.argtypes = [POINTER(c_char)]
+KVS_MoveAtVelocity.argtypes = []
 
 
 def move_at_velocity(serial_number):
@@ -1605,7 +1602,7 @@ def move_at_velocity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     direction = MOT_TravelDirection()
 
     output = KVS_MoveAtVelocity(serial_number)
@@ -1615,7 +1612,7 @@ def move_at_velocity(serial_number):
 
 KVS_MoveJog = lib.KVS_MoveJog
 KVS_MoveJog.restype = c_short
-KVS_MoveJog.argtypes = [POINTER(c_char)]
+KVS_MoveJog.argtypes = []
 
 
 def move_jog(serial_number):
@@ -1632,7 +1629,7 @@ def move_jog(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     jogDirection = MOT_TravelDirection()
 
     output = KVS_MoveJog(serial_number)
@@ -1642,7 +1639,7 @@ def move_jog(serial_number):
 
 KVS_MoveRelative = lib.KVS_MoveRelative
 KVS_MoveRelative.restype = c_short
-KVS_MoveRelative.argtypes = [POINTER(c_char)]
+KVS_MoveRelative.argtypes = []
 
 
 def move_relative(serial_number):
@@ -1659,7 +1656,7 @@ def move_relative(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     displacement = c_int()
 
     output = KVS_MoveRelative(serial_number)
@@ -1669,7 +1666,7 @@ def move_relative(serial_number):
 
 KVS_MoveRelativeDistance = lib.KVS_MoveRelativeDistance
 KVS_MoveRelativeDistance.restype = c_short
-KVS_MoveRelativeDistance.argtypes = [POINTER(c_char)]
+KVS_MoveRelativeDistance.argtypes = []
 
 
 def move_relative_distance(serial_number):
@@ -1685,7 +1682,7 @@ def move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_MoveRelativeDistance(serial_number)
 
@@ -1694,7 +1691,7 @@ def move_relative_distance(serial_number):
 
 KVS_MoveToPosition = lib.KVS_MoveToPosition
 KVS_MoveToPosition.restype = c_short
-KVS_MoveToPosition.argtypes = [POINTER(c_char)]
+KVS_MoveToPosition.argtypes = []
 
 
 def move_to_position(serial_number):
@@ -1711,7 +1708,7 @@ def move_to_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     index = c_int()
 
     output = KVS_MoveToPosition(serial_number)
@@ -1721,7 +1718,7 @@ def move_to_position(serial_number):
 
 KVS_NeedsHoming = lib.KVS_NeedsHoming
 KVS_NeedsHoming.restype = c_bool
-KVS_NeedsHoming.argtypes = [POINTER(c_char)]
+KVS_NeedsHoming.argtypes = []
 
 
 def needs_homing(serial_number):
@@ -1737,7 +1734,7 @@ def needs_homing(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_NeedsHoming(serial_number)
 
@@ -1746,7 +1743,7 @@ def needs_homing(serial_number):
 
 KVS_Open = lib.KVS_Open
 KVS_Open.restype = c_short
-KVS_Open.argtypes = [POINTER(c_char)]
+KVS_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -1762,7 +1759,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_Open(serial_number)
 
@@ -1771,7 +1768,7 @@ def open_device(serial_number):
 
 KVS_PersistSettings = lib.KVS_PersistSettings
 KVS_PersistSettings.restype = c_bool
-KVS_PersistSettings.argtypes = [POINTER(c_char)]
+KVS_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -1787,7 +1784,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_PersistSettings(serial_number)
 
@@ -1796,7 +1793,7 @@ def persist_settings(serial_number):
 
 KVS_PollingDuration = lib.KVS_PollingDuration
 KVS_PollingDuration.restype = c_long
-KVS_PollingDuration.argtypes = [POINTER(c_char)]
+KVS_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -1812,7 +1809,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_PollingDuration(serial_number)
 
@@ -1821,7 +1818,7 @@ def polling_duration(serial_number):
 
 KVS_RegisterMessageCallback = lib.KVS_RegisterMessageCallback
 KVS_RegisterMessageCallback.restype = c_void_p
-KVS_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+KVS_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -1838,7 +1835,7 @@ def register_message_callback(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RegisterMessageCallback(serial_number)
 
@@ -1847,7 +1844,7 @@ def register_message_callback(serial_number):
 
 KVS_RequestBacklash = lib.KVS_RequestBacklash
 KVS_RequestBacklash.restype = c_short
-KVS_RequestBacklash.argtypes = [POINTER(c_char)]
+KVS_RequestBacklash.argtypes = []
 
 
 def request_backlash(serial_number):
@@ -1863,7 +1860,7 @@ def request_backlash(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestBacklash(serial_number)
 
@@ -1872,7 +1869,7 @@ def request_backlash(serial_number):
 
 KVS_RequestDCPIDParams = lib.KVS_RequestDCPIDParams
 KVS_RequestDCPIDParams.restype = c_short
-KVS_RequestDCPIDParams.argtypes = [POINTER(c_char)]
+KVS_RequestDCPIDParams.argtypes = []
 
 
 def request_d_c_p_i_d_params(serial_number):
@@ -1888,7 +1885,7 @@ def request_d_c_p_i_d_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestDCPIDParams(serial_number)
 
@@ -1897,7 +1894,7 @@ def request_d_c_p_i_d_params(serial_number):
 
 KVS_RequestDigitalOutputs = lib.KVS_RequestDigitalOutputs
 KVS_RequestDigitalOutputs.restype = c_short
-KVS_RequestDigitalOutputs.argtypes = [POINTER(c_char)]
+KVS_RequestDigitalOutputs.argtypes = []
 
 
 def request_digital_outputs(serial_number):
@@ -1913,7 +1910,7 @@ def request_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestDigitalOutputs(serial_number)
 
@@ -1922,7 +1919,7 @@ def request_digital_outputs(serial_number):
 
 KVS_RequestEncoderCounter = lib.KVS_RequestEncoderCounter
 KVS_RequestEncoderCounter.restype = c_short
-KVS_RequestEncoderCounter.argtypes = [POINTER(c_char)]
+KVS_RequestEncoderCounter.argtypes = []
 
 
 def request_encoder_counter(serial_number):
@@ -1938,7 +1935,7 @@ def request_encoder_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestEncoderCounter(serial_number)
 
@@ -1947,7 +1944,7 @@ def request_encoder_counter(serial_number):
 
 KVS_RequestEncoderResolutionParams = lib.KVS_RequestEncoderResolutionParams
 KVS_RequestEncoderResolutionParams.restype = c_short
-KVS_RequestEncoderResolutionParams.argtypes = [POINTER(c_char)]
+KVS_RequestEncoderResolutionParams.argtypes = []
 
 
 def request_encoder_resolution_params(serial_number):
@@ -1963,7 +1960,7 @@ def request_encoder_resolution_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestEncoderResolutionParams(serial_number)
 
@@ -1972,7 +1969,7 @@ def request_encoder_resolution_params(serial_number):
 
 KVS_RequestFrontPanelLocked = lib.KVS_RequestFrontPanelLocked
 KVS_RequestFrontPanelLocked.restype = c_short
-KVS_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
+KVS_RequestFrontPanelLocked.argtypes = []
 
 
 def request_front_panel_locked(serial_number):
@@ -1988,7 +1985,7 @@ def request_front_panel_locked(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestFrontPanelLocked(serial_number)
 
@@ -1997,7 +1994,7 @@ def request_front_panel_locked(serial_number):
 
 KVS_RequestHomingParams = lib.KVS_RequestHomingParams
 KVS_RequestHomingParams.restype = c_short
-KVS_RequestHomingParams.argtypes = [POINTER(c_char)]
+KVS_RequestHomingParams.argtypes = []
 
 
 def request_homing_params(serial_number):
@@ -2013,7 +2010,7 @@ def request_homing_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestHomingParams(serial_number)
 
@@ -2022,7 +2019,7 @@ def request_homing_params(serial_number):
 
 KVS_RequestJogParams = lib.KVS_RequestJogParams
 KVS_RequestJogParams.restype = c_short
-KVS_RequestJogParams.argtypes = [POINTER(c_char)]
+KVS_RequestJogParams.argtypes = []
 
 
 def request_jog_params(serial_number):
@@ -2038,7 +2035,7 @@ def request_jog_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestJogParams(serial_number)
 
@@ -2047,7 +2044,7 @@ def request_jog_params(serial_number):
 
 KVS_RequestLEDswitches = lib.KVS_RequestLEDswitches
 KVS_RequestLEDswitches.restype = c_short
-KVS_RequestLEDswitches.argtypes = [POINTER(c_char)]
+KVS_RequestLEDswitches.argtypes = []
 
 
 def request_l_e_dswitches(serial_number):
@@ -2063,7 +2060,7 @@ def request_l_e_dswitches(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestLEDswitches(serial_number)
 
@@ -2072,7 +2069,7 @@ def request_l_e_dswitches(serial_number):
 
 KVS_RequestMoveAbsolutePosition = lib.KVS_RequestMoveAbsolutePosition
 KVS_RequestMoveAbsolutePosition.restype = c_short
-KVS_RequestMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+KVS_RequestMoveAbsolutePosition.argtypes = []
 
 
 def request_move_absolute_position(serial_number):
@@ -2088,7 +2085,7 @@ def request_move_absolute_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestMoveAbsolutePosition(serial_number)
 
@@ -2097,7 +2094,7 @@ def request_move_absolute_position(serial_number):
 
 KVS_RequestMoveRelativeDistance = lib.KVS_RequestMoveRelativeDistance
 KVS_RequestMoveRelativeDistance.restype = c_short
-KVS_RequestMoveRelativeDistance.argtypes = [POINTER(c_char)]
+KVS_RequestMoveRelativeDistance.argtypes = []
 
 
 def request_move_relative_distance(serial_number):
@@ -2113,7 +2110,7 @@ def request_move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestMoveRelativeDistance(serial_number)
 
@@ -2122,7 +2119,7 @@ def request_move_relative_distance(serial_number):
 
 KVS_RequestPosTriggerParams = lib.KVS_RequestPosTriggerParams
 KVS_RequestPosTriggerParams.restype = c_short
-KVS_RequestPosTriggerParams.argtypes = [POINTER(c_char)]
+KVS_RequestPosTriggerParams.argtypes = []
 
 
 def request_pos_trigger_params(serial_number):
@@ -2138,7 +2135,7 @@ def request_pos_trigger_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestPosTriggerParams(serial_number)
 
@@ -2147,7 +2144,7 @@ def request_pos_trigger_params(serial_number):
 
 KVS_RequestPosition = lib.KVS_RequestPosition
 KVS_RequestPosition.restype = c_short
-KVS_RequestPosition.argtypes = [POINTER(c_char)]
+KVS_RequestPosition.argtypes = []
 
 
 def request_position(serial_number):
@@ -2163,7 +2160,7 @@ def request_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestPosition(serial_number)
 
@@ -2172,7 +2169,7 @@ def request_position(serial_number):
 
 KVS_RequestSettings = lib.KVS_RequestSettings
 KVS_RequestSettings.restype = c_short
-KVS_RequestSettings.argtypes = [POINTER(c_char)]
+KVS_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -2188,7 +2185,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestSettings(serial_number)
 
@@ -2197,7 +2194,7 @@ def request_settings(serial_number):
 
 KVS_RequestStatusBits = lib.KVS_RequestStatusBits
 KVS_RequestStatusBits.restype = c_short
-KVS_RequestStatusBits.argtypes = [POINTER(c_char)]
+KVS_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serial_number):
@@ -2213,7 +2210,7 @@ def request_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestStatusBits(serial_number)
 
@@ -2222,7 +2219,7 @@ def request_status_bits(serial_number):
 
 KVS_RequestTrackSettleParams = lib.KVS_RequestTrackSettleParams
 KVS_RequestTrackSettleParams.restype = c_short
-KVS_RequestTrackSettleParams.argtypes = [POINTER(c_char)]
+KVS_RequestTrackSettleParams.argtypes = []
 
 
 def request_track_settle_params(serial_number):
@@ -2238,7 +2235,7 @@ def request_track_settle_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestTrackSettleParams(serial_number)
 
@@ -2247,7 +2244,7 @@ def request_track_settle_params(serial_number):
 
 KVS_RequestTriggerConfigParams = lib.KVS_RequestTriggerConfigParams
 KVS_RequestTriggerConfigParams.restype = c_short
-KVS_RequestTriggerConfigParams.argtypes = [POINTER(c_char)]
+KVS_RequestTriggerConfigParams.argtypes = []
 
 
 def request_trigger_config_params(serial_number):
@@ -2263,7 +2260,7 @@ def request_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestTriggerConfigParams(serial_number)
 
@@ -2272,7 +2269,7 @@ def request_trigger_config_params(serial_number):
 
 KVS_RequestVelParams = lib.KVS_RequestVelParams
 KVS_RequestVelParams.restype = c_short
-KVS_RequestVelParams.argtypes = [POINTER(c_char)]
+KVS_RequestVelParams.argtypes = []
 
 
 def request_vel_params(serial_number):
@@ -2288,7 +2285,7 @@ def request_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_RequestVelParams(serial_number)
 
@@ -2297,7 +2294,7 @@ def request_vel_params(serial_number):
 
 KVS_ResetStageToDefaults = lib.KVS_ResetStageToDefaults
 KVS_ResetStageToDefaults.restype = c_short
-KVS_ResetStageToDefaults.argtypes = [POINTER(c_char)]
+KVS_ResetStageToDefaults.argtypes = []
 
 
 def reset_stage_to_defaults(serial_number):
@@ -2313,7 +2310,7 @@ def reset_stage_to_defaults(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_ResetStageToDefaults(serial_number)
 
@@ -2322,7 +2319,7 @@ def reset_stage_to_defaults(serial_number):
 
 KVS_ResumeMoveMessages = lib.KVS_ResumeMoveMessages
 KVS_ResumeMoveMessages.restype = c_short
-KVS_ResumeMoveMessages.argtypes = [POINTER(c_char)]
+KVS_ResumeMoveMessages.argtypes = []
 
 
 def resume_move_messages(serial_number):
@@ -2338,7 +2335,7 @@ def resume_move_messages(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_ResumeMoveMessages(serial_number)
 
@@ -2347,7 +2344,7 @@ def resume_move_messages(serial_number):
 
 KVS_SetBacklash = lib.KVS_SetBacklash
 KVS_SetBacklash.restype = c_short
-KVS_SetBacklash.argtypes = [POINTER(c_char)]
+KVS_SetBacklash.argtypes = []
 
 
 def set_backlash(serial_number):
@@ -2364,7 +2361,7 @@ def set_backlash(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     distance = c_long()
 
     output = KVS_SetBacklash(serial_number)
@@ -2374,7 +2371,7 @@ def set_backlash(serial_number):
 
 KVS_SetDCPIDParams = lib.KVS_SetDCPIDParams
 KVS_SetDCPIDParams.restype = c_short
-KVS_SetDCPIDParams.argtypes = [POINTER(c_char)]
+KVS_SetDCPIDParams.argtypes = []
 
 
 def set_d_c_p_i_d_params(serial_number):
@@ -2391,7 +2388,7 @@ def set_d_c_p_i_d_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     DCproportionalIntegralDerivativeParams = MOT_DC_PIDParameters()
 
     output = KVS_SetDCPIDParams(serial_number)
@@ -2401,7 +2398,7 @@ def set_d_c_p_i_d_params(serial_number):
 
 KVS_SetDigitalOutputs = lib.KVS_SetDigitalOutputs
 KVS_SetDigitalOutputs.restype = c_short
-KVS_SetDigitalOutputs.argtypes = [POINTER(c_char)]
+KVS_SetDigitalOutputs.argtypes = []
 
 
 def set_digital_outputs(serial_number):
@@ -2418,7 +2415,7 @@ def set_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     outputsBits = c_byte()
 
     output = KVS_SetDigitalOutputs(serial_number)
@@ -2428,7 +2425,7 @@ def set_digital_outputs(serial_number):
 
 KVS_SetDirection = lib.KVS_SetDirection
 KVS_SetDirection.restype = c_void_p
-KVS_SetDirection.argtypes = [POINTER(c_char)]
+KVS_SetDirection.argtypes = []
 
 
 def set_direction(serial_number):
@@ -2445,7 +2442,7 @@ def set_direction(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     reverse = c_bool()
 
     output = KVS_SetDirection(serial_number)
@@ -2455,7 +2452,7 @@ def set_direction(serial_number):
 
 KVS_SetEncoderCounter = lib.KVS_SetEncoderCounter
 KVS_SetEncoderCounter.restype = c_short
-KVS_SetEncoderCounter.argtypes = [POINTER(c_char)]
+KVS_SetEncoderCounter.argtypes = []
 
 
 def set_encoder_counter(serial_number):
@@ -2472,7 +2469,7 @@ def set_encoder_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     count = c_long()
 
     output = KVS_SetEncoderCounter(serial_number)
@@ -2482,7 +2479,7 @@ def set_encoder_counter(serial_number):
 
 KVS_SetFrontPanelLock = lib.KVS_SetFrontPanelLock
 KVS_SetFrontPanelLock.restype = c_short
-KVS_SetFrontPanelLock.argtypes = [POINTER(c_char)]
+KVS_SetFrontPanelLock.argtypes = []
 
 
 def set_front_panel_lock(serial_number):
@@ -2499,7 +2496,7 @@ def set_front_panel_lock(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     locked = c_bool()
 
     output = KVS_SetFrontPanelLock(serial_number)
@@ -2509,7 +2506,7 @@ def set_front_panel_lock(serial_number):
 
 KVS_SetHomingParamsBlock = lib.KVS_SetHomingParamsBlock
 KVS_SetHomingParamsBlock.restype = c_short
-KVS_SetHomingParamsBlock.argtypes = [POINTER(c_char)]
+KVS_SetHomingParamsBlock.argtypes = []
 
 
 def set_homing_params_block(serial_number):
@@ -2526,7 +2523,7 @@ def set_homing_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     homingParams = MOT_HomingParameters()
 
     output = KVS_SetHomingParamsBlock(serial_number)
@@ -2536,7 +2533,7 @@ def set_homing_params_block(serial_number):
 
 KVS_SetHomingVelocity = lib.KVS_SetHomingVelocity
 KVS_SetHomingVelocity.restype = c_short
-KVS_SetHomingVelocity.argtypes = [POINTER(c_char)]
+KVS_SetHomingVelocity.argtypes = []
 
 
 def set_homing_velocity(serial_number):
@@ -2553,7 +2550,7 @@ def set_homing_velocity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     velocity = c_uint()
 
     output = KVS_SetHomingVelocity(serial_number)
@@ -2563,7 +2560,7 @@ def set_homing_velocity(serial_number):
 
 KVS_SetJogMode = lib.KVS_SetJogMode
 KVS_SetJogMode.restype = c_short
-KVS_SetJogMode.argtypes = [POINTER(c_char)]
+KVS_SetJogMode.argtypes = []
 
 
 def set_jog_mode(serial_number):
@@ -2581,7 +2578,7 @@ def set_jog_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = MOT_JogModes()
     stopMode = MOT_StopModes()
 
@@ -2592,7 +2589,7 @@ def set_jog_mode(serial_number):
 
 KVS_SetJogParamsBlock = lib.KVS_SetJogParamsBlock
 KVS_SetJogParamsBlock.restype = c_short
-KVS_SetJogParamsBlock.argtypes = [POINTER(c_char)]
+KVS_SetJogParamsBlock.argtypes = []
 
 
 def set_jog_params_block(serial_number):
@@ -2609,7 +2606,7 @@ def set_jog_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     jogParams = MOT_JogParameters()
 
     output = KVS_SetJogParamsBlock(serial_number)
@@ -2619,7 +2616,7 @@ def set_jog_params_block(serial_number):
 
 KVS_SetJogStepSize = lib.KVS_SetJogStepSize
 KVS_SetJogStepSize.restype = c_short
-KVS_SetJogStepSize.argtypes = [POINTER(c_char)]
+KVS_SetJogStepSize.argtypes = []
 
 
 def set_jog_step_size(serial_number):
@@ -2636,7 +2633,7 @@ def set_jog_step_size(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     stepSize = c_uint()
 
     output = KVS_SetJogStepSize(serial_number)
@@ -2646,7 +2643,7 @@ def set_jog_step_size(serial_number):
 
 KVS_SetJogVelParams = lib.KVS_SetJogVelParams
 KVS_SetJogVelParams.restype = c_short
-KVS_SetJogVelParams.argtypes = [POINTER(c_char)]
+KVS_SetJogVelParams.argtypes = []
 
 
 def set_jog_vel_params(serial_number):
@@ -2664,7 +2661,7 @@ def set_jog_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     acceleration = c_int()
     maxVelocity = c_int()
 
@@ -2675,7 +2672,7 @@ def set_jog_vel_params(serial_number):
 
 KVS_SetLEDswitches = lib.KVS_SetLEDswitches
 KVS_SetLEDswitches.restype = c_short
-KVS_SetLEDswitches.argtypes = [POINTER(c_char)]
+KVS_SetLEDswitches.argtypes = []
 
 
 def set_l_e_dswitches(serial_number):
@@ -2692,7 +2689,7 @@ def set_l_e_dswitches(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     LEDswitches = c_long()
 
     output = KVS_SetLEDswitches(serial_number)
@@ -2702,7 +2699,7 @@ def set_l_e_dswitches(serial_number):
 
 KVS_SetLimitsSoftwareApproachPolicy = lib.KVS_SetLimitsSoftwareApproachPolicy
 KVS_SetLimitsSoftwareApproachPolicy.restype = c_void_p
-KVS_SetLimitsSoftwareApproachPolicy.argtypes = [POINTER(c_char)]
+KVS_SetLimitsSoftwareApproachPolicy.argtypes = []
 
 
 def set_limits_software_approach_policy(serial_number):
@@ -2719,7 +2716,7 @@ def set_limits_software_approach_policy(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     limitsSoftwareApproachPolicy = MOT_LimitsSoftwareApproachPolicy()
 
     output = KVS_SetLimitsSoftwareApproachPolicy(serial_number)
@@ -2729,7 +2726,7 @@ def set_limits_software_approach_policy(serial_number):
 
 KVS_SetMotorParams = lib.KVS_SetMotorParams
 KVS_SetMotorParams.restype = c_short
-KVS_SetMotorParams.argtypes = [POINTER(c_char)]
+KVS_SetMotorParams.argtypes = []
 
 
 def set_motor_params(serial_number):
@@ -2748,7 +2745,7 @@ def set_motor_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     stepsPerRev = c_long()
     gearBoxRatio = c_long()
     pitch = c_float()
@@ -2760,7 +2757,7 @@ def set_motor_params(serial_number):
 
 KVS_SetMotorParamsExt = lib.KVS_SetMotorParamsExt
 KVS_SetMotorParamsExt.restype = c_short
-KVS_SetMotorParamsExt.argtypes = [POINTER(c_char)]
+KVS_SetMotorParamsExt.argtypes = []
 
 
 def set_motor_params_ext(serial_number):
@@ -2779,7 +2776,7 @@ def set_motor_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     stepsPerRev = c_double()
     gearBoxRatio = c_double()
     pitch = c_double()
@@ -2791,7 +2788,7 @@ def set_motor_params_ext(serial_number):
 
 KVS_SetMotorTravelLimits = lib.KVS_SetMotorTravelLimits
 KVS_SetMotorTravelLimits.restype = c_short
-KVS_SetMotorTravelLimits.argtypes = [POINTER(c_char)]
+KVS_SetMotorTravelLimits.argtypes = []
 
 
 def set_motor_travel_limits(serial_number):
@@ -2809,7 +2806,7 @@ def set_motor_travel_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     minPosition = c_double()
     maxPosition = c_double()
 
@@ -2820,7 +2817,7 @@ def set_motor_travel_limits(serial_number):
 
 KVS_SetMotorTravelMode = lib.KVS_SetMotorTravelMode
 KVS_SetMotorTravelMode.restype = c_short
-KVS_SetMotorTravelMode.argtypes = [POINTER(c_char)]
+KVS_SetMotorTravelMode.argtypes = []
 
 
 def set_motor_travel_mode(serial_number):
@@ -2837,7 +2834,7 @@ def set_motor_travel_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     travelMode = MOT_TravelModes()
 
     output = KVS_SetMotorTravelMode(serial_number)
@@ -2847,7 +2844,7 @@ def set_motor_travel_mode(serial_number):
 
 KVS_SetMotorVelocityLimits = lib.KVS_SetMotorVelocityLimits
 KVS_SetMotorVelocityLimits.restype = c_short
-KVS_SetMotorVelocityLimits.argtypes = [POINTER(c_char)]
+KVS_SetMotorVelocityLimits.argtypes = []
 
 
 def set_motor_velocity_limits(serial_number):
@@ -2865,7 +2862,7 @@ def set_motor_velocity_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     maxVelocity = c_double()
     maxAcceleration = c_double()
 
@@ -2876,7 +2873,7 @@ def set_motor_velocity_limits(serial_number):
 
 KVS_SetMoveAbsolutePosition = lib.KVS_SetMoveAbsolutePosition
 KVS_SetMoveAbsolutePosition.restype = c_short
-KVS_SetMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+KVS_SetMoveAbsolutePosition.argtypes = []
 
 
 def set_move_absolute_position(serial_number):
@@ -2893,7 +2890,7 @@ def set_move_absolute_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = c_int()
 
     output = KVS_SetMoveAbsolutePosition(serial_number)
@@ -2903,7 +2900,7 @@ def set_move_absolute_position(serial_number):
 
 KVS_SetMoveRelativeDistance = lib.KVS_SetMoveRelativeDistance
 KVS_SetMoveRelativeDistance.restype = c_short
-KVS_SetMoveRelativeDistance.argtypes = [POINTER(c_char)]
+KVS_SetMoveRelativeDistance.argtypes = []
 
 
 def set_move_relative_distance(serial_number):
@@ -2920,7 +2917,7 @@ def set_move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     distance = c_int()
 
     output = KVS_SetMoveRelativeDistance(serial_number)
@@ -2930,7 +2927,7 @@ def set_move_relative_distance(serial_number):
 
 KVS_SetPositionCounter = lib.KVS_SetPositionCounter
 KVS_SetPositionCounter.restype = c_short
-KVS_SetPositionCounter.argtypes = [POINTER(c_char)]
+KVS_SetPositionCounter.argtypes = []
 
 
 def set_position_counter(serial_number):
@@ -2947,7 +2944,7 @@ def set_position_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     count = c_long()
 
     output = KVS_SetPositionCounter(serial_number)
@@ -2957,7 +2954,7 @@ def set_position_counter(serial_number):
 
 KVS_SetStageAxisLimits = lib.KVS_SetStageAxisLimits
 KVS_SetStageAxisLimits.restype = c_short
-KVS_SetStageAxisLimits.argtypes = [POINTER(c_char)]
+KVS_SetStageAxisLimits.argtypes = []
 
 
 def set_stage_axis_limits(serial_number):
@@ -2975,7 +2972,7 @@ def set_stage_axis_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     minPosition = c_int()
     maxPosition = c_int()
 
@@ -2986,7 +2983,7 @@ def set_stage_axis_limits(serial_number):
 
 KVS_SetTrackSettleParams = lib.KVS_SetTrackSettleParams
 KVS_SetTrackSettleParams.restype = c_short
-KVS_SetTrackSettleParams.argtypes = [POINTER(c_char)]
+KVS_SetTrackSettleParams.argtypes = []
 
 
 def set_track_settle_params(serial_number):
@@ -3003,7 +3000,7 @@ def set_track_settle_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settleParams = MOT_BrushlessTrackSettleParameters()
 
     output = KVS_SetTrackSettleParams(serial_number)
@@ -3013,7 +3010,7 @@ def set_track_settle_params(serial_number):
 
 KVS_SetTriggerConfigParams = lib.KVS_SetTriggerConfigParams
 KVS_SetTriggerConfigParams.restype = c_short
-KVS_SetTriggerConfigParams.argtypes = [POINTER(c_char)]
+KVS_SetTriggerConfigParams.argtypes = []
 
 
 def set_trigger_config_params(serial_number):
@@ -3033,7 +3030,7 @@ def set_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     trigger1Mode = KMOT_TriggerPortMode()
     trigger1Polarity = KMOT_TriggerPortPolarity()
     trigger2Mode = KMOT_TriggerPortMode()
@@ -3046,7 +3043,7 @@ def set_trigger_config_params(serial_number):
 
 KVS_SetTriggerConfigParamsBlock = lib.KVS_SetTriggerConfigParamsBlock
 KVS_SetTriggerConfigParamsBlock.restype = c_short
-KVS_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
+KVS_SetTriggerConfigParamsBlock.argtypes = []
 
 
 def set_trigger_config_params_block(serial_number):
@@ -3063,7 +3060,7 @@ def set_trigger_config_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerConfigParams = KMOT_TriggerConfig()
 
     output = KVS_SetTriggerConfigParamsBlock(serial_number)
@@ -3073,7 +3070,7 @@ def set_trigger_config_params_block(serial_number):
 
 KVS_SetTriggerParamsParams = lib.KVS_SetTriggerParamsParams
 KVS_SetTriggerParamsParams.restype = c_short
-KVS_SetTriggerParamsParams.argtypes = [POINTER(c_char)]
+KVS_SetTriggerParamsParams.argtypes = []
 
 
 def set_trigger_params_params(serial_number):
@@ -3097,7 +3094,7 @@ def set_trigger_params_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerStartPositionFwd = c_int32()
     triggerIntervalFwd = c_int32()
     triggerPulseCountFwd = c_int32()
@@ -3114,7 +3111,7 @@ def set_trigger_params_params(serial_number):
 
 KVS_SetTriggerParamsParamsBlock = lib.KVS_SetTriggerParamsParamsBlock
 KVS_SetTriggerParamsParamsBlock.restype = c_short
-KVS_SetTriggerParamsParamsBlock.argtypes = [POINTER(c_char)]
+KVS_SetTriggerParamsParamsBlock.argtypes = []
 
 
 def set_trigger_params_params_block(serial_number):
@@ -3131,7 +3128,7 @@ def set_trigger_params_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerParamsParams = KMOT_TriggerParams()
 
     output = KVS_SetTriggerParamsParamsBlock(serial_number)
@@ -3141,7 +3138,7 @@ def set_trigger_params_params_block(serial_number):
 
 KVS_SetVelParams = lib.KVS_SetVelParams
 KVS_SetVelParams.restype = c_short
-KVS_SetVelParams.argtypes = [POINTER(c_char)]
+KVS_SetVelParams.argtypes = []
 
 
 def set_vel_params(serial_number):
@@ -3159,7 +3156,7 @@ def set_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     acceleration = c_int()
     maxVelocity = c_int()
 
@@ -3170,7 +3167,7 @@ def set_vel_params(serial_number):
 
 KVS_SetVelParamsBlock = lib.KVS_SetVelParamsBlock
 KVS_SetVelParamsBlock.restype = c_short
-KVS_SetVelParamsBlock.argtypes = [POINTER(c_char)]
+KVS_SetVelParamsBlock.argtypes = []
 
 
 def set_vel_params_block(serial_number):
@@ -3187,7 +3184,7 @@ def set_vel_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     velocityParams = MOT_VelocityParameters()
 
     output = KVS_SetVelParamsBlock(serial_number)
@@ -3197,7 +3194,7 @@ def set_vel_params_block(serial_number):
 
 KVS_StartPolling = lib.KVS_StartPolling
 KVS_StartPolling.restype = c_bool
-KVS_StartPolling.argtypes = [POINTER(c_char)]
+KVS_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -3214,7 +3211,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     milliseconds = c_int()
 
     output = KVS_StartPolling(serial_number)
@@ -3224,7 +3221,7 @@ def start_polling(serial_number):
 
 KVS_StopImmediate = lib.KVS_StopImmediate
 KVS_StopImmediate.restype = c_short
-KVS_StopImmediate.argtypes = [POINTER(c_char)]
+KVS_StopImmediate.argtypes = []
 
 
 def stop_immediate(serial_number):
@@ -3240,7 +3237,7 @@ def stop_immediate(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_StopImmediate(serial_number)
 
@@ -3249,7 +3246,7 @@ def stop_immediate(serial_number):
 
 KVS_StopPolling = lib.KVS_StopPolling
 KVS_StopPolling.restype = c_void_p
-KVS_StopPolling.argtypes = [POINTER(c_char)]
+KVS_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -3265,7 +3262,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_StopPolling(serial_number)
 
@@ -3274,7 +3271,7 @@ def stop_polling(serial_number):
 
 KVS_StopProfiled = lib.KVS_StopProfiled
 KVS_StopProfiled.restype = c_short
-KVS_StopProfiled.argtypes = [POINTER(c_char)]
+KVS_StopProfiled.argtypes = []
 
 
 def stop_profiled(serial_number):
@@ -3290,7 +3287,7 @@ def stop_profiled(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_StopProfiled(serial_number)
 
@@ -3299,7 +3296,7 @@ def stop_profiled(serial_number):
 
 KVS_SuspendMoveMessages = lib.KVS_SuspendMoveMessages
 KVS_SuspendMoveMessages.restype = c_short
-KVS_SuspendMoveMessages.argtypes = [POINTER(c_char)]
+KVS_SuspendMoveMessages.argtypes = []
 
 
 def suspend_move_messages(serial_number):
@@ -3315,7 +3312,7 @@ def suspend_move_messages(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KVS_SuspendMoveMessages(serial_number)
 
@@ -3324,7 +3321,7 @@ def suspend_move_messages(serial_number):
 
 KVS_TimeSinceLastMsgReceived = lib.KVS_TimeSinceLastMsgReceived
 KVS_TimeSinceLastMsgReceived.restype = c_bool
-KVS_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+KVS_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serial_number):
@@ -3341,7 +3338,7 @@ def time_since_last_msg_received(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     lastUpdateTimeMS = c_int64()
 
     output = KVS_TimeSinceLastMsgReceived(serial_number)
@@ -3351,7 +3348,7 @@ def time_since_last_msg_received(serial_number):
 
 KVS_WaitForMessage = lib.KVS_WaitForMessage
 KVS_WaitForMessage.restype = c_bool
-KVS_WaitForMessage.argtypes = [POINTER(c_char)]
+KVS_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -3370,7 +3367,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -3408,7 +3405,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -3426,18 +3423,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -3464,7 +3463,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -3486,12 +3485,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -3515,12 +3516,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -3544,12 +3547,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -3575,12 +3580,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -3602,7 +3609,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -3625,7 +3634,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations

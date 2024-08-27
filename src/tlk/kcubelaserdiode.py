@@ -32,6 +32,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -42,7 +46,7 @@ lib = cdll.LoadLibrary(
 
 LD_CanDeviceLockFrontPanel = lib.LD_CanDeviceLockFrontPanel
 LD_CanDeviceLockFrontPanel.restype = c_bool
-LD_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
+LD_CanDeviceLockFrontPanel.argtypes = []
 
 
 def can_device_lock_front_panel(serial_number):
@@ -58,7 +62,7 @@ def can_device_lock_front_panel(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_CanDeviceLockFrontPanel(serial_number)
 
@@ -76,14 +80,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_CheckConnection(serial_number)
 
@@ -92,7 +97,7 @@ def check_connection(serial_number):
 
 LD_ClearMessageQueue = lib.LD_ClearMessageQueue
 LD_ClearMessageQueue.restype = c_void_p
-LD_ClearMessageQueue.argtypes = [POINTER(c_char)]
+LD_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -108,7 +113,7 @@ def clear_message_queue(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_ClearMessageQueue(serial_number)
 
@@ -117,7 +122,7 @@ def clear_message_queue(serial_number):
 
 LD_Close = lib.LD_Close
 LD_Close.restype = c_void_p
-LD_Close.argtypes = [POINTER(c_char)]
+LD_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -133,7 +138,7 @@ def close_device(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_Close(serial_number)
 
@@ -142,7 +147,7 @@ def close_device(serial_number):
 
 LD_Disable = lib.LD_Disable
 LD_Disable.restype = c_short
-LD_Disable.argtypes = [POINTER(c_char)]
+LD_Disable.argtypes = []
 
 
 def disable(serial_number):
@@ -158,7 +163,7 @@ def disable(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_Disable(serial_number)
 
@@ -167,7 +172,7 @@ def disable(serial_number):
 
 LD_DisableOutput = lib.LD_DisableOutput
 LD_DisableOutput.restype = c_short
-LD_DisableOutput.argtypes = [POINTER(c_char)]
+LD_DisableOutput.argtypes = []
 
 
 def disable_output(serial_number):
@@ -183,7 +188,7 @@ def disable_output(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_DisableOutput(serial_number)
 
@@ -192,7 +197,7 @@ def disable_output(serial_number):
 
 LD_Enable = lib.LD_Enable
 LD_Enable.restype = c_short
-LD_Enable.argtypes = [POINTER(c_char)]
+LD_Enable.argtypes = []
 
 
 def enable(serial_number):
@@ -208,7 +213,7 @@ def enable(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_Enable(serial_number)
 
@@ -217,7 +222,7 @@ def enable(serial_number):
 
 LD_EnableLastMsgTimer = lib.LD_EnableLastMsgTimer
 LD_EnableLastMsgTimer.restype = c_void_p
-LD_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+LD_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serial_number):
@@ -235,7 +240,7 @@ def enable_last_msg_timer(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     enable = c_bool()
     lastMsgTimeout = c_int32()
 
@@ -246,7 +251,7 @@ def enable_last_msg_timer(serial_number):
 
 LD_EnableMaxCurrentAdjust = lib.LD_EnableMaxCurrentAdjust
 LD_EnableMaxCurrentAdjust.restype = c_short
-LD_EnableMaxCurrentAdjust.argtypes = [POINTER(c_char)]
+LD_EnableMaxCurrentAdjust.argtypes = []
 
 
 def enable_max_current_adjust(serial_number):
@@ -264,7 +269,7 @@ def enable_max_current_adjust(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     enableAdjust = c_bool()
     enableDiode = c_bool()
 
@@ -275,7 +280,7 @@ def enable_max_current_adjust(serial_number):
 
 LD_EnableOutput = lib.LD_EnableOutput
 LD_EnableOutput.restype = c_short
-LD_EnableOutput.argtypes = [POINTER(c_char)]
+LD_EnableOutput.argtypes = []
 
 
 def enable_output(serial_number):
@@ -291,7 +296,7 @@ def enable_output(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_EnableOutput(serial_number)
 
@@ -300,7 +305,7 @@ def enable_output(serial_number):
 
 LD_EnableTIAGainAdjust = lib.LD_EnableTIAGainAdjust
 LD_EnableTIAGainAdjust.restype = c_short
-LD_EnableTIAGainAdjust.argtypes = [POINTER(c_char)]
+LD_EnableTIAGainAdjust.argtypes = []
 
 
 def enable_t_i_a_gain_adjust(serial_number):
@@ -317,7 +322,7 @@ def enable_t_i_a_gain_adjust(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     enable = c_bool()
 
     output = LD_EnableTIAGainAdjust(serial_number)
@@ -327,7 +332,7 @@ def enable_t_i_a_gain_adjust(serial_number):
 
 LD_FindTIAGain = lib.LD_FindTIAGain
 LD_FindTIAGain.restype = c_short
-LD_FindTIAGain.argtypes = [POINTER(c_char)]
+LD_FindTIAGain.argtypes = []
 
 
 def find_t_i_a_gain(serial_number):
@@ -343,7 +348,7 @@ def find_t_i_a_gain(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_FindTIAGain(serial_number)
 
@@ -352,7 +357,7 @@ def find_t_i_a_gain(serial_number):
 
 LD_GetControlSource = lib.LD_GetControlSource
 LD_GetControlSource.restype = LD_InputSourceFlags
-LD_GetControlSource.argtypes = [POINTER(c_char)]
+LD_GetControlSource.argtypes = []
 
 
 def get_control_source(serial_number):
@@ -368,7 +373,7 @@ def get_control_source(serial_number):
         LD_InputSourceFlags
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetControlSource(serial_number)
 
@@ -377,7 +382,7 @@ def get_control_source(serial_number):
 
 LD_GetDisplayUnits = lib.LD_GetDisplayUnits
 LD_GetDisplayUnits.restype = LD_DisplayUnits
-LD_GetDisplayUnits.argtypes = [POINTER(c_char)]
+LD_GetDisplayUnits.argtypes = []
 
 
 def get_display_units(serial_number):
@@ -393,7 +398,7 @@ def get_display_units(serial_number):
         LD_DisplayUnits
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetDisplayUnits(serial_number)
 
@@ -402,7 +407,7 @@ def get_display_units(serial_number):
 
 LD_GetFirmwareVersion = lib.LD_GetFirmwareVersion
 LD_GetFirmwareVersion.restype = c_ulong
-LD_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+LD_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serial_number):
@@ -418,7 +423,7 @@ def get_firmware_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetFirmwareVersion(serial_number)
 
@@ -427,7 +432,7 @@ def get_firmware_version(serial_number):
 
 LD_GetFrontPanelLocked = lib.LD_GetFrontPanelLocked
 LD_GetFrontPanelLocked.restype = c_bool
-LD_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
+LD_GetFrontPanelLocked.argtypes = []
 
 
 def get_front_panel_locked(serial_number):
@@ -443,7 +448,7 @@ def get_front_panel_locked(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetFrontPanelLocked(serial_number)
 
@@ -461,23 +466,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -504,15 +501,15 @@ def get_hardware_info_block(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     hardwareInfo = TLI_HardwareInformation()
 
     output = LD_GetHardwareInfoBlock(serial_number)
@@ -522,7 +519,7 @@ def get_hardware_info_block(serial_number):
 
 LD_GetInterlockState = lib.LD_GetInterlockState
 LD_GetInterlockState.restype = c_byte
-LD_GetInterlockState.argtypes = [POINTER(c_char)]
+LD_GetInterlockState.argtypes = []
 
 
 def get_interlock_state(serial_number):
@@ -538,7 +535,7 @@ def get_interlock_state(serial_number):
         c_byte
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetInterlockState(serial_number)
 
@@ -547,7 +544,7 @@ def get_interlock_state(serial_number):
 
 LD_GetLEDBrightness = lib.LD_GetLEDBrightness
 LD_GetLEDBrightness.restype = c_long
-LD_GetLEDBrightness.argtypes = [POINTER(c_char)]
+LD_GetLEDBrightness.argtypes = []
 
 
 def get_l_e_d_brightness(serial_number):
@@ -563,7 +560,7 @@ def get_l_e_d_brightness(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetLEDBrightness(serial_number)
 
@@ -572,7 +569,7 @@ def get_l_e_d_brightness(serial_number):
 
 LD_GetLaserDiodeCurrentReading = lib.LD_GetLaserDiodeCurrentReading
 LD_GetLaserDiodeCurrentReading.restype = c_long
-LD_GetLaserDiodeCurrentReading.argtypes = [POINTER(c_char)]
+LD_GetLaserDiodeCurrentReading.argtypes = []
 
 
 def get_laser_diode_current_reading(serial_number):
@@ -588,7 +585,7 @@ def get_laser_diode_current_reading(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetLaserDiodeCurrentReading(serial_number)
 
@@ -597,7 +594,7 @@ def get_laser_diode_current_reading(serial_number):
 
 LD_GetLaserPolarity = lib.LD_GetLaserPolarity
 LD_GetLaserPolarity.restype = LD_POLARITY
-LD_GetLaserPolarity.argtypes = [POINTER(c_char)]
+LD_GetLaserPolarity.argtypes = []
 
 
 def get_laser_polarity(serial_number):
@@ -613,7 +610,7 @@ def get_laser_polarity(serial_number):
         LD_POLARITY
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetLaserPolarity(serial_number)
 
@@ -622,7 +619,7 @@ def get_laser_polarity(serial_number):
 
 LD_GetLaserSetPoint = lib.LD_GetLaserSetPoint
 LD_GetLaserSetPoint.restype = c_long
-LD_GetLaserSetPoint.argtypes = [POINTER(c_char)]
+LD_GetLaserSetPoint.argtypes = []
 
 
 def get_laser_set_point(serial_number):
@@ -638,7 +635,7 @@ def get_laser_set_point(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetLaserSetPoint(serial_number)
 
@@ -647,7 +644,7 @@ def get_laser_set_point(serial_number):
 
 LD_GetMaxCurrentDigPot = lib.LD_GetMaxCurrentDigPot
 LD_GetMaxCurrentDigPot.restype = c_long
-LD_GetMaxCurrentDigPot.argtypes = [POINTER(c_char)]
+LD_GetMaxCurrentDigPot.argtypes = []
 
 
 def get_max_current_dig_pot(serial_number):
@@ -663,7 +660,7 @@ def get_max_current_dig_pot(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetMaxCurrentDigPot(serial_number)
 
@@ -672,7 +669,7 @@ def get_max_current_dig_pot(serial_number):
 
 LD_GetNextMessage = lib.LD_GetNextMessage
 LD_GetNextMessage.restype = c_bool
-LD_GetNextMessage.argtypes = [POINTER(c_char)]
+LD_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -691,7 +688,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -703,7 +700,7 @@ def get_next_message(serial_number):
 
 LD_GetPhotoCurrentReading = lib.LD_GetPhotoCurrentReading
 LD_GetPhotoCurrentReading.restype = c_long
-LD_GetPhotoCurrentReading.argtypes = [POINTER(c_char)]
+LD_GetPhotoCurrentReading.argtypes = []
 
 
 def get_photo_current_reading(serial_number):
@@ -719,7 +716,7 @@ def get_photo_current_reading(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetPhotoCurrentReading(serial_number)
 
@@ -728,7 +725,7 @@ def get_photo_current_reading(serial_number):
 
 LD_GetRampupMode = lib.LD_GetRampupMode
 LD_GetRampupMode.restype = KLD_RAMPUP
-LD_GetRampupMode.argtypes = [POINTER(c_char)]
+LD_GetRampupMode.argtypes = []
 
 
 def get_rampup_mode(serial_number):
@@ -744,7 +741,7 @@ def get_rampup_mode(serial_number):
         KLD_RAMPUP
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetRampupMode(serial_number)
 
@@ -753,7 +750,7 @@ def get_rampup_mode(serial_number):
 
 LD_GetSoftwareVersion = lib.LD_GetSoftwareVersion
 LD_GetSoftwareVersion.restype = c_ulong
-LD_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+LD_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -769,7 +766,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetSoftwareVersion(serial_number)
 
@@ -778,7 +775,7 @@ def get_software_version(serial_number):
 
 LD_GetStatusBits = lib.LD_GetStatusBits
 LD_GetStatusBits.restype = c_ulong
-LD_GetStatusBits.argtypes = [POINTER(c_char)]
+LD_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -794,7 +791,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetStatusBits(serial_number)
 
@@ -803,7 +800,7 @@ def get_status_bits(serial_number):
 
 LD_GetVoltageReading = lib.LD_GetVoltageReading
 LD_GetVoltageReading.restype = c_long
-LD_GetVoltageReading.argtypes = [POINTER(c_char)]
+LD_GetVoltageReading.argtypes = []
 
 
 def get_voltage_reading(serial_number):
@@ -819,7 +816,7 @@ def get_voltage_reading(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetVoltageReading(serial_number)
 
@@ -828,7 +825,7 @@ def get_voltage_reading(serial_number):
 
 LD_GetWACalibFactor = lib.LD_GetWACalibFactor
 LD_GetWACalibFactor.restype = c_float
-LD_GetWACalibFactor.argtypes = [POINTER(c_char)]
+LD_GetWACalibFactor.argtypes = []
 
 
 def get_w_a_calib_factor(serial_number):
@@ -844,7 +841,7 @@ def get_w_a_calib_factor(serial_number):
         c_float
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_GetWACalibFactor(serial_number)
 
@@ -853,7 +850,7 @@ def get_w_a_calib_factor(serial_number):
 
 LD_HasLastMsgTimerOverrun = lib.LD_HasLastMsgTimerOverrun
 LD_HasLastMsgTimerOverrun.restype = c_bool
-LD_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+LD_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serial_number):
@@ -869,7 +866,7 @@ def has_last_msg_timer_overrun(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_HasLastMsgTimerOverrun(serial_number)
 
@@ -878,7 +875,7 @@ def has_last_msg_timer_overrun(serial_number):
 
 LD_Identify = lib.LD_Identify
 LD_Identify.restype = c_void_p
-LD_Identify.argtypes = [POINTER(c_char)]
+LD_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -894,7 +891,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_Identify(serial_number)
 
@@ -903,7 +900,7 @@ def identify(serial_number):
 
 LD_LoadNamedSettings = lib.LD_LoadNamedSettings
 LD_LoadNamedSettings.restype = c_bool
-LD_LoadNamedSettings.argtypes = [POINTER(c_char)]
+LD_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -920,7 +917,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settingsName = POINTER(c_char)()
 
     output = LD_LoadNamedSettings(serial_number)
@@ -930,7 +927,7 @@ def load_named_settings(serial_number):
 
 LD_LoadSettings = lib.LD_LoadSettings
 LD_LoadSettings.restype = c_bool
-LD_LoadSettings.argtypes = [POINTER(c_char)]
+LD_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -946,7 +943,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_LoadSettings(serial_number)
 
@@ -955,7 +952,7 @@ def load_settings(serial_number):
 
 LD_MessageQueueSize = lib.LD_MessageQueueSize
 LD_MessageQueueSize.restype = c_int
-LD_MessageQueueSize.argtypes = [POINTER(c_char)]
+LD_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -971,7 +968,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_MessageQueueSize(serial_number)
 
@@ -980,7 +977,7 @@ def message_queue_size(serial_number):
 
 LD_Open = lib.LD_Open
 LD_Open.restype = c_short
-LD_Open.argtypes = [POINTER(c_char)]
+LD_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -996,7 +993,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_Open(serial_number)
 
@@ -1005,7 +1002,7 @@ def open_device(serial_number):
 
 LD_PersistSettings = lib.LD_PersistSettings
 LD_PersistSettings.restype = c_bool
-LD_PersistSettings.argtypes = [POINTER(c_char)]
+LD_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -1021,7 +1018,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_PersistSettings(serial_number)
 
@@ -1030,7 +1027,7 @@ def persist_settings(serial_number):
 
 LD_PollingDuration = lib.LD_PollingDuration
 LD_PollingDuration.restype = c_long
-LD_PollingDuration.argtypes = [POINTER(c_char)]
+LD_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -1046,7 +1043,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_PollingDuration(serial_number)
 
@@ -1055,7 +1052,7 @@ def polling_duration(serial_number):
 
 LD_RegisterMessageCallback = lib.LD_RegisterMessageCallback
 LD_RegisterMessageCallback.restype = c_void_p
-LD_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+LD_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -1072,7 +1069,7 @@ def register_message_callback(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RegisterMessageCallback(serial_number)
 
@@ -1081,7 +1078,7 @@ def register_message_callback(serial_number):
 
 LD_RequestControlSource = lib.LD_RequestControlSource
 LD_RequestControlSource.restype = c_short
-LD_RequestControlSource.argtypes = [POINTER(c_char)]
+LD_RequestControlSource.argtypes = []
 
 
 def request_control_source(serial_number):
@@ -1097,7 +1094,7 @@ def request_control_source(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestControlSource(serial_number)
 
@@ -1106,7 +1103,7 @@ def request_control_source(serial_number):
 
 LD_RequestDisplay = lib.LD_RequestDisplay
 LD_RequestDisplay.restype = c_short
-LD_RequestDisplay.argtypes = [POINTER(c_char)]
+LD_RequestDisplay.argtypes = []
 
 
 def request_display(serial_number):
@@ -1122,7 +1119,7 @@ def request_display(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestDisplay(serial_number)
 
@@ -1131,7 +1128,7 @@ def request_display(serial_number):
 
 LD_RequestFrontPanelLocked = lib.LD_RequestFrontPanelLocked
 LD_RequestFrontPanelLocked.restype = c_short
-LD_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
+LD_RequestFrontPanelLocked.argtypes = []
 
 
 def request_front_panel_locked(serial_number):
@@ -1147,7 +1144,7 @@ def request_front_panel_locked(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestFrontPanelLocked(serial_number)
 
@@ -1156,7 +1153,7 @@ def request_front_panel_locked(serial_number):
 
 LD_RequestLaserPolarity = lib.LD_RequestLaserPolarity
 LD_RequestLaserPolarity.restype = c_short
-LD_RequestLaserPolarity.argtypes = [POINTER(c_char)]
+LD_RequestLaserPolarity.argtypes = []
 
 
 def request_laser_polarity(serial_number):
@@ -1172,7 +1169,7 @@ def request_laser_polarity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestLaserPolarity(serial_number)
 
@@ -1181,7 +1178,7 @@ def request_laser_polarity(serial_number):
 
 LD_RequestLaserSetPoint = lib.LD_RequestLaserSetPoint
 LD_RequestLaserSetPoint.restype = c_short
-LD_RequestLaserSetPoint.argtypes = [POINTER(c_char)]
+LD_RequestLaserSetPoint.argtypes = []
 
 
 def request_laser_set_point(serial_number):
@@ -1197,7 +1194,7 @@ def request_laser_set_point(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestLaserSetPoint(serial_number)
 
@@ -1206,7 +1203,7 @@ def request_laser_set_point(serial_number):
 
 LD_RequestMaxCurrent = lib.LD_RequestMaxCurrent
 LD_RequestMaxCurrent.restype = c_short
-LD_RequestMaxCurrent.argtypes = [POINTER(c_char)]
+LD_RequestMaxCurrent.argtypes = []
 
 
 def request_max_current(serial_number):
@@ -1222,7 +1219,7 @@ def request_max_current(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestMaxCurrent(serial_number)
 
@@ -1231,7 +1228,7 @@ def request_max_current(serial_number):
 
 LD_RequestRampupMode = lib.LD_RequestRampupMode
 LD_RequestRampupMode.restype = c_short
-LD_RequestRampupMode.argtypes = [POINTER(c_char)]
+LD_RequestRampupMode.argtypes = []
 
 
 def request_rampup_mode(serial_number):
@@ -1247,7 +1244,7 @@ def request_rampup_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestRampupMode(serial_number)
 
@@ -1256,7 +1253,7 @@ def request_rampup_mode(serial_number):
 
 LD_RequestReadings = lib.LD_RequestReadings
 LD_RequestReadings.restype = c_short
-LD_RequestReadings.argtypes = [POINTER(c_char)]
+LD_RequestReadings.argtypes = []
 
 
 def request_readings(serial_number):
@@ -1272,7 +1269,7 @@ def request_readings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestReadings(serial_number)
 
@@ -1281,7 +1278,7 @@ def request_readings(serial_number):
 
 LD_RequestSettings = lib.LD_RequestSettings
 LD_RequestSettings.restype = c_short
-LD_RequestSettings.argtypes = [POINTER(c_char)]
+LD_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -1297,7 +1294,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestSettings(serial_number)
 
@@ -1306,7 +1303,7 @@ def request_settings(serial_number):
 
 LD_RequestStatus = lib.LD_RequestStatus
 LD_RequestStatus.restype = c_short
-LD_RequestStatus.argtypes = [POINTER(c_char)]
+LD_RequestStatus.argtypes = []
 
 
 def request_status(serial_number):
@@ -1322,7 +1319,7 @@ def request_status(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestStatus(serial_number)
 
@@ -1331,7 +1328,7 @@ def request_status(serial_number):
 
 LD_RequestStatusBits = lib.LD_RequestStatusBits
 LD_RequestStatusBits.restype = c_short
-LD_RequestStatusBits.argtypes = [POINTER(c_char)]
+LD_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serial_number):
@@ -1347,7 +1344,7 @@ def request_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestStatusBits(serial_number)
 
@@ -1356,7 +1353,7 @@ def request_status_bits(serial_number):
 
 LD_RequestWACalibFactor = lib.LD_RequestWACalibFactor
 LD_RequestWACalibFactor.restype = c_short
-LD_RequestWACalibFactor.argtypes = [POINTER(c_char)]
+LD_RequestWACalibFactor.argtypes = []
 
 
 def request_w_a_calib_factor(serial_number):
@@ -1372,7 +1369,7 @@ def request_w_a_calib_factor(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_RequestWACalibFactor(serial_number)
 
@@ -1381,7 +1378,7 @@ def request_w_a_calib_factor(serial_number):
 
 LD_SetClosedLoopMode = lib.LD_SetClosedLoopMode
 LD_SetClosedLoopMode.restype = c_short
-LD_SetClosedLoopMode.argtypes = [POINTER(c_char)]
+LD_SetClosedLoopMode.argtypes = []
 
 
 def set_closed_loop_mode(serial_number):
@@ -1397,7 +1394,7 @@ def set_closed_loop_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_SetClosedLoopMode(serial_number)
 
@@ -1406,7 +1403,7 @@ def set_closed_loop_mode(serial_number):
 
 LD_SetControlSource = lib.LD_SetControlSource
 LD_SetControlSource.restype = c_short
-LD_SetControlSource.argtypes = [POINTER(c_char)]
+LD_SetControlSource.argtypes = []
 
 
 def set_control_source(serial_number):
@@ -1423,7 +1420,7 @@ def set_control_source(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     source = LD_InputSourceFlags()
 
     output = LD_SetControlSource(serial_number)
@@ -1433,7 +1430,7 @@ def set_control_source(serial_number):
 
 LD_SetDisplayUnits = lib.LD_SetDisplayUnits
 LD_SetDisplayUnits.restype = c_short
-LD_SetDisplayUnits.argtypes = [POINTER(c_char)]
+LD_SetDisplayUnits.argtypes = []
 
 
 def set_display_units(serial_number):
@@ -1450,7 +1447,7 @@ def set_display_units(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     units = LD_DisplayUnits()
 
     output = LD_SetDisplayUnits(serial_number)
@@ -1460,7 +1457,7 @@ def set_display_units(serial_number):
 
 LD_SetFrontPanelLock = lib.LD_SetFrontPanelLock
 LD_SetFrontPanelLock.restype = c_short
-LD_SetFrontPanelLock.argtypes = [POINTER(c_char)]
+LD_SetFrontPanelLock.argtypes = []
 
 
 def set_front_panel_lock(serial_number):
@@ -1477,7 +1474,7 @@ def set_front_panel_lock(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     locked = c_bool()
 
     output = LD_SetFrontPanelLock(serial_number)
@@ -1487,7 +1484,7 @@ def set_front_panel_lock(serial_number):
 
 LD_SetLEDBrightness = lib.LD_SetLEDBrightness
 LD_SetLEDBrightness.restype = c_short
-LD_SetLEDBrightness.argtypes = [POINTER(c_char)]
+LD_SetLEDBrightness.argtypes = []
 
 
 def set_l_e_d_brightness(serial_number):
@@ -1504,7 +1501,7 @@ def set_l_e_d_brightness(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     brightness = c_short()
 
     output = LD_SetLEDBrightness(serial_number)
@@ -1514,7 +1511,7 @@ def set_l_e_d_brightness(serial_number):
 
 LD_SetLaserPolarity = lib.LD_SetLaserPolarity
 LD_SetLaserPolarity.restype = c_short
-LD_SetLaserPolarity.argtypes = [POINTER(c_char)]
+LD_SetLaserPolarity.argtypes = []
 
 
 def set_laser_polarity(serial_number):
@@ -1531,7 +1528,7 @@ def set_laser_polarity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     polarity = LD_POLARITY()
 
     output = LD_SetLaserPolarity(serial_number)
@@ -1541,7 +1538,7 @@ def set_laser_polarity(serial_number):
 
 LD_SetLaserSetPoint = lib.LD_SetLaserSetPoint
 LD_SetLaserSetPoint.restype = c_short
-LD_SetLaserSetPoint.argtypes = [POINTER(c_char)]
+LD_SetLaserSetPoint.argtypes = []
 
 
 def set_laser_set_point(serial_number):
@@ -1558,7 +1555,7 @@ def set_laser_set_point(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     laserDiodeCurrent = c_long()
 
     output = LD_SetLaserSetPoint(serial_number)
@@ -1568,7 +1565,7 @@ def set_laser_set_point(serial_number):
 
 LD_SetMaxCurrent = lib.LD_SetMaxCurrent
 LD_SetMaxCurrent.restype = c_short
-LD_SetMaxCurrent.argtypes = [POINTER(c_char)]
+LD_SetMaxCurrent.argtypes = []
 
 
 def set_max_current(serial_number):
@@ -1585,7 +1582,7 @@ def set_max_current(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     maxCurrent = c_long()
 
     output = LD_SetMaxCurrent(serial_number)
@@ -1595,7 +1592,7 @@ def set_max_current(serial_number):
 
 LD_SetOpenLoopMode = lib.LD_SetOpenLoopMode
 LD_SetOpenLoopMode.restype = c_short
-LD_SetOpenLoopMode.argtypes = [POINTER(c_char)]
+LD_SetOpenLoopMode.argtypes = []
 
 
 def set_open_loop_mode(serial_number):
@@ -1611,7 +1608,7 @@ def set_open_loop_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_SetOpenLoopMode(serial_number)
 
@@ -1620,7 +1617,7 @@ def set_open_loop_mode(serial_number):
 
 LD_SetRampupMode = lib.LD_SetRampupMode
 LD_SetRampupMode.restype = c_short
-LD_SetRampupMode.argtypes = [POINTER(c_char)]
+LD_SetRampupMode.argtypes = []
 
 
 def set_rampup_mode(serial_number):
@@ -1637,7 +1634,7 @@ def set_rampup_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     rampupMode = KLD_RAMPUP()
 
     output = LD_SetRampupMode(serial_number)
@@ -1647,7 +1644,7 @@ def set_rampup_mode(serial_number):
 
 LD_SetWACalibFactor = lib.LD_SetWACalibFactor
 LD_SetWACalibFactor.restype = c_short
-LD_SetWACalibFactor.argtypes = [POINTER(c_char)]
+LD_SetWACalibFactor.argtypes = []
 
 
 def set_w_a_calib_factor(serial_number):
@@ -1664,7 +1661,7 @@ def set_w_a_calib_factor(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     calibFactor = c_float()
 
     output = LD_SetWACalibFactor(serial_number)
@@ -1674,7 +1671,7 @@ def set_w_a_calib_factor(serial_number):
 
 LD_StartPolling = lib.LD_StartPolling
 LD_StartPolling.restype = c_bool
-LD_StartPolling.argtypes = [POINTER(c_char)]
+LD_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -1691,7 +1688,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     milliseconds = c_int()
 
     output = LD_StartPolling(serial_number)
@@ -1701,7 +1698,7 @@ def start_polling(serial_number):
 
 LD_StopFindTIAGain = lib.LD_StopFindTIAGain
 LD_StopFindTIAGain.restype = c_short
-LD_StopFindTIAGain.argtypes = [POINTER(c_char)]
+LD_StopFindTIAGain.argtypes = []
 
 
 def stop_find_t_i_a_gain(serial_number):
@@ -1717,7 +1714,7 @@ def stop_find_t_i_a_gain(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_StopFindTIAGain(serial_number)
 
@@ -1726,7 +1723,7 @@ def stop_find_t_i_a_gain(serial_number):
 
 LD_StopPolling = lib.LD_StopPolling
 LD_StopPolling.restype = c_void_p
-LD_StopPolling.argtypes = [POINTER(c_char)]
+LD_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -1742,7 +1739,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LD_StopPolling(serial_number)
 
@@ -1751,7 +1748,7 @@ def stop_polling(serial_number):
 
 LD_TimeSinceLastMsgReceived = lib.LD_TimeSinceLastMsgReceived
 LD_TimeSinceLastMsgReceived.restype = c_bool
-LD_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+LD_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serial_number):
@@ -1768,7 +1765,7 @@ def time_since_last_msg_received(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     lastUpdateTimeMS = c_int64()
 
     output = LD_TimeSinceLastMsgReceived(serial_number)
@@ -1778,7 +1775,7 @@ def time_since_last_msg_received(serial_number):
 
 LD_WaitForMessage = lib.LD_WaitForMessage
 LD_WaitForMessage.restype = c_bool
-LD_WaitForMessage.argtypes = [POINTER(c_char)]
+LD_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -1797,7 +1794,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -1809,7 +1806,7 @@ def wait_for_message(serial_number):
 
 LS_GetMMIParams = lib.LS_GetMMIParams
 LS_GetMMIParams.restype = c_short
-LS_GetMMIParams.argtypes = [POINTER(c_char)]
+LS_GetMMIParams.argtypes = []
 
 
 def get_m_m_i_params(serial_number):
@@ -1825,7 +1822,7 @@ def get_m_m_i_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LS_GetMMIParams(serial_number)
 
@@ -1834,7 +1831,7 @@ def get_m_m_i_params(serial_number):
 
 LS_GetMMIParamsBlock = lib.LS_GetMMIParamsBlock
 LS_GetMMIParamsBlock.restype = c_short
-LS_GetMMIParamsBlock.argtypes = [POINTER(c_char)]
+LS_GetMMIParamsBlock.argtypes = []
 
 
 def get_m_m_i_params_block(serial_number):
@@ -1852,7 +1849,7 @@ def get_m_m_i_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = KLD_MMIParams()
     params = KLS_MMIParams()
 
@@ -1863,7 +1860,7 @@ def get_m_m_i_params_block(serial_number):
 
 LS_GetTrigIOParams = lib.LS_GetTrigIOParams
 LS_GetTrigIOParams.restype = c_short
-LS_GetTrigIOParams.argtypes = [POINTER(c_char)]
+LS_GetTrigIOParams.argtypes = []
 
 
 def get_trig_i_o_params(serial_number):
@@ -1887,7 +1884,7 @@ def get_trig_i_o_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode1 = KLD_TriggerMode()
     mode1 = KLS_TriggerMode()
     polarity1 = KLD_TrigPolarity()
@@ -1904,7 +1901,7 @@ def get_trig_i_o_params(serial_number):
 
 LS_GetTrigIOParamsBlock = lib.LS_GetTrigIOParamsBlock
 LS_GetTrigIOParamsBlock.restype = c_short
-LS_GetTrigIOParamsBlock.argtypes = [POINTER(c_char)]
+LS_GetTrigIOParamsBlock.argtypes = []
 
 
 def get_trig_i_o_params_block(serial_number):
@@ -1922,7 +1919,7 @@ def get_trig_i_o_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = KLD_TrigIOParams()
     params = KLS_TrigIOParams()
 
@@ -1933,7 +1930,7 @@ def get_trig_i_o_params_block(serial_number):
 
 LS_RequestMMIParams = lib.LS_RequestMMIParams
 LS_RequestMMIParams.restype = c_short
-LS_RequestMMIParams.argtypes = [POINTER(c_char)]
+LS_RequestMMIParams.argtypes = []
 
 
 def request_m_m_i_params(serial_number):
@@ -1949,7 +1946,7 @@ def request_m_m_i_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LS_RequestMMIParams(serial_number)
 
@@ -1958,7 +1955,7 @@ def request_m_m_i_params(serial_number):
 
 LS_RequestTrigIOParams = lib.LS_RequestTrigIOParams
 LS_RequestTrigIOParams.restype = c_short
-LS_RequestTrigIOParams.argtypes = [POINTER(c_char)]
+LS_RequestTrigIOParams.argtypes = []
 
 
 def request_trig_i_o_params(serial_number):
@@ -1974,7 +1971,7 @@ def request_trig_i_o_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = LS_RequestTrigIOParams(serial_number)
 
@@ -1983,7 +1980,7 @@ def request_trig_i_o_params(serial_number):
 
 LS_SetMMIParams = lib.LS_SetMMIParams
 LS_SetMMIParams.restype = c_short
-LS_SetMMIParams.argtypes = [POINTER(c_char)]
+LS_SetMMIParams.argtypes = []
 
 
 def set_m_m_i_params(serial_number):
@@ -2000,7 +1997,7 @@ def set_m_m_i_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     dispIntensity = c_short()
 
     output = LS_SetMMIParams(serial_number)
@@ -2010,7 +2007,7 @@ def set_m_m_i_params(serial_number):
 
 LS_SetMMIParamsBlock = lib.LS_SetMMIParamsBlock
 LS_SetMMIParamsBlock.restype = c_short
-LS_SetMMIParamsBlock.argtypes = [POINTER(c_char)]
+LS_SetMMIParamsBlock.argtypes = []
 
 
 def set_m_m_i_params_block(serial_number):
@@ -2028,7 +2025,7 @@ def set_m_m_i_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = KLD_MMIParams()
     params = KLS_MMIParams()
 
@@ -2039,7 +2036,7 @@ def set_m_m_i_params_block(serial_number):
 
 LS_SetTrigIOParams = lib.LS_SetTrigIOParams
 LS_SetTrigIOParams.restype = c_short
-LS_SetTrigIOParams.argtypes = [POINTER(c_char)]
+LS_SetTrigIOParams.argtypes = []
 
 
 def set_trig_i_o_params(serial_number):
@@ -2063,7 +2060,7 @@ def set_trig_i_o_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode1 = KLD_TriggerMode()
     mode1 = KLS_TriggerMode()
     polarity1 = KLD_TrigPolarity()
@@ -2080,7 +2077,7 @@ def set_trig_i_o_params(serial_number):
 
 LS_SetTrigIOParamsBlock = lib.LS_SetTrigIOParamsBlock
 LS_SetTrigIOParamsBlock.restype = c_short
-LS_SetTrigIOParamsBlock.argtypes = [POINTER(c_char)]
+LS_SetTrigIOParamsBlock.argtypes = []
 
 
 def set_trig_i_o_params_block(serial_number):
@@ -2098,7 +2095,7 @@ def set_trig_i_o_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = KLD_TrigIOParams()
     params = KLS_TrigIOParams()
 
@@ -2135,7 +2132,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -2153,18 +2150,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -2191,7 +2190,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -2213,12 +2212,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -2242,12 +2243,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -2271,12 +2274,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -2302,12 +2307,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -2329,7 +2336,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -2352,7 +2361,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations

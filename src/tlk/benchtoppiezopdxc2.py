@@ -27,6 +27,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -46,14 +50,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_CheckConnection(serial_number)
 
@@ -62,7 +67,7 @@ def check_connection(serial_number):
 
 PDXC2_ClearMessageQueue = lib.PDXC2_ClearMessageQueue
 PDXC2_ClearMessageQueue.restype = c_short
-PDXC2_ClearMessageQueue.argtypes = [POINTER(c_char)]
+PDXC2_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -78,7 +83,7 @@ def clear_message_queue(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_ClearMessageQueue(serial_number)
 
@@ -87,7 +92,7 @@ def clear_message_queue(serial_number):
 
 PDXC2_Close = lib.PDXC2_Close
 PDXC2_Close.restype = c_void_p
-PDXC2_Close.argtypes = [POINTER(c_char)]
+PDXC2_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -103,7 +108,7 @@ def close_device(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_Close(serial_number)
 
@@ -112,7 +117,7 @@ def close_device(serial_number):
 
 PDXC2_Disable = lib.PDXC2_Disable
 PDXC2_Disable.restype = c_short
-PDXC2_Disable.argtypes = [POINTER(c_char)]
+PDXC2_Disable.argtypes = []
 
 
 def disable(serial_number):
@@ -128,7 +133,7 @@ def disable(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_Disable(serial_number)
 
@@ -137,7 +142,7 @@ def disable(serial_number):
 
 PDXC2_Disconnect = lib.PDXC2_Disconnect
 PDXC2_Disconnect.restype = c_short
-PDXC2_Disconnect.argtypes = [POINTER(c_char)]
+PDXC2_Disconnect.argtypes = []
 
 
 def disconnect(serial_number):
@@ -153,7 +158,7 @@ def disconnect(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_Disconnect(serial_number)
 
@@ -162,7 +167,7 @@ def disconnect(serial_number):
 
 PDXC2_Enable = lib.PDXC2_Enable
 PDXC2_Enable.restype = c_short
-PDXC2_Enable.argtypes = [POINTER(c_char)]
+PDXC2_Enable.argtypes = []
 
 
 def enable(serial_number):
@@ -178,7 +183,7 @@ def enable(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_Enable(serial_number)
 
@@ -187,7 +192,7 @@ def enable(serial_number):
 
 PDXC2_EnableLastMsgTimer = lib.PDXC2_EnableLastMsgTimer
 PDXC2_EnableLastMsgTimer.restype = c_void_p
-PDXC2_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+PDXC2_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serial_number):
@@ -205,7 +210,7 @@ def enable_last_msg_timer(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     enable = c_bool()
     lastMsgTimeout = c_int32()
 
@@ -216,7 +221,7 @@ def enable_last_msg_timer(serial_number):
 
 PDXC2_GetAbnormalMoveDetectionEnabled = lib.PDXC2_GetAbnormalMoveDetectionEnabled
 PDXC2_GetAbnormalMoveDetectionEnabled.restype = c_bool
-PDXC2_GetAbnormalMoveDetectionEnabled.argtypes = [POINTER(c_char)]
+PDXC2_GetAbnormalMoveDetectionEnabled.argtypes = []
 
 
 def get_abnormal_move_detection_enabled(serial_number):
@@ -232,7 +237,7 @@ def get_abnormal_move_detection_enabled(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_GetAbnormalMoveDetectionEnabled(serial_number)
 
@@ -241,7 +246,7 @@ def get_abnormal_move_detection_enabled(serial_number):
 
 PDXC2_GetAmpOutParams = lib.PDXC2_GetAmpOutParams
 PDXC2_GetAmpOutParams.restype = c_short
-PDXC2_GetAmpOutParams.argtypes = [POINTER(c_char)]
+PDXC2_GetAmpOutParams.argtypes = []
 
 
 def get_amp_out_params(serial_number):
@@ -258,7 +263,7 @@ def get_amp_out_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = PZ_AmpOutParameters()
 
     output = PDXC2_GetAmpOutParams(serial_number)
@@ -268,7 +273,7 @@ def get_amp_out_params(serial_number):
 
 PDXC2_GetClosedLoopParams = lib.PDXC2_GetClosedLoopParams
 PDXC2_GetClosedLoopParams.restype = c_short
-PDXC2_GetClosedLoopParams.argtypes = [POINTER(c_char)]
+PDXC2_GetClosedLoopParams.argtypes = []
 
 
 def get_closed_loop_params(serial_number):
@@ -285,7 +290,7 @@ def get_closed_loop_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = PDXC2_ClosedLoopParameters()
 
     output = PDXC2_GetClosedLoopParams(serial_number)
@@ -295,7 +300,7 @@ def get_closed_loop_params(serial_number):
 
 PDXC2_GetClosedLoopTarget = lib.PDXC2_GetClosedLoopTarget
 PDXC2_GetClosedLoopTarget.restype = c_int
-PDXC2_GetClosedLoopTarget.argtypes = [POINTER(c_char)]
+PDXC2_GetClosedLoopTarget.argtypes = []
 
 
 def get_closed_loop_target(serial_number):
@@ -311,7 +316,7 @@ def get_closed_loop_target(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_GetClosedLoopTarget(serial_number)
 
@@ -320,7 +325,7 @@ def get_closed_loop_target(serial_number):
 
 PDXC2_GetExternalTriggerConfig = lib.PDXC2_GetExternalTriggerConfig
 PDXC2_GetExternalTriggerConfig.restype = PDXC2_TriggerModes
-PDXC2_GetExternalTriggerConfig.argtypes = [POINTER(c_char)]
+PDXC2_GetExternalTriggerConfig.argtypes = []
 
 
 def get_external_trigger_config(serial_number):
@@ -336,7 +341,7 @@ def get_external_trigger_config(serial_number):
         PDXC2_TriggerModes
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_GetExternalTriggerConfig(serial_number)
 
@@ -345,7 +350,7 @@ def get_external_trigger_config(serial_number):
 
 PDXC2_GetExternalTriggerParams = lib.PDXC2_GetExternalTriggerParams
 PDXC2_GetExternalTriggerParams.restype = c_short
-PDXC2_GetExternalTriggerParams.argtypes = [POINTER(c_char)]
+PDXC2_GetExternalTriggerParams.argtypes = []
 
 
 def get_external_trigger_params(serial_number):
@@ -362,7 +367,7 @@ def get_external_trigger_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = PDXC2_TriggerParams()
 
     output = PDXC2_GetExternalTriggerParams(serial_number)
@@ -372,7 +377,7 @@ def get_external_trigger_params(serial_number):
 
 PDXC2_GetExternalTriggerTarget = lib.PDXC2_GetExternalTriggerTarget
 PDXC2_GetExternalTriggerTarget.restype = c_int
-PDXC2_GetExternalTriggerTarget.argtypes = [POINTER(c_char)]
+PDXC2_GetExternalTriggerTarget.argtypes = []
 
 
 def get_external_trigger_target(serial_number):
@@ -388,7 +393,7 @@ def get_external_trigger_target(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_GetExternalTriggerTarget(serial_number)
 
@@ -397,7 +402,7 @@ def get_external_trigger_target(serial_number):
 
 PDXC2_GetFirmwareVersion = lib.PDXC2_GetFirmwareVersion
 PDXC2_GetFirmwareVersion.restype = c_ulong
-PDXC2_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+PDXC2_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serial_number):
@@ -413,7 +418,7 @@ def get_firmware_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_GetFirmwareVersion(serial_number)
 
@@ -431,23 +436,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -474,15 +471,15 @@ def get_hardware_info_block(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     hardwareInfo = TLI_HardwareInformation()
 
     output = PDXC2_GetHardwareInfoBlock(serial_number)
@@ -492,7 +489,7 @@ def get_hardware_info_block(serial_number):
 
 PDXC2_GetJogParams = lib.PDXC2_GetJogParams
 PDXC2_GetJogParams.restype = c_short
-PDXC2_GetJogParams.argtypes = [POINTER(c_char)]
+PDXC2_GetJogParams.argtypes = []
 
 
 def get_jog_params(serial_number):
@@ -509,7 +506,7 @@ def get_jog_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = PDXC2_JogParameters()
 
     output = PDXC2_GetJogParams(serial_number)
@@ -519,7 +516,7 @@ def get_jog_params(serial_number):
 
 PDXC2_GetNextMessage = lib.PDXC2_GetNextMessage
 PDXC2_GetNextMessage.restype = c_bool
-PDXC2_GetNextMessage.argtypes = [POINTER(c_char)]
+PDXC2_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -538,7 +535,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -550,7 +547,7 @@ def get_next_message(serial_number):
 
 PDXC2_GetOpenLoopMoveParams = lib.PDXC2_GetOpenLoopMoveParams
 PDXC2_GetOpenLoopMoveParams.restype = c_short
-PDXC2_GetOpenLoopMoveParams.argtypes = [POINTER(c_char)]
+PDXC2_GetOpenLoopMoveParams.argtypes = []
 
 
 def get_open_loop_move_params(serial_number):
@@ -567,7 +564,7 @@ def get_open_loop_move_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = PDXC2_OpenLoopMoveParameters()
 
     output = PDXC2_GetOpenLoopMoveParams(serial_number)
@@ -577,7 +574,7 @@ def get_open_loop_move_params(serial_number):
 
 PDXC2_GetPosition = lib.PDXC2_GetPosition
 PDXC2_GetPosition.restype = c_short
-PDXC2_GetPosition.argtypes = [POINTER(c_char)]
+PDXC2_GetPosition.argtypes = []
 
 
 def get_position(serial_number):
@@ -594,7 +591,7 @@ def get_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = c_int32()
 
     output = PDXC2_GetPosition(serial_number)
@@ -604,7 +601,7 @@ def get_position(serial_number):
 
 PDXC2_GetPositionControlMode = lib.PDXC2_GetPositionControlMode
 PDXC2_GetPositionControlMode.restype = PZ_ControlModeTypes
-PDXC2_GetPositionControlMode.argtypes = [POINTER(c_char)]
+PDXC2_GetPositionControlMode.argtypes = []
 
 
 def get_position_control_mode(serial_number):
@@ -620,7 +617,7 @@ def get_position_control_mode(serial_number):
         PZ_ControlModeTypes
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_GetPositionControlMode(serial_number)
 
@@ -629,7 +626,7 @@ def get_position_control_mode(serial_number):
 
 PDXC2_GetSoftwareVersion = lib.PDXC2_GetSoftwareVersion
 PDXC2_GetSoftwareVersion.restype = c_ulong
-PDXC2_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+PDXC2_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -645,7 +642,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_GetSoftwareVersion(serial_number)
 
@@ -654,7 +651,7 @@ def get_software_version(serial_number):
 
 PDXC2_GetStageAxisParams = lib.PDXC2_GetStageAxisParams
 PDXC2_GetStageAxisParams.restype = c_short
-PDXC2_GetStageAxisParams.argtypes = [POINTER(c_char)]
+PDXC2_GetStageAxisParams.argtypes = []
 
 
 def get_stage_axis_params(serial_number):
@@ -671,7 +668,7 @@ def get_stage_axis_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = PZ_StageAxisParameters()
 
     output = PDXC2_GetStageAxisParams(serial_number)
@@ -681,7 +678,7 @@ def get_stage_axis_params(serial_number):
 
 PDXC2_GetStatusBits = lib.PDXC2_GetStatusBits
 PDXC2_GetStatusBits.restype = c_ulong
-PDXC2_GetStatusBits.argtypes = [POINTER(c_char)]
+PDXC2_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -697,7 +694,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_GetStatusBits(serial_number)
 
@@ -706,7 +703,7 @@ def get_status_bits(serial_number):
 
 PDXC2_HasLastMsgTimerOverrun = lib.PDXC2_HasLastMsgTimerOverrun
 PDXC2_HasLastMsgTimerOverrun.restype = c_bool
-PDXC2_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+PDXC2_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serial_number):
@@ -722,7 +719,7 @@ def has_last_msg_timer_overrun(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_HasLastMsgTimerOverrun(serial_number)
 
@@ -731,7 +728,7 @@ def has_last_msg_timer_overrun(serial_number):
 
 PDXC2_Home = lib.PDXC2_Home
 PDXC2_Home.restype = c_short
-PDXC2_Home.argtypes = [POINTER(c_char)]
+PDXC2_Home.argtypes = []
 
 
 def home(serial_number):
@@ -747,7 +744,7 @@ def home(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_Home(serial_number)
 
@@ -756,7 +753,7 @@ def home(serial_number):
 
 PDXC2_Identify = lib.PDXC2_Identify
 PDXC2_Identify.restype = c_void_p
-PDXC2_Identify.argtypes = [POINTER(c_char)]
+PDXC2_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -772,7 +769,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_Identify(serial_number)
 
@@ -781,7 +778,7 @@ def identify(serial_number):
 
 PDXC2_LoadNamedSettings = lib.PDXC2_LoadNamedSettings
 PDXC2_LoadNamedSettings.restype = c_bool
-PDXC2_LoadNamedSettings.argtypes = [POINTER(c_char)]
+PDXC2_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -798,7 +795,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settingsName = POINTER(c_char)()
 
     output = PDXC2_LoadNamedSettings(serial_number)
@@ -808,7 +805,7 @@ def load_named_settings(serial_number):
 
 PDXC2_LoadSettings = lib.PDXC2_LoadSettings
 PDXC2_LoadSettings.restype = c_bool
-PDXC2_LoadSettings.argtypes = [POINTER(c_char)]
+PDXC2_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -824,7 +821,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_LoadSettings(serial_number)
 
@@ -833,7 +830,7 @@ def load_settings(serial_number):
 
 PDXC2_MessageQueueSize = lib.PDXC2_MessageQueueSize
 PDXC2_MessageQueueSize.restype = c_int
-PDXC2_MessageQueueSize.argtypes = [POINTER(c_char)]
+PDXC2_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -849,7 +846,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_MessageQueueSize(serial_number)
 
@@ -858,7 +855,7 @@ def message_queue_size(serial_number):
 
 PDXC2_MoveJog = lib.PDXC2_MoveJog
 PDXC2_MoveJog.restype = c_short
-PDXC2_MoveJog.argtypes = [POINTER(c_char)]
+PDXC2_MoveJog.argtypes = []
 
 
 def move_jog(serial_number):
@@ -875,7 +872,7 @@ def move_jog(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     jogDirection = MOT_TravelDirection()
 
     output = PDXC2_MoveJog(serial_number)
@@ -885,7 +882,7 @@ def move_jog(serial_number):
 
 PDXC2_MoveStart = lib.PDXC2_MoveStart
 PDXC2_MoveStart.restype = c_short
-PDXC2_MoveStart.argtypes = [POINTER(c_char)]
+PDXC2_MoveStart.argtypes = []
 
 
 def move_start(serial_number):
@@ -901,7 +898,7 @@ def move_start(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_MoveStart(serial_number)
 
@@ -910,7 +907,7 @@ def move_start(serial_number):
 
 PDXC2_MoveStop = lib.PDXC2_MoveStop
 PDXC2_MoveStop.restype = c_short
-PDXC2_MoveStop.argtypes = [POINTER(c_char)]
+PDXC2_MoveStop.argtypes = []
 
 
 def move_stop(serial_number):
@@ -926,7 +923,7 @@ def move_stop(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_MoveStop(serial_number)
 
@@ -935,7 +932,7 @@ def move_stop(serial_number):
 
 PDXC2_Open = lib.PDXC2_Open
 PDXC2_Open.restype = c_short
-PDXC2_Open.argtypes = [POINTER(c_char)]
+PDXC2_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -951,7 +948,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_Open(serial_number)
 
@@ -960,7 +957,7 @@ def open_device(serial_number):
 
 PDXC2_PersistSettings = lib.PDXC2_PersistSettings
 PDXC2_PersistSettings.restype = c_bool
-PDXC2_PersistSettings.argtypes = [POINTER(c_char)]
+PDXC2_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -976,7 +973,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_PersistSettings(serial_number)
 
@@ -985,7 +982,7 @@ def persist_settings(serial_number):
 
 PDXC2_PollingDuration = lib.PDXC2_PollingDuration
 PDXC2_PollingDuration.restype = c_long
-PDXC2_PollingDuration.argtypes = [POINTER(c_char)]
+PDXC2_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -1001,7 +998,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_PollingDuration(serial_number)
 
@@ -1010,7 +1007,7 @@ def polling_duration(serial_number):
 
 PDXC2_PulseParamsAcquireStart = lib.PDXC2_PulseParamsAcquireStart
 PDXC2_PulseParamsAcquireStart.restype = c_short
-PDXC2_PulseParamsAcquireStart.argtypes = [POINTER(c_char)]
+PDXC2_PulseParamsAcquireStart.argtypes = []
 
 
 def pulse_params_acquire_start(serial_number):
@@ -1026,7 +1023,7 @@ def pulse_params_acquire_start(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_PulseParamsAcquireStart(serial_number)
 
@@ -1035,7 +1032,7 @@ def pulse_params_acquire_start(serial_number):
 
 PDXC2_RegisterMessageCallback = lib.PDXC2_RegisterMessageCallback
 PDXC2_RegisterMessageCallback.restype = c_short
-PDXC2_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+PDXC2_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -1052,7 +1049,7 @@ def register_message_callback(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RegisterMessageCallback(serial_number)
 
@@ -1061,7 +1058,7 @@ def register_message_callback(serial_number):
 
 PDXC2_RequestAbnormalMoveDetectionEnabled = lib.PDXC2_RequestAbnormalMoveDetectionEnabled
 PDXC2_RequestAbnormalMoveDetectionEnabled.restype = c_short
-PDXC2_RequestAbnormalMoveDetectionEnabled.argtypes = [POINTER(c_char)]
+PDXC2_RequestAbnormalMoveDetectionEnabled.argtypes = []
 
 
 def request_abnormal_move_detection_enabled(serial_number):
@@ -1077,7 +1074,7 @@ def request_abnormal_move_detection_enabled(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestAbnormalMoveDetectionEnabled(serial_number)
 
@@ -1086,7 +1083,7 @@ def request_abnormal_move_detection_enabled(serial_number):
 
 PDXC2_RequestAmpOutParams = lib.PDXC2_RequestAmpOutParams
 PDXC2_RequestAmpOutParams.restype = c_short
-PDXC2_RequestAmpOutParams.argtypes = [POINTER(c_char)]
+PDXC2_RequestAmpOutParams.argtypes = []
 
 
 def request_amp_out_params(serial_number):
@@ -1102,7 +1099,7 @@ def request_amp_out_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestAmpOutParams(serial_number)
 
@@ -1111,7 +1108,7 @@ def request_amp_out_params(serial_number):
 
 PDXC2_RequestClosedLoopParams = lib.PDXC2_RequestClosedLoopParams
 PDXC2_RequestClosedLoopParams.restype = c_short
-PDXC2_RequestClosedLoopParams.argtypes = [POINTER(c_char)]
+PDXC2_RequestClosedLoopParams.argtypes = []
 
 
 def request_closed_loop_params(serial_number):
@@ -1127,7 +1124,7 @@ def request_closed_loop_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestClosedLoopParams(serial_number)
 
@@ -1136,7 +1133,7 @@ def request_closed_loop_params(serial_number):
 
 PDXC2_RequestClosedLoopTarget = lib.PDXC2_RequestClosedLoopTarget
 PDXC2_RequestClosedLoopTarget.restype = c_short
-PDXC2_RequestClosedLoopTarget.argtypes = [POINTER(c_char)]
+PDXC2_RequestClosedLoopTarget.argtypes = []
 
 
 def request_closed_loop_target(serial_number):
@@ -1152,7 +1149,7 @@ def request_closed_loop_target(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestClosedLoopTarget(serial_number)
 
@@ -1161,7 +1158,7 @@ def request_closed_loop_target(serial_number):
 
 PDXC2_RequestExternalTriggerConfig = lib.PDXC2_RequestExternalTriggerConfig
 PDXC2_RequestExternalTriggerConfig.restype = c_short
-PDXC2_RequestExternalTriggerConfig.argtypes = [POINTER(c_char)]
+PDXC2_RequestExternalTriggerConfig.argtypes = []
 
 
 def request_external_trigger_config(serial_number):
@@ -1177,7 +1174,7 @@ def request_external_trigger_config(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestExternalTriggerConfig(serial_number)
 
@@ -1186,7 +1183,7 @@ def request_external_trigger_config(serial_number):
 
 PDXC2_RequestExternalTriggerParams = lib.PDXC2_RequestExternalTriggerParams
 PDXC2_RequestExternalTriggerParams.restype = c_short
-PDXC2_RequestExternalTriggerParams.argtypes = [POINTER(c_char)]
+PDXC2_RequestExternalTriggerParams.argtypes = []
 
 
 def request_external_trigger_params(serial_number):
@@ -1202,7 +1199,7 @@ def request_external_trigger_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestExternalTriggerParams(serial_number)
 
@@ -1211,7 +1208,7 @@ def request_external_trigger_params(serial_number):
 
 PDXC2_RequestExternalTriggerTarget = lib.PDXC2_RequestExternalTriggerTarget
 PDXC2_RequestExternalTriggerTarget.restype = c_short
-PDXC2_RequestExternalTriggerTarget.argtypes = [POINTER(c_char)]
+PDXC2_RequestExternalTriggerTarget.argtypes = []
 
 
 def request_external_trigger_target(serial_number):
@@ -1227,7 +1224,7 @@ def request_external_trigger_target(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestExternalTriggerTarget(serial_number)
 
@@ -1236,7 +1233,7 @@ def request_external_trigger_target(serial_number):
 
 PDXC2_RequestJogParams = lib.PDXC2_RequestJogParams
 PDXC2_RequestJogParams.restype = c_short
-PDXC2_RequestJogParams.argtypes = [POINTER(c_char)]
+PDXC2_RequestJogParams.argtypes = []
 
 
 def request_jog_params(serial_number):
@@ -1252,7 +1249,7 @@ def request_jog_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestJogParams(serial_number)
 
@@ -1261,7 +1258,7 @@ def request_jog_params(serial_number):
 
 PDXC2_RequestOpenLoopMoveParams = lib.PDXC2_RequestOpenLoopMoveParams
 PDXC2_RequestOpenLoopMoveParams.restype = c_short
-PDXC2_RequestOpenLoopMoveParams.argtypes = [POINTER(c_char)]
+PDXC2_RequestOpenLoopMoveParams.argtypes = []
 
 
 def request_open_loop_move_params(serial_number):
@@ -1277,7 +1274,7 @@ def request_open_loop_move_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestOpenLoopMoveParams(serial_number)
 
@@ -1286,7 +1283,7 @@ def request_open_loop_move_params(serial_number):
 
 PDXC2_RequestPosition = lib.PDXC2_RequestPosition
 PDXC2_RequestPosition.restype = c_short
-PDXC2_RequestPosition.argtypes = [POINTER(c_char)]
+PDXC2_RequestPosition.argtypes = []
 
 
 def request_position(serial_number):
@@ -1302,7 +1299,7 @@ def request_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestPosition(serial_number)
 
@@ -1311,7 +1308,7 @@ def request_position(serial_number):
 
 PDXC2_RequestPositionControlMode = lib.PDXC2_RequestPositionControlMode
 PDXC2_RequestPositionControlMode.restype = c_bool
-PDXC2_RequestPositionControlMode.argtypes = [POINTER(c_char)]
+PDXC2_RequestPositionControlMode.argtypes = []
 
 
 def request_position_control_mode(serial_number):
@@ -1327,7 +1324,7 @@ def request_position_control_mode(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestPositionControlMode(serial_number)
 
@@ -1336,7 +1333,7 @@ def request_position_control_mode(serial_number):
 
 PDXC2_RequestSettings = lib.PDXC2_RequestSettings
 PDXC2_RequestSettings.restype = c_short
-PDXC2_RequestSettings.argtypes = [POINTER(c_char)]
+PDXC2_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -1352,7 +1349,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestSettings(serial_number)
 
@@ -1361,7 +1358,7 @@ def request_settings(serial_number):
 
 PDXC2_RequestStageAxisParams = lib.PDXC2_RequestStageAxisParams
 PDXC2_RequestStageAxisParams.restype = c_short
-PDXC2_RequestStageAxisParams.argtypes = [POINTER(c_char)]
+PDXC2_RequestStageAxisParams.argtypes = []
 
 
 def request_stage_axis_params(serial_number):
@@ -1377,7 +1374,7 @@ def request_stage_axis_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestStageAxisParams(serial_number)
 
@@ -1386,7 +1383,7 @@ def request_stage_axis_params(serial_number):
 
 PDXC2_RequestStatus = lib.PDXC2_RequestStatus
 PDXC2_RequestStatus.restype = c_short
-PDXC2_RequestStatus.argtypes = [POINTER(c_char)]
+PDXC2_RequestStatus.argtypes = []
 
 
 def request_status(serial_number):
@@ -1402,7 +1399,7 @@ def request_status(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestStatus(serial_number)
 
@@ -1411,7 +1408,7 @@ def request_status(serial_number):
 
 PDXC2_RequestStatusBits = lib.PDXC2_RequestStatusBits
 PDXC2_RequestStatusBits.restype = c_short
-PDXC2_RequestStatusBits.argtypes = [POINTER(c_char)]
+PDXC2_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serial_number):
@@ -1427,7 +1424,7 @@ def request_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_RequestStatusBits(serial_number)
 
@@ -1436,7 +1433,7 @@ def request_status_bits(serial_number):
 
 PDXC2_ResetParameters = lib.PDXC2_ResetParameters
 PDXC2_ResetParameters.restype = c_short
-PDXC2_ResetParameters.argtypes = [POINTER(c_char)]
+PDXC2_ResetParameters.argtypes = []
 
 
 def reset_parameters(serial_number):
@@ -1452,7 +1449,7 @@ def reset_parameters(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_ResetParameters(serial_number)
 
@@ -1461,7 +1458,7 @@ def reset_parameters(serial_number):
 
 PDXC2_SetAbnormalMoveDetectionEnabled = lib.PDXC2_SetAbnormalMoveDetectionEnabled
 PDXC2_SetAbnormalMoveDetectionEnabled.restype = c_short
-PDXC2_SetAbnormalMoveDetectionEnabled.argtypes = [POINTER(c_char)]
+PDXC2_SetAbnormalMoveDetectionEnabled.argtypes = []
 
 
 def set_abnormal_move_detection_enabled(serial_number):
@@ -1478,7 +1475,7 @@ def set_abnormal_move_detection_enabled(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     isEnabled = c_bool()
 
     output = PDXC2_SetAbnormalMoveDetectionEnabled(serial_number)
@@ -1488,7 +1485,7 @@ def set_abnormal_move_detection_enabled(serial_number):
 
 PDXC2_SetAmpOutParams = lib.PDXC2_SetAmpOutParams
 PDXC2_SetAmpOutParams.restype = c_short
-PDXC2_SetAmpOutParams.argtypes = [POINTER(c_char)]
+PDXC2_SetAmpOutParams.argtypes = []
 
 
 def set_amp_out_params(serial_number):
@@ -1505,7 +1502,7 @@ def set_amp_out_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = PZ_AmpOutParameters()
 
     output = PDXC2_SetAmpOutParams(serial_number)
@@ -1515,7 +1512,7 @@ def set_amp_out_params(serial_number):
 
 PDXC2_SetClosedLoopParams = lib.PDXC2_SetClosedLoopParams
 PDXC2_SetClosedLoopParams.restype = c_short
-PDXC2_SetClosedLoopParams.argtypes = [POINTER(c_char)]
+PDXC2_SetClosedLoopParams.argtypes = []
 
 
 def set_closed_loop_params(serial_number):
@@ -1532,7 +1529,7 @@ def set_closed_loop_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = PDXC2_ClosedLoopParameters()
 
     output = PDXC2_SetClosedLoopParams(serial_number)
@@ -1542,7 +1539,7 @@ def set_closed_loop_params(serial_number):
 
 PDXC2_SetClosedLoopTarget = lib.PDXC2_SetClosedLoopTarget
 PDXC2_SetClosedLoopTarget.restype = c_short
-PDXC2_SetClosedLoopTarget.argtypes = [POINTER(c_char)]
+PDXC2_SetClosedLoopTarget.argtypes = []
 
 
 def set_closed_loop_target(serial_number):
@@ -1559,7 +1556,7 @@ def set_closed_loop_target(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     target = c_int()
 
     output = PDXC2_SetClosedLoopTarget(serial_number)
@@ -1569,7 +1566,7 @@ def set_closed_loop_target(serial_number):
 
 PDXC2_SetExternalTriggerConfig = lib.PDXC2_SetExternalTriggerConfig
 PDXC2_SetExternalTriggerConfig.restype = c_short
-PDXC2_SetExternalTriggerConfig.argtypes = [POINTER(c_char)]
+PDXC2_SetExternalTriggerConfig.argtypes = []
 
 
 def set_external_trigger_config(serial_number):
@@ -1586,7 +1583,7 @@ def set_external_trigger_config(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = PDXC2_TriggerModes()
 
     output = PDXC2_SetExternalTriggerConfig(serial_number)
@@ -1596,7 +1593,7 @@ def set_external_trigger_config(serial_number):
 
 PDXC2_SetExternalTriggerParams = lib.PDXC2_SetExternalTriggerParams
 PDXC2_SetExternalTriggerParams.restype = c_short
-PDXC2_SetExternalTriggerParams.argtypes = [POINTER(c_char)]
+PDXC2_SetExternalTriggerParams.argtypes = []
 
 
 def set_external_trigger_params(serial_number):
@@ -1613,7 +1610,7 @@ def set_external_trigger_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = PDXC2_TriggerParams()
 
     output = PDXC2_SetExternalTriggerParams(serial_number)
@@ -1623,7 +1620,7 @@ def set_external_trigger_params(serial_number):
 
 PDXC2_SetJogParams = lib.PDXC2_SetJogParams
 PDXC2_SetJogParams.restype = c_short
-PDXC2_SetJogParams.argtypes = [POINTER(c_char)]
+PDXC2_SetJogParams.argtypes = []
 
 
 def set_jog_params(serial_number):
@@ -1640,7 +1637,7 @@ def set_jog_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = PDXC2_JogParameters()
 
     output = PDXC2_SetJogParams(serial_number)
@@ -1650,7 +1647,7 @@ def set_jog_params(serial_number):
 
 PDXC2_SetOpenLoopMoveParams = lib.PDXC2_SetOpenLoopMoveParams
 PDXC2_SetOpenLoopMoveParams.restype = c_short
-PDXC2_SetOpenLoopMoveParams.argtypes = [POINTER(c_char)]
+PDXC2_SetOpenLoopMoveParams.argtypes = []
 
 
 def set_open_loop_move_params(serial_number):
@@ -1667,7 +1664,7 @@ def set_open_loop_move_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     params = PDXC2_OpenLoopMoveParameters()
 
     output = PDXC2_SetOpenLoopMoveParams(serial_number)
@@ -1677,7 +1674,7 @@ def set_open_loop_move_params(serial_number):
 
 PDXC2_SetPositionControlMode = lib.PDXC2_SetPositionControlMode
 PDXC2_SetPositionControlMode.restype = c_short
-PDXC2_SetPositionControlMode.argtypes = [POINTER(c_char)]
+PDXC2_SetPositionControlMode.argtypes = []
 
 
 def set_position_control_mode(serial_number):
@@ -1694,7 +1691,7 @@ def set_position_control_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = PZ_ControlModeTypes()
 
     output = PDXC2_SetPositionControlMode(serial_number)
@@ -1704,7 +1701,7 @@ def set_position_control_mode(serial_number):
 
 PDXC2_StartPolling = lib.PDXC2_StartPolling
 PDXC2_StartPolling.restype = c_bool
-PDXC2_StartPolling.argtypes = [POINTER(c_char)]
+PDXC2_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -1721,7 +1718,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     milliseconds = c_int()
 
     output = PDXC2_StartPolling(serial_number)
@@ -1731,7 +1728,7 @@ def start_polling(serial_number):
 
 PDXC2_StopPolling = lib.PDXC2_StopPolling
 PDXC2_StopPolling.restype = c_void_p
-PDXC2_StopPolling.argtypes = [POINTER(c_char)]
+PDXC2_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -1747,7 +1744,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PDXC2_StopPolling(serial_number)
 
@@ -1756,7 +1753,7 @@ def stop_polling(serial_number):
 
 PDXC2_TimeSinceLastMsgReceived = lib.PDXC2_TimeSinceLastMsgReceived
 PDXC2_TimeSinceLastMsgReceived.restype = c_bool
-PDXC2_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+PDXC2_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serial_number):
@@ -1773,7 +1770,7 @@ def time_since_last_msg_received(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     lastUpdateTimeMS = c_int64()
 
     output = PDXC2_TimeSinceLastMsgReceived(serial_number)
@@ -1783,7 +1780,7 @@ def time_since_last_msg_received(serial_number):
 
 PDXC2_WaitForMessage = lib.PDXC2_WaitForMessage
 PDXC2_WaitForMessage.restype = c_bool
-PDXC2_WaitForMessage.argtypes = [POINTER(c_char)]
+PDXC2_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -1802,7 +1799,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -1840,7 +1837,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -1858,18 +1855,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -1896,7 +1895,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -1918,12 +1917,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -1947,12 +1948,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -1976,12 +1979,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -2007,12 +2012,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -2034,7 +2041,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -2057,7 +2066,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations
@@ -2085,7 +2096,7 @@ def initialize_simulations():
 
 TLI_ScanEthernetRange = lib.TLI_ScanEthernetRange
 TLI_ScanEthernetRange.restype = c_short
-TLI_ScanEthernetRange.argtypes = [POINTER(c_char)]
+TLI_ScanEthernetRange.argtypes = []
 
 
 def scan_ethernet_range(startIPAddress):

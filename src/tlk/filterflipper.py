@@ -20,6 +20,10 @@ from .definitions.structures import (
     TLI_DeviceInfo)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -39,14 +43,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_CheckConnection(serial_number)
 
@@ -55,7 +60,7 @@ def check_connection(serial_number):
 
 FF_ClearMessageQueue = lib.FF_ClearMessageQueue
 FF_ClearMessageQueue.restype = c_void_p
-FF_ClearMessageQueue.argtypes = [POINTER(c_char)]
+FF_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -71,7 +76,7 @@ def clear_message_queue(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_ClearMessageQueue(serial_number)
 
@@ -80,7 +85,7 @@ def clear_message_queue(serial_number):
 
 FF_Close = lib.FF_Close
 FF_Close.restype = c_void_p
-FF_Close.argtypes = [POINTER(c_char)]
+FF_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -96,7 +101,7 @@ def close_device(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_Close(serial_number)
 
@@ -105,7 +110,7 @@ def close_device(serial_number):
 
 FF_EnableLastMsgTimer = lib.FF_EnableLastMsgTimer
 FF_EnableLastMsgTimer.restype = c_void_p
-FF_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+FF_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serial_number):
@@ -123,7 +128,7 @@ def enable_last_msg_timer(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     enable = c_bool()
     lastMsgTimeout = c_int32()
 
@@ -134,7 +139,7 @@ def enable_last_msg_timer(serial_number):
 
 FF_GetFirmwareVersion = lib.FF_GetFirmwareVersion
 FF_GetFirmwareVersion.restype = c_ulong
-FF_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+FF_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serial_number):
@@ -150,7 +155,7 @@ def get_firmware_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_GetFirmwareVersion(serial_number)
 
@@ -168,23 +173,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -202,7 +199,7 @@ def get_hardware_info(serial_number):
 
 FF_GetIOSettings = lib.FF_GetIOSettings
 FF_GetIOSettings.restype = c_short
-FF_GetIOSettings.argtypes = [POINTER(c_char)]
+FF_GetIOSettings.argtypes = []
 
 
 def get_i_o_settings(serial_number):
@@ -219,7 +216,7 @@ def get_i_o_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settings = FF_IOSettings()
 
     output = FF_GetIOSettings(serial_number)
@@ -229,7 +226,7 @@ def get_i_o_settings(serial_number):
 
 FF_GetNextMessage = lib.FF_GetNextMessage
 FF_GetNextMessage.restype = c_bool
-FF_GetNextMessage.argtypes = [POINTER(c_char)]
+FF_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -248,7 +245,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -260,7 +257,7 @@ def get_next_message(serial_number):
 
 FF_GetNumberPositions = lib.FF_GetNumberPositions
 FF_GetNumberPositions.restype = c_int
-FF_GetNumberPositions.argtypes = [POINTER(c_char)]
+FF_GetNumberPositions.argtypes = []
 
 
 def get_number_positions(serial_number):
@@ -276,7 +273,7 @@ def get_number_positions(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_GetNumberPositions(serial_number)
 
@@ -285,7 +282,7 @@ def get_number_positions(serial_number):
 
 FF_GetPosition = lib.FF_GetPosition
 FF_GetPosition.restype = FF_Positions
-FF_GetPosition.argtypes = [POINTER(c_char)]
+FF_GetPosition.argtypes = []
 
 
 def get_position(serial_number):
@@ -301,7 +298,7 @@ def get_position(serial_number):
         FF_Positions
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_GetPosition(serial_number)
 
@@ -310,7 +307,7 @@ def get_position(serial_number):
 
 FF_GetSoftwareVersion = lib.FF_GetSoftwareVersion
 FF_GetSoftwareVersion.restype = c_ulong
-FF_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+FF_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -326,7 +323,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_GetSoftwareVersion(serial_number)
 
@@ -335,7 +332,7 @@ def get_software_version(serial_number):
 
 FF_GetStatusBits = lib.FF_GetStatusBits
 FF_GetStatusBits.restype = c_ulong
-FF_GetStatusBits.argtypes = [POINTER(c_char)]
+FF_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -351,7 +348,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_GetStatusBits(serial_number)
 
@@ -360,7 +357,7 @@ def get_status_bits(serial_number):
 
 FF_GetTransitTime = lib.FF_GetTransitTime
 FF_GetTransitTime.restype = c_uint
-FF_GetTransitTime.argtypes = [POINTER(c_char)]
+FF_GetTransitTime.argtypes = []
 
 
 def get_transit_time(serial_number):
@@ -376,7 +373,7 @@ def get_transit_time(serial_number):
         c_uint
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_GetTransitTime(serial_number)
 
@@ -385,7 +382,7 @@ def get_transit_time(serial_number):
 
 FF_HasLastMsgTimerOverrun = lib.FF_HasLastMsgTimerOverrun
 FF_HasLastMsgTimerOverrun.restype = c_bool
-FF_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+FF_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serial_number):
@@ -401,7 +398,7 @@ def has_last_msg_timer_overrun(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_HasLastMsgTimerOverrun(serial_number)
 
@@ -410,7 +407,7 @@ def has_last_msg_timer_overrun(serial_number):
 
 FF_Home = lib.FF_Home
 FF_Home.restype = c_short
-FF_Home.argtypes = [POINTER(c_char)]
+FF_Home.argtypes = []
 
 
 def home(serial_number):
@@ -426,7 +423,7 @@ def home(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_Home(serial_number)
 
@@ -435,7 +432,7 @@ def home(serial_number):
 
 FF_Identify = lib.FF_Identify
 FF_Identify.restype = c_void_p
-FF_Identify.argtypes = [POINTER(c_char)]
+FF_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -451,7 +448,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_Identify(serial_number)
 
@@ -460,7 +457,7 @@ def identify(serial_number):
 
 FF_LoadNamedSettings = lib.FF_LoadNamedSettings
 FF_LoadNamedSettings.restype = c_bool
-FF_LoadNamedSettings.argtypes = [POINTER(c_char)]
+FF_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -477,7 +474,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settingsName = POINTER(c_char)()
 
     output = FF_LoadNamedSettings(serial_number)
@@ -487,7 +484,7 @@ def load_named_settings(serial_number):
 
 FF_LoadSettings = lib.FF_LoadSettings
 FF_LoadSettings.restype = c_bool
-FF_LoadSettings.argtypes = [POINTER(c_char)]
+FF_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -503,7 +500,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_LoadSettings(serial_number)
 
@@ -512,7 +509,7 @@ def load_settings(serial_number):
 
 FF_MessageQueueSize = lib.FF_MessageQueueSize
 FF_MessageQueueSize.restype = c_int
-FF_MessageQueueSize.argtypes = [POINTER(c_char)]
+FF_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -528,7 +525,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_MessageQueueSize(serial_number)
 
@@ -537,7 +534,7 @@ def message_queue_size(serial_number):
 
 FF_MoveToPosition = lib.FF_MoveToPosition
 FF_MoveToPosition.restype = c_short
-FF_MoveToPosition.argtypes = [POINTER(c_char)]
+FF_MoveToPosition.argtypes = []
 
 
 def move_to_position(serial_number):
@@ -554,7 +551,7 @@ def move_to_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = FF_Positions()
 
     output = FF_MoveToPosition(serial_number)
@@ -564,7 +561,7 @@ def move_to_position(serial_number):
 
 FF_Open = lib.FF_Open
 FF_Open.restype = c_short
-FF_Open.argtypes = [POINTER(c_char)]
+FF_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -580,7 +577,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_Open(serial_number)
 
@@ -589,7 +586,7 @@ def open_device(serial_number):
 
 FF_PersistSettings = lib.FF_PersistSettings
 FF_PersistSettings.restype = c_bool
-FF_PersistSettings.argtypes = [POINTER(c_char)]
+FF_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -605,7 +602,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_PersistSettings(serial_number)
 
@@ -614,7 +611,7 @@ def persist_settings(serial_number):
 
 FF_PollingDuration = lib.FF_PollingDuration
 FF_PollingDuration.restype = c_long
-FF_PollingDuration.argtypes = [POINTER(c_char)]
+FF_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -630,7 +627,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_PollingDuration(serial_number)
 
@@ -639,7 +636,7 @@ def polling_duration(serial_number):
 
 FF_RegisterMessageCallback = lib.FF_RegisterMessageCallback
 FF_RegisterMessageCallback.restype = c_void_p
-FF_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+FF_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -656,7 +653,7 @@ def register_message_callback(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_RegisterMessageCallback(serial_number)
 
@@ -665,7 +662,7 @@ def register_message_callback(serial_number):
 
 FF_RequestIOSettings = lib.FF_RequestIOSettings
 FF_RequestIOSettings.restype = c_short
-FF_RequestIOSettings.argtypes = [POINTER(c_char)]
+FF_RequestIOSettings.argtypes = []
 
 
 def request_i_o_settings(serial_number):
@@ -681,7 +678,7 @@ def request_i_o_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_RequestIOSettings(serial_number)
 
@@ -690,7 +687,7 @@ def request_i_o_settings(serial_number):
 
 FF_RequestSettings = lib.FF_RequestSettings
 FF_RequestSettings.restype = c_short
-FF_RequestSettings.argtypes = [POINTER(c_char)]
+FF_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -706,7 +703,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_RequestSettings(serial_number)
 
@@ -715,7 +712,7 @@ def request_settings(serial_number):
 
 FF_RequestStatus = lib.FF_RequestStatus
 FF_RequestStatus.restype = c_short
-FF_RequestStatus.argtypes = [POINTER(c_char)]
+FF_RequestStatus.argtypes = []
 
 
 def request_status(serial_number):
@@ -731,7 +728,7 @@ def request_status(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_RequestStatus(serial_number)
 
@@ -740,7 +737,7 @@ def request_status(serial_number):
 
 FF_SetIOSettings = lib.FF_SetIOSettings
 FF_SetIOSettings.restype = c_short
-FF_SetIOSettings.argtypes = [POINTER(c_char)]
+FF_SetIOSettings.argtypes = []
 
 
 def set_i_o_settings(serial_number):
@@ -757,7 +754,7 @@ def set_i_o_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settings = FF_IOSettings()
 
     output = FF_SetIOSettings(serial_number)
@@ -767,7 +764,7 @@ def set_i_o_settings(serial_number):
 
 FF_SetTransitTime = lib.FF_SetTransitTime
 FF_SetTransitTime.restype = c_short
-FF_SetTransitTime.argtypes = [POINTER(c_char)]
+FF_SetTransitTime.argtypes = []
 
 
 def set_transit_time(serial_number):
@@ -784,7 +781,7 @@ def set_transit_time(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     transitTime = c_uint()
 
     output = FF_SetTransitTime(serial_number)
@@ -794,7 +791,7 @@ def set_transit_time(serial_number):
 
 FF_StartPolling = lib.FF_StartPolling
 FF_StartPolling.restype = c_bool
-FF_StartPolling.argtypes = [POINTER(c_char)]
+FF_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -811,7 +808,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     milliseconds = c_int()
 
     output = FF_StartPolling(serial_number)
@@ -821,7 +818,7 @@ def start_polling(serial_number):
 
 FF_StopPolling = lib.FF_StopPolling
 FF_StopPolling.restype = c_void_p
-FF_StopPolling.argtypes = [POINTER(c_char)]
+FF_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -837,7 +834,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = FF_StopPolling(serial_number)
 
@@ -846,7 +843,7 @@ def stop_polling(serial_number):
 
 FF_TimeSinceLastMsgReceived = lib.FF_TimeSinceLastMsgReceived
 FF_TimeSinceLastMsgReceived.restype = c_bool
-FF_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+FF_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serial_number):
@@ -863,7 +860,7 @@ def time_since_last_msg_received(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     lastUpdateTimeMS = c_int64()
 
     output = FF_TimeSinceLastMsgReceived(serial_number)
@@ -873,7 +870,7 @@ def time_since_last_msg_received(serial_number):
 
 FF_WaitForMessage = lib.FF_WaitForMessage
 FF_WaitForMessage.restype = c_bool
-FF_WaitForMessage.argtypes = [POINTER(c_char)]
+FF_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -892,7 +889,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -930,7 +927,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -948,18 +945,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -986,7 +985,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -1008,12 +1007,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -1037,12 +1038,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -1066,12 +1069,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -1097,12 +1102,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -1124,7 +1131,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -1147,7 +1156,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations

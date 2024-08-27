@@ -31,6 +31,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -41,7 +45,7 @@ lib = cdll.LoadLibrary(
 
 IPP_CanDeviceLockFrontPanel = lib.IPP_CanDeviceLockFrontPanel
 IPP_CanDeviceLockFrontPanel.restype = c_bool
-IPP_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
+IPP_CanDeviceLockFrontPanel.argtypes = []
 
 
 def can_device_lock_front_panel(serial_number):
@@ -57,7 +61,7 @@ def can_device_lock_front_panel(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_CanDeviceLockFrontPanel(serial_number)
 
@@ -75,14 +79,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_CheckConnection(serial_number)
 
@@ -91,7 +96,7 @@ def check_connection(serial_number):
 
 IPP_ClearMessageQueue = lib.IPP_ClearMessageQueue
 IPP_ClearMessageQueue.restype = c_short
-IPP_ClearMessageQueue.argtypes = [POINTER(c_char)]
+IPP_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -107,7 +112,7 @@ def clear_message_queue(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_ClearMessageQueue(serial_number)
 
@@ -116,7 +121,7 @@ def clear_message_queue(serial_number):
 
 IPP_Close = lib.IPP_Close
 IPP_Close.restype = c_void_p
-IPP_Close.argtypes = [POINTER(c_char)]
+IPP_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -132,7 +137,7 @@ def close_device(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_Close(serial_number)
 
@@ -141,7 +146,7 @@ def close_device(serial_number):
 
 IPP_DisableChannel = lib.IPP_DisableChannel
 IPP_DisableChannel.restype = c_short
-IPP_DisableChannel.argtypes = [POINTER(c_char)]
+IPP_DisableChannel.argtypes = []
 
 
 def disable_channel(serial_number):
@@ -157,7 +162,7 @@ def disable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_DisableChannel(serial_number)
 
@@ -166,7 +171,7 @@ def disable_channel(serial_number):
 
 IPP_Disconnect = lib.IPP_Disconnect
 IPP_Disconnect.restype = c_short
-IPP_Disconnect.argtypes = [POINTER(c_char)]
+IPP_Disconnect.argtypes = []
 
 
 def disconnect(serial_number):
@@ -182,7 +187,7 @@ def disconnect(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_Disconnect(serial_number)
 
@@ -191,7 +196,7 @@ def disconnect(serial_number):
 
 IPP_EnableChannel = lib.IPP_EnableChannel
 IPP_EnableChannel.restype = c_short
-IPP_EnableChannel.argtypes = [POINTER(c_char)]
+IPP_EnableChannel.argtypes = []
 
 
 def enable_channel(serial_number):
@@ -207,7 +212,7 @@ def enable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_EnableChannel(serial_number)
 
@@ -216,7 +221,7 @@ def enable_channel(serial_number):
 
 IPP_GetFirmwareVersion = lib.IPP_GetFirmwareVersion
 IPP_GetFirmwareVersion.restype = c_ulong
-IPP_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+IPP_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serial_number):
@@ -232,7 +237,7 @@ def get_firmware_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_GetFirmwareVersion(serial_number)
 
@@ -241,7 +246,7 @@ def get_firmware_version(serial_number):
 
 IPP_GetFrontPanelLocked = lib.IPP_GetFrontPanelLocked
 IPP_GetFrontPanelLocked.restype = c_bool
-IPP_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
+IPP_GetFrontPanelLocked.argtypes = []
 
 
 def get_front_panel_locked(serial_number):
@@ -257,7 +262,7 @@ def get_front_panel_locked(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_GetFrontPanelLocked(serial_number)
 
@@ -275,23 +280,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -318,15 +315,15 @@ def get_hardware_info_block(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     hardwareInfo = TLI_HardwareInformation()
 
     output = IPP_GetHardwareInfoBlock(serial_number)
@@ -336,7 +333,7 @@ def get_hardware_info_block(serial_number):
 
 IPP_GetIOSettings = lib.IPP_GetIOSettings
 IPP_GetIOSettings.restype = c_short
-IPP_GetIOSettings.argtypes = [POINTER(c_char)]
+IPP_GetIOSettings.argtypes = []
 
 
 def get_i_o_settings(serial_number):
@@ -353,7 +350,7 @@ def get_i_o_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     ioSettings = PPC_IOSettings()
 
     output = IPP_GetIOSettings(serial_number)
@@ -363,7 +360,7 @@ def get_i_o_settings(serial_number):
 
 IPP_GetMMIParams = lib.IPP_GetMMIParams
 IPP_GetMMIParams.restype = c_short
-IPP_GetMMIParams.argtypes = [POINTER(c_char)]
+IPP_GetMMIParams.argtypes = []
 
 
 def get_m_m_i_params(serial_number):
@@ -388,7 +385,7 @@ def get_m_m_i_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KPZ_WheelMode()
     voltageAdjustRate = KPZ_WheelChangeRate()
     voltageStep = c_int32()
@@ -406,7 +403,7 @@ def get_m_m_i_params(serial_number):
 
 IPP_GetMaxOutputVoltage = lib.IPP_GetMaxOutputVoltage
 IPP_GetMaxOutputVoltage.restype = c_short
-IPP_GetMaxOutputVoltage.argtypes = [POINTER(c_char)]
+IPP_GetMaxOutputVoltage.argtypes = []
 
 
 def get_max_output_voltage(serial_number):
@@ -422,7 +419,7 @@ def get_max_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_GetMaxOutputVoltage(serial_number)
 
@@ -431,7 +428,7 @@ def get_max_output_voltage(serial_number):
 
 IPP_GetMinOutputVoltage = lib.IPP_GetMinOutputVoltage
 IPP_GetMinOutputVoltage.restype = c_short
-IPP_GetMinOutputVoltage.argtypes = [POINTER(c_char)]
+IPP_GetMinOutputVoltage.argtypes = []
 
 
 def get_min_output_voltage(serial_number):
@@ -447,7 +444,7 @@ def get_min_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_GetMinOutputVoltage(serial_number)
 
@@ -456,7 +453,7 @@ def get_min_output_voltage(serial_number):
 
 IPP_GetNextMessage = lib.IPP_GetNextMessage
 IPP_GetNextMessage.restype = c_bool
-IPP_GetNextMessage.argtypes = [POINTER(c_char)]
+IPP_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -475,7 +472,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -487,7 +484,7 @@ def get_next_message(serial_number):
 
 IPP_GetOutputVoltage = lib.IPP_GetOutputVoltage
 IPP_GetOutputVoltage.restype = c_short
-IPP_GetOutputVoltage.argtypes = [POINTER(c_char)]
+IPP_GetOutputVoltage.argtypes = []
 
 
 def get_output_voltage(serial_number):
@@ -503,7 +500,7 @@ def get_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_GetOutputVoltage(serial_number)
 
@@ -512,7 +509,7 @@ def get_output_voltage(serial_number):
 
 IPP_GetPIDConsts = lib.IPP_GetPIDConsts
 IPP_GetPIDConsts.restype = c_short
-IPP_GetPIDConsts.argtypes = [POINTER(c_char)]
+IPP_GetPIDConsts.argtypes = []
 
 
 def get_p_i_d_consts(serial_number):
@@ -530,7 +527,7 @@ def get_p_i_d_consts(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     index = c_byte()
     pidConsts = PPC_PIDConsts()
 
@@ -541,7 +538,7 @@ def get_p_i_d_consts(serial_number):
 
 IPP_GetPIDCriteria = lib.IPP_GetPIDCriteria
 IPP_GetPIDCriteria.restype = c_short
-IPP_GetPIDCriteria.argtypes = [POINTER(c_char)]
+IPP_GetPIDCriteria.argtypes = []
 
 
 def get_p_i_d_criteria(serial_number):
@@ -559,7 +556,7 @@ def get_p_i_d_criteria(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     criteriaID = c_byte()
     pidCriteria = PPC_PIDCriteria()
 
@@ -570,7 +567,7 @@ def get_p_i_d_criteria(serial_number):
 
 IPP_GetPosition = lib.IPP_GetPosition
 IPP_GetPosition.restype = c_short
-IPP_GetPosition.argtypes = [POINTER(c_char)]
+IPP_GetPosition.argtypes = []
 
 
 def get_position(serial_number):
@@ -586,7 +583,7 @@ def get_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_GetPosition(serial_number)
 
@@ -595,7 +592,7 @@ def get_position(serial_number):
 
 IPP_GetPositionControlMode = lib.IPP_GetPositionControlMode
 IPP_GetPositionControlMode.restype = PZ_ControlModeTypes
-IPP_GetPositionControlMode.argtypes = [POINTER(c_char)]
+IPP_GetPositionControlMode.argtypes = []
 
 
 def get_position_control_mode(serial_number):
@@ -611,7 +608,7 @@ def get_position_control_mode(serial_number):
         PZ_ControlModeTypes
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_GetPositionControlMode(serial_number)
 
@@ -620,7 +617,7 @@ def get_position_control_mode(serial_number):
 
 IPP_GetSoftwareVersion = lib.IPP_GetSoftwareVersion
 IPP_GetSoftwareVersion.restype = c_ulong
-IPP_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+IPP_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -636,7 +633,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_GetSoftwareVersion(serial_number)
 
@@ -645,7 +642,7 @@ def get_software_version(serial_number):
 
 IPP_GetStatusBits = lib.IPP_GetStatusBits
 IPP_GetStatusBits.restype = c_ulong
-IPP_GetStatusBits.argtypes = [POINTER(c_char)]
+IPP_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -661,7 +658,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_GetStatusBits(serial_number)
 
@@ -670,7 +667,7 @@ def get_status_bits(serial_number):
 
 IPP_GetTriggerConfigParams = lib.IPP_GetTriggerConfigParams
 IPP_GetTriggerConfigParams.restype = c_short
-IPP_GetTriggerConfigParams.argtypes = [POINTER(c_char)]
+IPP_GetTriggerConfigParams.argtypes = []
 
 
 def get_trigger_config_params(serial_number):
@@ -693,7 +690,7 @@ def get_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     trigger1Mode = KSG_TriggerPortMode()
     trigger1Polarity = KSG_TriggerPortPolarity()
     trigger2Mode = KSG_TriggerPortMode()
@@ -709,7 +706,7 @@ def get_trigger_config_params(serial_number):
 
 IPP_GetTriggerConfigParamsBlock = lib.IPP_GetTriggerConfigParamsBlock
 IPP_GetTriggerConfigParamsBlock.restype = c_short
-IPP_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
+IPP_GetTriggerConfigParamsBlock.argtypes = []
 
 
 def get_trigger_config_params_block(serial_number):
@@ -726,7 +723,7 @@ def get_trigger_config_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerConfigParams = KSG_TriggerConfig()
 
     output = IPP_GetTriggerConfigParamsBlock(serial_number)
@@ -736,7 +733,7 @@ def get_trigger_config_params_block(serial_number):
 
 IPP_GetVoltageSource = lib.IPP_GetVoltageSource
 IPP_GetVoltageSource.restype = PZ_InputSourceFlags
-IPP_GetVoltageSource.argtypes = [POINTER(c_char)]
+IPP_GetVoltageSource.argtypes = []
 
 
 def get_voltage_source(serial_number):
@@ -752,7 +749,7 @@ def get_voltage_source(serial_number):
         PZ_InputSourceFlags
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_GetVoltageSource(serial_number)
 
@@ -761,7 +758,7 @@ def get_voltage_source(serial_number):
 
 IPP_Identify = lib.IPP_Identify
 IPP_Identify.restype = c_void_p
-IPP_Identify.argtypes = [POINTER(c_char)]
+IPP_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -777,7 +774,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_Identify(serial_number)
 
@@ -786,7 +783,7 @@ def identify(serial_number):
 
 IPP_LoadNamedSettings = lib.IPP_LoadNamedSettings
 IPP_LoadNamedSettings.restype = c_bool
-IPP_LoadNamedSettings.argtypes = [POINTER(c_char)]
+IPP_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -803,7 +800,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settingsName = POINTER(c_char)()
 
     output = IPP_LoadNamedSettings(serial_number)
@@ -813,7 +810,7 @@ def load_named_settings(serial_number):
 
 IPP_LoadSettings = lib.IPP_LoadSettings
 IPP_LoadSettings.restype = c_bool
-IPP_LoadSettings.argtypes = [POINTER(c_char)]
+IPP_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -829,7 +826,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_LoadSettings(serial_number)
 
@@ -838,7 +835,7 @@ def load_settings(serial_number):
 
 IPP_MessageQueueSize = lib.IPP_MessageQueueSize
 IPP_MessageQueueSize.restype = c_int
-IPP_MessageQueueSize.argtypes = [POINTER(c_char)]
+IPP_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -854,7 +851,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_MessageQueueSize(serial_number)
 
@@ -863,7 +860,7 @@ def message_queue_size(serial_number):
 
 IPP_Open = lib.IPP_Open
 IPP_Open.restype = c_short
-IPP_Open.argtypes = [POINTER(c_char)]
+IPP_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -879,7 +876,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_Open(serial_number)
 
@@ -888,7 +885,7 @@ def open_device(serial_number):
 
 IPP_PersistSettings = lib.IPP_PersistSettings
 IPP_PersistSettings.restype = c_bool
-IPP_PersistSettings.argtypes = [POINTER(c_char)]
+IPP_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -904,7 +901,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_PersistSettings(serial_number)
 
@@ -913,7 +910,7 @@ def persist_settings(serial_number):
 
 IPP_PollingDuration = lib.IPP_PollingDuration
 IPP_PollingDuration.restype = c_long
-IPP_PollingDuration.argtypes = [POINTER(c_char)]
+IPP_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -929,7 +926,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_PollingDuration(serial_number)
 
@@ -938,7 +935,7 @@ def polling_duration(serial_number):
 
 IPP_RegisterMessageCallback = lib.IPP_RegisterMessageCallback
 IPP_RegisterMessageCallback.restype = c_short
-IPP_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+IPP_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -955,7 +952,7 @@ def register_message_callback(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RegisterMessageCallback(serial_number)
 
@@ -964,7 +961,7 @@ def register_message_callback(serial_number):
 
 IPP_RequestFrontPanelLocked = lib.IPP_RequestFrontPanelLocked
 IPP_RequestFrontPanelLocked.restype = c_short
-IPP_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
+IPP_RequestFrontPanelLocked.argtypes = []
 
 
 def request_front_panel_locked(serial_number):
@@ -980,7 +977,7 @@ def request_front_panel_locked(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RequestFrontPanelLocked(serial_number)
 
@@ -989,7 +986,7 @@ def request_front_panel_locked(serial_number):
 
 IPP_RequestIOSettings = lib.IPP_RequestIOSettings
 IPP_RequestIOSettings.restype = c_bool
-IPP_RequestIOSettings.argtypes = [POINTER(c_char)]
+IPP_RequestIOSettings.argtypes = []
 
 
 def request_i_o_settings(serial_number):
@@ -1005,7 +1002,7 @@ def request_i_o_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RequestIOSettings(serial_number)
 
@@ -1014,7 +1011,7 @@ def request_i_o_settings(serial_number):
 
 IPP_RequestMMIParams = lib.IPP_RequestMMIParams
 IPP_RequestMMIParams.restype = c_bool
-IPP_RequestMMIParams.argtypes = [POINTER(c_char)]
+IPP_RequestMMIParams.argtypes = []
 
 
 def request_m_m_i_params(serial_number):
@@ -1030,7 +1027,7 @@ def request_m_m_i_params(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RequestMMIParams(serial_number)
 
@@ -1039,7 +1036,7 @@ def request_m_m_i_params(serial_number):
 
 IPP_RequestOutputVoltage = lib.IPP_RequestOutputVoltage
 IPP_RequestOutputVoltage.restype = c_bool
-IPP_RequestOutputVoltage.argtypes = [POINTER(c_char)]
+IPP_RequestOutputVoltage.argtypes = []
 
 
 def request_output_voltage(serial_number):
@@ -1055,7 +1052,7 @@ def request_output_voltage(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RequestOutputVoltage(serial_number)
 
@@ -1064,7 +1061,7 @@ def request_output_voltage(serial_number):
 
 IPP_RequestPIDConsts = lib.IPP_RequestPIDConsts
 IPP_RequestPIDConsts.restype = c_short
-IPP_RequestPIDConsts.argtypes = [POINTER(c_char)]
+IPP_RequestPIDConsts.argtypes = []
 
 
 def request_p_i_d_consts(serial_number):
@@ -1081,7 +1078,7 @@ def request_p_i_d_consts(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     index = c_byte()
 
     output = IPP_RequestPIDConsts(serial_number)
@@ -1091,7 +1088,7 @@ def request_p_i_d_consts(serial_number):
 
 IPP_RequestPIDCriteria = lib.IPP_RequestPIDCriteria
 IPP_RequestPIDCriteria.restype = c_short
-IPP_RequestPIDCriteria.argtypes = [POINTER(c_char)]
+IPP_RequestPIDCriteria.argtypes = []
 
 
 def request_p_i_d_criteria(serial_number):
@@ -1108,7 +1105,7 @@ def request_p_i_d_criteria(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     criteriaID = c_byte()
 
     output = IPP_RequestPIDCriteria(serial_number)
@@ -1118,7 +1115,7 @@ def request_p_i_d_criteria(serial_number):
 
 IPP_RequestPosition = lib.IPP_RequestPosition
 IPP_RequestPosition.restype = c_bool
-IPP_RequestPosition.argtypes = [POINTER(c_char)]
+IPP_RequestPosition.argtypes = []
 
 
 def request_position(serial_number):
@@ -1134,7 +1131,7 @@ def request_position(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RequestPosition(serial_number)
 
@@ -1143,7 +1140,7 @@ def request_position(serial_number):
 
 IPP_RequestPositionControlMode = lib.IPP_RequestPositionControlMode
 IPP_RequestPositionControlMode.restype = c_bool
-IPP_RequestPositionControlMode.argtypes = [POINTER(c_char)]
+IPP_RequestPositionControlMode.argtypes = []
 
 
 def request_position_control_mode(serial_number):
@@ -1159,7 +1156,7 @@ def request_position_control_mode(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RequestPositionControlMode(serial_number)
 
@@ -1168,7 +1165,7 @@ def request_position_control_mode(serial_number):
 
 IPP_RequestSettings = lib.IPP_RequestSettings
 IPP_RequestSettings.restype = c_short
-IPP_RequestSettings.argtypes = [POINTER(c_char)]
+IPP_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -1184,7 +1181,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RequestSettings(serial_number)
 
@@ -1193,7 +1190,7 @@ def request_settings(serial_number):
 
 IPP_RequestStatus = lib.IPP_RequestStatus
 IPP_RequestStatus.restype = c_short
-IPP_RequestStatus.argtypes = [POINTER(c_char)]
+IPP_RequestStatus.argtypes = []
 
 
 def request_status(serial_number):
@@ -1209,7 +1206,7 @@ def request_status(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RequestStatus(serial_number)
 
@@ -1218,7 +1215,7 @@ def request_status(serial_number):
 
 IPP_RequestStatusBits = lib.IPP_RequestStatusBits
 IPP_RequestStatusBits.restype = c_short
-IPP_RequestStatusBits.argtypes = [POINTER(c_char)]
+IPP_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serial_number):
@@ -1234,7 +1231,7 @@ def request_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RequestStatusBits(serial_number)
 
@@ -1243,7 +1240,7 @@ def request_status_bits(serial_number):
 
 IPP_RequestTriggerConfigParams = lib.IPP_RequestTriggerConfigParams
 IPP_RequestTriggerConfigParams.restype = c_short
-IPP_RequestTriggerConfigParams.argtypes = [POINTER(c_char)]
+IPP_RequestTriggerConfigParams.argtypes = []
 
 
 def request_trigger_config_params(serial_number):
@@ -1259,7 +1256,7 @@ def request_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RequestTriggerConfigParams(serial_number)
 
@@ -1268,7 +1265,7 @@ def request_trigger_config_params(serial_number):
 
 IPP_RequestVoltageSource = lib.IPP_RequestVoltageSource
 IPP_RequestVoltageSource.restype = c_bool
-IPP_RequestVoltageSource.argtypes = [POINTER(c_char)]
+IPP_RequestVoltageSource.argtypes = []
 
 
 def request_voltage_source(serial_number):
@@ -1284,7 +1281,7 @@ def request_voltage_source(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_RequestVoltageSource(serial_number)
 
@@ -1293,7 +1290,7 @@ def request_voltage_source(serial_number):
 
 IPP_ResetParameters = lib.IPP_ResetParameters
 IPP_ResetParameters.restype = c_short
-IPP_ResetParameters.argtypes = [POINTER(c_char)]
+IPP_ResetParameters.argtypes = []
 
 
 def reset_parameters(serial_number):
@@ -1309,7 +1306,7 @@ def reset_parameters(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_ResetParameters(serial_number)
 
@@ -1318,7 +1315,7 @@ def reset_parameters(serial_number):
 
 IPP_SetFrontPanelLock = lib.IPP_SetFrontPanelLock
 IPP_SetFrontPanelLock.restype = c_short
-IPP_SetFrontPanelLock.argtypes = [POINTER(c_char)]
+IPP_SetFrontPanelLock.argtypes = []
 
 
 def set_front_panel_lock(serial_number):
@@ -1335,7 +1332,7 @@ def set_front_panel_lock(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     locked = c_bool()
 
     output = IPP_SetFrontPanelLock(serial_number)
@@ -1345,7 +1342,7 @@ def set_front_panel_lock(serial_number):
 
 IPP_SetIOSettings = lib.IPP_SetIOSettings
 IPP_SetIOSettings.restype = c_short
-IPP_SetIOSettings.argtypes = [POINTER(c_char)]
+IPP_SetIOSettings.argtypes = []
 
 
 def set_i_o_settings(serial_number):
@@ -1362,7 +1359,7 @@ def set_i_o_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     ioSettings = PPC_IOSettings()
 
     output = IPP_SetIOSettings(serial_number)
@@ -1372,7 +1369,7 @@ def set_i_o_settings(serial_number):
 
 IPP_SetMMIParams = lib.IPP_SetMMIParams
 IPP_SetMMIParams.restype = c_short
-IPP_SetMMIParams.argtypes = [POINTER(c_char)]
+IPP_SetMMIParams.argtypes = []
 
 
 def set_m_m_i_params(serial_number):
@@ -1397,7 +1394,7 @@ def set_m_m_i_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KPZ_WheelMode()
     voltageAdjustRate = KPZ_WheelChangeRate()
     voltageStep = c_int32()
@@ -1415,7 +1412,7 @@ def set_m_m_i_params(serial_number):
 
 IPP_SetOutputVoltage = lib.IPP_SetOutputVoltage
 IPP_SetOutputVoltage.restype = c_short
-IPP_SetOutputVoltage.argtypes = [POINTER(c_char)]
+IPP_SetOutputVoltage.argtypes = []
 
 
 def set_output_voltage(serial_number):
@@ -1432,7 +1429,7 @@ def set_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     volts = c_short()
 
     output = IPP_SetOutputVoltage(serial_number)
@@ -1442,7 +1439,7 @@ def set_output_voltage(serial_number):
 
 IPP_SetPIDConsts = lib.IPP_SetPIDConsts
 IPP_SetPIDConsts.restype = c_short
-IPP_SetPIDConsts.argtypes = [POINTER(c_char)]
+IPP_SetPIDConsts.argtypes = []
 
 
 def set_p_i_d_consts(serial_number):
@@ -1459,7 +1456,7 @@ def set_p_i_d_consts(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     pidConsts = PPC_PIDConsts()
 
     output = IPP_SetPIDConsts(serial_number)
@@ -1469,7 +1466,7 @@ def set_p_i_d_consts(serial_number):
 
 IPP_SetPIDCriteria = lib.IPP_SetPIDCriteria
 IPP_SetPIDCriteria.restype = c_short
-IPP_SetPIDCriteria.argtypes = [POINTER(c_char)]
+IPP_SetPIDCriteria.argtypes = []
 
 
 def set_p_i_d_criteria(serial_number):
@@ -1486,7 +1483,7 @@ def set_p_i_d_criteria(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     pidCriteria = PPC_PIDCriteria()
 
     output = IPP_SetPIDCriteria(serial_number)
@@ -1496,7 +1493,7 @@ def set_p_i_d_criteria(serial_number):
 
 IPP_SetPosition = lib.IPP_SetPosition
 IPP_SetPosition.restype = c_short
-IPP_SetPosition.argtypes = [POINTER(c_char)]
+IPP_SetPosition.argtypes = []
 
 
 def set_position(serial_number):
@@ -1513,7 +1510,7 @@ def set_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = c_short()
 
     output = IPP_SetPosition(serial_number)
@@ -1523,7 +1520,7 @@ def set_position(serial_number):
 
 IPP_SetPositionControlMode = lib.IPP_SetPositionControlMode
 IPP_SetPositionControlMode.restype = c_short
-IPP_SetPositionControlMode.argtypes = [POINTER(c_char)]
+IPP_SetPositionControlMode.argtypes = []
 
 
 def set_position_control_mode(serial_number):
@@ -1540,7 +1537,7 @@ def set_position_control_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = PZ_ControlModeTypes()
 
     output = IPP_SetPositionControlMode(serial_number)
@@ -1550,7 +1547,7 @@ def set_position_control_mode(serial_number):
 
 IPP_SetTriggerConfigParams = lib.IPP_SetTriggerConfigParams
 IPP_SetTriggerConfigParams.restype = c_short
-IPP_SetTriggerConfigParams.argtypes = [POINTER(c_char)]
+IPP_SetTriggerConfigParams.argtypes = []
 
 
 def set_trigger_config_params(serial_number):
@@ -1573,7 +1570,7 @@ def set_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     trigger1Mode = KSG_TriggerPortMode()
     trigger1Polarity = KSG_TriggerPortPolarity()
     trigger2Mode = KSG_TriggerPortMode()
@@ -1589,7 +1586,7 @@ def set_trigger_config_params(serial_number):
 
 IPP_SetTriggerConfigParamsBlock = lib.IPP_SetTriggerConfigParamsBlock
 IPP_SetTriggerConfigParamsBlock.restype = c_short
-IPP_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
+IPP_SetTriggerConfigParamsBlock.argtypes = []
 
 
 def set_trigger_config_params_block(serial_number):
@@ -1606,7 +1603,7 @@ def set_trigger_config_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerConfigParams = KSG_TriggerConfig()
 
     output = IPP_SetTriggerConfigParamsBlock(serial_number)
@@ -1616,7 +1613,7 @@ def set_trigger_config_params_block(serial_number):
 
 IPP_SetVoltageSource = lib.IPP_SetVoltageSource
 IPP_SetVoltageSource.restype = c_short
-IPP_SetVoltageSource.argtypes = [POINTER(c_char)]
+IPP_SetVoltageSource.argtypes = []
 
 
 def set_voltage_source(serial_number):
@@ -1633,7 +1630,7 @@ def set_voltage_source(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     source = PZ_InputSourceFlags()
 
     output = IPP_SetVoltageSource(serial_number)
@@ -1643,7 +1640,7 @@ def set_voltage_source(serial_number):
 
 IPP_SetZero = lib.IPP_SetZero
 IPP_SetZero.restype = c_short
-IPP_SetZero.argtypes = [POINTER(c_char)]
+IPP_SetZero.argtypes = []
 
 
 def set_zero(serial_number):
@@ -1659,7 +1656,7 @@ def set_zero(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_SetZero(serial_number)
 
@@ -1668,7 +1665,7 @@ def set_zero(serial_number):
 
 IPP_StartPolling = lib.IPP_StartPolling
 IPP_StartPolling.restype = c_bool
-IPP_StartPolling.argtypes = [POINTER(c_char)]
+IPP_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -1685,7 +1682,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     milliseconds = c_int()
 
     output = IPP_StartPolling(serial_number)
@@ -1695,7 +1692,7 @@ def start_polling(serial_number):
 
 IPP_StopPolling = lib.IPP_StopPolling
 IPP_StopPolling.restype = c_void_p
-IPP_StopPolling.argtypes = [POINTER(c_char)]
+IPP_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -1711,7 +1708,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = IPP_StopPolling(serial_number)
 
@@ -1720,7 +1717,7 @@ def stop_polling(serial_number):
 
 IPP_WaitForMessage = lib.IPP_WaitForMessage
 IPP_WaitForMessage.restype = c_bool
-IPP_WaitForMessage.argtypes = [POINTER(c_char)]
+IPP_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -1739,7 +1736,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -1777,7 +1774,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -1795,18 +1792,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -1833,7 +1832,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -1855,12 +1854,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -1884,12 +1885,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -1913,12 +1916,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -1944,12 +1949,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -1971,7 +1978,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -1994,7 +2003,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations

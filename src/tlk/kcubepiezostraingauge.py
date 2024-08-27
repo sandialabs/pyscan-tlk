@@ -35,6 +35,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -45,7 +49,7 @@ lib = cdll.LoadLibrary(
 
 KPC_CanDeviceLockFrontPanel = lib.KPC_CanDeviceLockFrontPanel
 KPC_CanDeviceLockFrontPanel.restype = c_bool
-KPC_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
+KPC_CanDeviceLockFrontPanel.argtypes = []
 
 
 def can_device_lock_front_panel(serial_number):
@@ -61,7 +65,7 @@ def can_device_lock_front_panel(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_CanDeviceLockFrontPanel(serial_number)
 
@@ -79,14 +83,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_CheckConnection(serial_number)
 
@@ -95,7 +100,7 @@ def check_connection(serial_number):
 
 KPC_ClearMessageQueue = lib.KPC_ClearMessageQueue
 KPC_ClearMessageQueue.restype = c_void_p
-KPC_ClearMessageQueue.argtypes = [POINTER(c_char)]
+KPC_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -111,7 +116,7 @@ def clear_message_queue(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_ClearMessageQueue(serial_number)
 
@@ -120,7 +125,7 @@ def clear_message_queue(serial_number):
 
 KPC_Close = lib.KPC_Close
 KPC_Close.restype = c_void_p
-KPC_Close.argtypes = [POINTER(c_char)]
+KPC_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -136,7 +141,7 @@ def close_device(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_Close(serial_number)
 
@@ -145,7 +150,7 @@ def close_device(serial_number):
 
 KPC_Disable = lib.KPC_Disable
 KPC_Disable.restype = c_short
-KPC_Disable.argtypes = [POINTER(c_char)]
+KPC_Disable.argtypes = []
 
 
 def disable(serial_number):
@@ -161,7 +166,7 @@ def disable(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_Disable(serial_number)
 
@@ -170,7 +175,7 @@ def disable(serial_number):
 
 KPC_Disconnect = lib.KPC_Disconnect
 KPC_Disconnect.restype = c_short
-KPC_Disconnect.argtypes = [POINTER(c_char)]
+KPC_Disconnect.argtypes = []
 
 
 def disconnect(serial_number):
@@ -186,7 +191,7 @@ def disconnect(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_Disconnect(serial_number)
 
@@ -195,7 +200,7 @@ def disconnect(serial_number):
 
 KPC_Enable = lib.KPC_Enable
 KPC_Enable.restype = c_short
-KPC_Enable.argtypes = [POINTER(c_char)]
+KPC_Enable.argtypes = []
 
 
 def enable(serial_number):
@@ -211,7 +216,7 @@ def enable(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_Enable(serial_number)
 
@@ -220,7 +225,7 @@ def enable(serial_number):
 
 KPC_EnableLastMsgTimer = lib.KPC_EnableLastMsgTimer
 KPC_EnableLastMsgTimer.restype = c_void_p
-KPC_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+KPC_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serial_number):
@@ -238,7 +243,7 @@ def enable_last_msg_timer(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     enable = c_bool()
     lastMsgTimeout = c_int32()
 
@@ -249,7 +254,7 @@ def enable_last_msg_timer(serial_number):
 
 KPC_GetDigitalOutputs = lib.KPC_GetDigitalOutputs
 KPC_GetDigitalOutputs.restype = c_byte
-KPC_GetDigitalOutputs.argtypes = [POINTER(c_char)]
+KPC_GetDigitalOutputs.argtypes = []
 
 
 def get_digital_outputs(serial_number):
@@ -265,7 +270,7 @@ def get_digital_outputs(serial_number):
         c_byte
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetDigitalOutputs(serial_number)
 
@@ -274,7 +279,7 @@ def get_digital_outputs(serial_number):
 
 KPC_GetFeedbackLoopPIconsts = lib.KPC_GetFeedbackLoopPIconsts
 KPC_GetFeedbackLoopPIconsts.restype = c_short
-KPC_GetFeedbackLoopPIconsts.argtypes = [POINTER(c_char)]
+KPC_GetFeedbackLoopPIconsts.argtypes = []
 
 
 def get_feedback_loop_p_iconsts(serial_number):
@@ -292,7 +297,7 @@ def get_feedback_loop_p_iconsts(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     proportionalTerm = c_short()
     integralTerm = c_short()
 
@@ -303,7 +308,7 @@ def get_feedback_loop_p_iconsts(serial_number):
 
 KPC_GetFeedbackLoopPIconstsBlock = lib.KPC_GetFeedbackLoopPIconstsBlock
 KPC_GetFeedbackLoopPIconstsBlock.restype = c_short
-KPC_GetFeedbackLoopPIconstsBlock.argtypes = [POINTER(c_char)]
+KPC_GetFeedbackLoopPIconstsBlock.argtypes = []
 
 
 def get_feedback_loop_p_iconsts_block(serial_number):
@@ -320,7 +325,7 @@ def get_feedback_loop_p_iconsts_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     proportionalAndIntegralConstants = PZ_FeedbackLoopConstants()
 
     output = KPC_GetFeedbackLoopPIconstsBlock(serial_number)
@@ -330,7 +335,7 @@ def get_feedback_loop_p_iconsts_block(serial_number):
 
 KPC_GetFirmwareVersion = lib.KPC_GetFirmwareVersion
 KPC_GetFirmwareVersion.restype = c_ulong
-KPC_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+KPC_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serial_number):
@@ -346,7 +351,7 @@ def get_firmware_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetFirmwareVersion(serial_number)
 
@@ -355,7 +360,7 @@ def get_firmware_version(serial_number):
 
 KPC_GetFrontPanelLocked = lib.KPC_GetFrontPanelLocked
 KPC_GetFrontPanelLocked.restype = c_bool
-KPC_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
+KPC_GetFrontPanelLocked.argtypes = []
 
 
 def get_front_panel_locked(serial_number):
@@ -371,7 +376,7 @@ def get_front_panel_locked(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetFrontPanelLocked(serial_number)
 
@@ -389,23 +394,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -432,15 +429,15 @@ def get_hardware_info_block(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     hardwareInfo = TLI_HardwareInformation()
 
     output = KPC_GetHardwareInfoBlock(serial_number)
@@ -450,7 +447,7 @@ def get_hardware_info_block(serial_number):
 
 KPC_GetHardwareMaxOutputVoltage = lib.KPC_GetHardwareMaxOutputVoltage
 KPC_GetHardwareMaxOutputVoltage.restype = c_short
-KPC_GetHardwareMaxOutputVoltage.argtypes = [POINTER(c_char)]
+KPC_GetHardwareMaxOutputVoltage.argtypes = []
 
 
 def get_hardware_max_output_voltage(serial_number):
@@ -466,7 +463,7 @@ def get_hardware_max_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetHardwareMaxOutputVoltage(serial_number)
 
@@ -475,7 +472,7 @@ def get_hardware_max_output_voltage(serial_number):
 
 KPC_GetHubAnalogInput = lib.KPC_GetHubAnalogInput
 KPC_GetHubAnalogInput.restype = KPC_HubAnalogueModes
-KPC_GetHubAnalogInput.argtypes = [POINTER(c_char)]
+KPC_GetHubAnalogInput.argtypes = []
 
 
 def get_hub_analog_input(serial_number):
@@ -491,7 +488,7 @@ def get_hub_analog_input(serial_number):
         KPC_HubAnalogueModes
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetHubAnalogInput(serial_number)
 
@@ -500,7 +497,7 @@ def get_hub_analog_input(serial_number):
 
 KPC_GetIOSettings = lib.KPC_GetIOSettings
 KPC_GetIOSettings.restype = KPC_IOSettings
-KPC_GetIOSettings.argtypes = [POINTER(c_char)]
+KPC_GetIOSettings.argtypes = []
 
 
 def get_i_o_settings(serial_number):
@@ -516,7 +513,7 @@ def get_i_o_settings(serial_number):
         KPC_IOSettings
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetIOSettings(serial_number)
 
@@ -525,7 +522,7 @@ def get_i_o_settings(serial_number):
 
 KPC_GetLEDBrightness = lib.KPC_GetLEDBrightness
 KPC_GetLEDBrightness.restype = c_short
-KPC_GetLEDBrightness.argtypes = [POINTER(c_char)]
+KPC_GetLEDBrightness.argtypes = []
 
 
 def get_l_e_d_brightness(serial_number):
@@ -541,7 +538,7 @@ def get_l_e_d_brightness(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetLEDBrightness(serial_number)
 
@@ -550,7 +547,7 @@ def get_l_e_d_brightness(serial_number):
 
 KPC_GetMMIParams = lib.KPC_GetMMIParams
 KPC_GetMMIParams.restype = c_short
-KPC_GetMMIParams.argtypes = [POINTER(c_char)]
+KPC_GetMMIParams.argtypes = []
 
 
 def get_m_m_i_params(serial_number):
@@ -576,7 +573,7 @@ def get_m_m_i_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KPZ_WheelMode()
     voltageAdjustRate = KPZ_WheelChangeRate()
     voltageStep = c_int16()
@@ -595,7 +592,7 @@ def get_m_m_i_params(serial_number):
 
 KPC_GetMMIParamsBlock = lib.KPC_GetMMIParamsBlock
 KPC_GetMMIParamsBlock.restype = c_short
-KPC_GetMMIParamsBlock.argtypes = [POINTER(c_char)]
+KPC_GetMMIParamsBlock.argtypes = []
 
 
 def get_m_m_i_params_block(serial_number):
@@ -612,7 +609,7 @@ def get_m_m_i_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mmiParams = KPC_MMIParams()
 
     output = KPC_GetMMIParamsBlock(serial_number)
@@ -622,7 +619,7 @@ def get_m_m_i_params_block(serial_number):
 
 KPC_GetMMIParamsExt = lib.KPC_GetMMIParamsExt
 KPC_GetMMIParamsExt.restype = c_short
-KPC_GetMMIParamsExt.argtypes = [POINTER(c_char)]
+KPC_GetMMIParamsExt.argtypes = []
 
 
 def get_m_m_i_params_ext(serial_number):
@@ -650,7 +647,7 @@ def get_m_m_i_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KPZ_WheelMode()
     voltageAdjustRate = KPZ_WheelChangeRate()
     voltageStep = c_int16()
@@ -671,7 +668,7 @@ def get_m_m_i_params_ext(serial_number):
 
 KPC_GetMaxOutputVoltage = lib.KPC_GetMaxOutputVoltage
 KPC_GetMaxOutputVoltage.restype = c_short
-KPC_GetMaxOutputVoltage.argtypes = [POINTER(c_char)]
+KPC_GetMaxOutputVoltage.argtypes = []
 
 
 def get_max_output_voltage(serial_number):
@@ -687,7 +684,7 @@ def get_max_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetMaxOutputVoltage(serial_number)
 
@@ -696,7 +693,7 @@ def get_max_output_voltage(serial_number):
 
 KPC_GetMaximumTravel = lib.KPC_GetMaximumTravel
 KPC_GetMaximumTravel.restype = c_long
-KPC_GetMaximumTravel.argtypes = [POINTER(c_char)]
+KPC_GetMaximumTravel.argtypes = []
 
 
 def get_maximum_travel(serial_number):
@@ -712,7 +709,7 @@ def get_maximum_travel(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetMaximumTravel(serial_number)
 
@@ -721,7 +718,7 @@ def get_maximum_travel(serial_number):
 
 KPC_GetNextMessage = lib.KPC_GetNextMessage
 KPC_GetNextMessage.restype = c_bool
-KPC_GetNextMessage.argtypes = [POINTER(c_char)]
+KPC_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -740,7 +737,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -752,7 +749,7 @@ def get_next_message(serial_number):
 
 KPC_GetOutputVoltage = lib.KPC_GetOutputVoltage
 KPC_GetOutputVoltage.restype = c_short
-KPC_GetOutputVoltage.argtypes = [POINTER(c_char)]
+KPC_GetOutputVoltage.argtypes = []
 
 
 def get_output_voltage(serial_number):
@@ -768,7 +765,7 @@ def get_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetOutputVoltage(serial_number)
 
@@ -777,7 +774,7 @@ def get_output_voltage(serial_number):
 
 KPC_GetPosition = lib.KPC_GetPosition
 KPC_GetPosition.restype = c_long
-KPC_GetPosition.argtypes = [POINTER(c_char)]
+KPC_GetPosition.argtypes = []
 
 
 def get_position(serial_number):
@@ -793,7 +790,7 @@ def get_position(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetPosition(serial_number)
 
@@ -802,7 +799,7 @@ def get_position(serial_number):
 
 KPC_GetPositionControlMode = lib.KPC_GetPositionControlMode
 KPC_GetPositionControlMode.restype = PZ_ControlModeTypes
-KPC_GetPositionControlMode.argtypes = [POINTER(c_char)]
+KPC_GetPositionControlMode.argtypes = []
 
 
 def get_position_control_mode(serial_number):
@@ -818,7 +815,7 @@ def get_position_control_mode(serial_number):
         PZ_ControlModeTypes
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetPositionControlMode(serial_number)
 
@@ -827,7 +824,7 @@ def get_position_control_mode(serial_number):
 
 KPC_GetSoftwareVersion = lib.KPC_GetSoftwareVersion
 KPC_GetSoftwareVersion.restype = c_ulong
-KPC_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+KPC_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -843,7 +840,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetSoftwareVersion(serial_number)
 
@@ -852,7 +849,7 @@ def get_software_version(serial_number):
 
 KPC_GetStatusBits = lib.KPC_GetStatusBits
 KPC_GetStatusBits.restype = c_ulong
-KPC_GetStatusBits.argtypes = [POINTER(c_char)]
+KPC_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -868,7 +865,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetStatusBits(serial_number)
 
@@ -877,7 +874,7 @@ def get_status_bits(serial_number):
 
 KPC_GetTriggerConfigParams = lib.KPC_GetTriggerConfigParams
 KPC_GetTriggerConfigParams.restype = c_short
-KPC_GetTriggerConfigParams.argtypes = [POINTER(c_char)]
+KPC_GetTriggerConfigParams.argtypes = []
 
 
 def get_trigger_config_params(serial_number):
@@ -903,7 +900,7 @@ def get_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     trigger1Mode = KPC_TriggerPortMode()
     trigger1Polarity = KPC_TriggerPortPolarity()
     trigger2Mode = KPC_TriggerPortMode()
@@ -922,7 +919,7 @@ def get_trigger_config_params(serial_number):
 
 KPC_GetTriggerConfigParamsBlock = lib.KPC_GetTriggerConfigParamsBlock
 KPC_GetTriggerConfigParamsBlock.restype = c_short
-KPC_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
+KPC_GetTriggerConfigParamsBlock.argtypes = []
 
 
 def get_trigger_config_params_block(serial_number):
@@ -939,7 +936,7 @@ def get_trigger_config_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerConfigParams = KPC_TriggerConfig()
 
     output = KPC_GetTriggerConfigParamsBlock(serial_number)
@@ -949,7 +946,7 @@ def get_trigger_config_params_block(serial_number):
 
 KPC_GetVoltageSource = lib.KPC_GetVoltageSource
 KPC_GetVoltageSource.restype = PZ_InputSourceFlags
-KPC_GetVoltageSource.argtypes = [POINTER(c_char)]
+KPC_GetVoltageSource.argtypes = []
 
 
 def get_voltage_source(serial_number):
@@ -965,7 +962,7 @@ def get_voltage_source(serial_number):
         PZ_InputSourceFlags
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_GetVoltageSource(serial_number)
 
@@ -974,7 +971,7 @@ def get_voltage_source(serial_number):
 
 KPC_HasLastMsgTimerOverrun = lib.KPC_HasLastMsgTimerOverrun
 KPC_HasLastMsgTimerOverrun.restype = c_bool
-KPC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+KPC_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serial_number):
@@ -990,7 +987,7 @@ def has_last_msg_timer_overrun(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_HasLastMsgTimerOverrun(serial_number)
 
@@ -999,7 +996,7 @@ def has_last_msg_timer_overrun(serial_number):
 
 KPC_Identify = lib.KPC_Identify
 KPC_Identify.restype = c_void_p
-KPC_Identify.argtypes = [POINTER(c_char)]
+KPC_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -1015,7 +1012,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_Identify(serial_number)
 
@@ -1024,7 +1021,7 @@ def identify(serial_number):
 
 KPC_LoadNamedSettings = lib.KPC_LoadNamedSettings
 KPC_LoadNamedSettings.restype = c_bool
-KPC_LoadNamedSettings.argtypes = [POINTER(c_char)]
+KPC_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -1041,7 +1038,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settingsName = POINTER(c_char)()
 
     output = KPC_LoadNamedSettings(serial_number)
@@ -1051,7 +1048,7 @@ def load_named_settings(serial_number):
 
 KPC_LoadSettings = lib.KPC_LoadSettings
 KPC_LoadSettings.restype = c_bool
-KPC_LoadSettings.argtypes = [POINTER(c_char)]
+KPC_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -1067,7 +1064,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_LoadSettings(serial_number)
 
@@ -1076,7 +1073,7 @@ def load_settings(serial_number):
 
 KPC_MessageQueueSize = lib.KPC_MessageQueueSize
 KPC_MessageQueueSize.restype = c_int
-KPC_MessageQueueSize.argtypes = [POINTER(c_char)]
+KPC_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -1092,7 +1089,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_MessageQueueSize(serial_number)
 
@@ -1101,7 +1098,7 @@ def message_queue_size(serial_number):
 
 KPC_Open = lib.KPC_Open
 KPC_Open.restype = c_short
-KPC_Open.argtypes = [POINTER(c_char)]
+KPC_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -1117,7 +1114,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_Open(serial_number)
 
@@ -1126,7 +1123,7 @@ def open_device(serial_number):
 
 KPC_PersistSettings = lib.KPC_PersistSettings
 KPC_PersistSettings.restype = c_bool
-KPC_PersistSettings.argtypes = [POINTER(c_char)]
+KPC_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -1142,7 +1139,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_PersistSettings(serial_number)
 
@@ -1151,7 +1148,7 @@ def persist_settings(serial_number):
 
 KPC_PollingDuration = lib.KPC_PollingDuration
 KPC_PollingDuration.restype = c_long
-KPC_PollingDuration.argtypes = [POINTER(c_char)]
+KPC_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -1167,7 +1164,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_PollingDuration(serial_number)
 
@@ -1176,7 +1173,7 @@ def polling_duration(serial_number):
 
 KPC_RegisterMessageCallback = lib.KPC_RegisterMessageCallback
 KPC_RegisterMessageCallback.restype = c_void_p
-KPC_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+KPC_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -1193,7 +1190,7 @@ def register_message_callback(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RegisterMessageCallback(serial_number)
 
@@ -1202,7 +1199,7 @@ def register_message_callback(serial_number):
 
 KPC_RequestActualPosition = lib.KPC_RequestActualPosition
 KPC_RequestActualPosition.restype = c_short
-KPC_RequestActualPosition.argtypes = [POINTER(c_char)]
+KPC_RequestActualPosition.argtypes = []
 
 
 def request_actual_position(serial_number):
@@ -1218,7 +1215,7 @@ def request_actual_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestActualPosition(serial_number)
 
@@ -1227,7 +1224,7 @@ def request_actual_position(serial_number):
 
 KPC_RequestDigitalOutputs = lib.KPC_RequestDigitalOutputs
 KPC_RequestDigitalOutputs.restype = c_short
-KPC_RequestDigitalOutputs.argtypes = [POINTER(c_char)]
+KPC_RequestDigitalOutputs.argtypes = []
 
 
 def request_digital_outputs(serial_number):
@@ -1243,7 +1240,7 @@ def request_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestDigitalOutputs(serial_number)
 
@@ -1252,7 +1249,7 @@ def request_digital_outputs(serial_number):
 
 KPC_RequestFeedbackLoopPIconsts = lib.KPC_RequestFeedbackLoopPIconsts
 KPC_RequestFeedbackLoopPIconsts.restype = c_bool
-KPC_RequestFeedbackLoopPIconsts.argtypes = [POINTER(c_char)]
+KPC_RequestFeedbackLoopPIconsts.argtypes = []
 
 
 def request_feedback_loop_p_iconsts(serial_number):
@@ -1268,7 +1265,7 @@ def request_feedback_loop_p_iconsts(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestFeedbackLoopPIconsts(serial_number)
 
@@ -1277,7 +1274,7 @@ def request_feedback_loop_p_iconsts(serial_number):
 
 KPC_RequestFrontPanelLocked = lib.KPC_RequestFrontPanelLocked
 KPC_RequestFrontPanelLocked.restype = c_short
-KPC_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
+KPC_RequestFrontPanelLocked.argtypes = []
 
 
 def request_front_panel_locked(serial_number):
@@ -1293,7 +1290,7 @@ def request_front_panel_locked(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestFrontPanelLocked(serial_number)
 
@@ -1302,7 +1299,7 @@ def request_front_panel_locked(serial_number):
 
 KPC_RequestHardwareMaxOutputVoltage = lib.KPC_RequestHardwareMaxOutputVoltage
 KPC_RequestHardwareMaxOutputVoltage.restype = c_bool
-KPC_RequestHardwareMaxOutputVoltage.argtypes = [POINTER(c_char)]
+KPC_RequestHardwareMaxOutputVoltage.argtypes = []
 
 
 def request_hardware_max_output_voltage(serial_number):
@@ -1318,7 +1315,7 @@ def request_hardware_max_output_voltage(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestHardwareMaxOutputVoltage(serial_number)
 
@@ -1327,7 +1324,7 @@ def request_hardware_max_output_voltage(serial_number):
 
 KPC_RequestIOSettings = lib.KPC_RequestIOSettings
 KPC_RequestIOSettings.restype = c_bool
-KPC_RequestIOSettings.argtypes = [POINTER(c_char)]
+KPC_RequestIOSettings.argtypes = []
 
 
 def request_i_o_settings(serial_number):
@@ -1343,7 +1340,7 @@ def request_i_o_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestIOSettings(serial_number)
 
@@ -1352,7 +1349,7 @@ def request_i_o_settings(serial_number):
 
 KPC_RequestLEDBrightness = lib.KPC_RequestLEDBrightness
 KPC_RequestLEDBrightness.restype = c_bool
-KPC_RequestLEDBrightness.argtypes = [POINTER(c_char)]
+KPC_RequestLEDBrightness.argtypes = []
 
 
 def request_l_e_d_brightness(serial_number):
@@ -1368,7 +1365,7 @@ def request_l_e_d_brightness(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestLEDBrightness(serial_number)
 
@@ -1377,7 +1374,7 @@ def request_l_e_d_brightness(serial_number):
 
 KPC_RequestMMIParams = lib.KPC_RequestMMIParams
 KPC_RequestMMIParams.restype = c_bool
-KPC_RequestMMIParams.argtypes = [POINTER(c_char)]
+KPC_RequestMMIParams.argtypes = []
 
 
 def request_m_m_i_params(serial_number):
@@ -1393,7 +1390,7 @@ def request_m_m_i_params(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestMMIParams(serial_number)
 
@@ -1402,7 +1399,7 @@ def request_m_m_i_params(serial_number):
 
 KPC_RequestMaxOutputVoltage = lib.KPC_RequestMaxOutputVoltage
 KPC_RequestMaxOutputVoltage.restype = c_bool
-KPC_RequestMaxOutputVoltage.argtypes = [POINTER(c_char)]
+KPC_RequestMaxOutputVoltage.argtypes = []
 
 
 def request_max_output_voltage(serial_number):
@@ -1418,7 +1415,7 @@ def request_max_output_voltage(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestMaxOutputVoltage(serial_number)
 
@@ -1427,7 +1424,7 @@ def request_max_output_voltage(serial_number):
 
 KPC_RequestMaximumTravel = lib.KPC_RequestMaximumTravel
 KPC_RequestMaximumTravel.restype = c_short
-KPC_RequestMaximumTravel.argtypes = [POINTER(c_char)]
+KPC_RequestMaximumTravel.argtypes = []
 
 
 def request_maximum_travel(serial_number):
@@ -1443,7 +1440,7 @@ def request_maximum_travel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestMaximumTravel(serial_number)
 
@@ -1452,7 +1449,7 @@ def request_maximum_travel(serial_number):
 
 KPC_RequestOutputVoltage = lib.KPC_RequestOutputVoltage
 KPC_RequestOutputVoltage.restype = c_short
-KPC_RequestOutputVoltage.argtypes = [POINTER(c_char)]
+KPC_RequestOutputVoltage.argtypes = []
 
 
 def request_output_voltage(serial_number):
@@ -1468,7 +1465,7 @@ def request_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestOutputVoltage(serial_number)
 
@@ -1477,7 +1474,7 @@ def request_output_voltage(serial_number):
 
 KPC_RequestPosition = lib.KPC_RequestPosition
 KPC_RequestPosition.restype = c_short
-KPC_RequestPosition.argtypes = [POINTER(c_char)]
+KPC_RequestPosition.argtypes = []
 
 
 def request_position(serial_number):
@@ -1493,7 +1490,7 @@ def request_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestPosition(serial_number)
 
@@ -1502,7 +1499,7 @@ def request_position(serial_number):
 
 KPC_RequestPositionControlMode = lib.KPC_RequestPositionControlMode
 KPC_RequestPositionControlMode.restype = c_bool
-KPC_RequestPositionControlMode.argtypes = [POINTER(c_char)]
+KPC_RequestPositionControlMode.argtypes = []
 
 
 def request_position_control_mode(serial_number):
@@ -1518,7 +1515,7 @@ def request_position_control_mode(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestPositionControlMode(serial_number)
 
@@ -1527,7 +1524,7 @@ def request_position_control_mode(serial_number):
 
 KPC_RequestSettings = lib.KPC_RequestSettings
 KPC_RequestSettings.restype = c_short
-KPC_RequestSettings.argtypes = [POINTER(c_char)]
+KPC_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -1543,7 +1540,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestSettings(serial_number)
 
@@ -1552,7 +1549,7 @@ def request_settings(serial_number):
 
 KPC_RequestStatus = lib.KPC_RequestStatus
 KPC_RequestStatus.restype = c_short
-KPC_RequestStatus.argtypes = [POINTER(c_char)]
+KPC_RequestStatus.argtypes = []
 
 
 def request_status(serial_number):
@@ -1568,7 +1565,7 @@ def request_status(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestStatus(serial_number)
 
@@ -1577,7 +1574,7 @@ def request_status(serial_number):
 
 KPC_RequestStatusBits = lib.KPC_RequestStatusBits
 KPC_RequestStatusBits.restype = c_short
-KPC_RequestStatusBits.argtypes = [POINTER(c_char)]
+KPC_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serial_number):
@@ -1593,7 +1590,7 @@ def request_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestStatusBits(serial_number)
 
@@ -1602,7 +1599,7 @@ def request_status_bits(serial_number):
 
 KPC_RequestTriggerConfigParams = lib.KPC_RequestTriggerConfigParams
 KPC_RequestTriggerConfigParams.restype = c_short
-KPC_RequestTriggerConfigParams.argtypes = [POINTER(c_char)]
+KPC_RequestTriggerConfigParams.argtypes = []
 
 
 def request_trigger_config_params(serial_number):
@@ -1618,7 +1615,7 @@ def request_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestTriggerConfigParams(serial_number)
 
@@ -1627,7 +1624,7 @@ def request_trigger_config_params(serial_number):
 
 KPC_RequestVoltageSource = lib.KPC_RequestVoltageSource
 KPC_RequestVoltageSource.restype = c_bool
-KPC_RequestVoltageSource.argtypes = [POINTER(c_char)]
+KPC_RequestVoltageSource.argtypes = []
 
 
 def request_voltage_source(serial_number):
@@ -1643,7 +1640,7 @@ def request_voltage_source(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_RequestVoltageSource(serial_number)
 
@@ -1652,7 +1649,7 @@ def request_voltage_source(serial_number):
 
 KPC_ResetParameters = lib.KPC_ResetParameters
 KPC_ResetParameters.restype = c_short
-KPC_ResetParameters.argtypes = [POINTER(c_char)]
+KPC_ResetParameters.argtypes = []
 
 
 def reset_parameters(serial_number):
@@ -1668,7 +1665,7 @@ def reset_parameters(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_ResetParameters(serial_number)
 
@@ -1677,7 +1674,7 @@ def reset_parameters(serial_number):
 
 KPC_SetDigitalOutputs = lib.KPC_SetDigitalOutputs
 KPC_SetDigitalOutputs.restype = c_short
-KPC_SetDigitalOutputs.argtypes = [POINTER(c_char)]
+KPC_SetDigitalOutputs.argtypes = []
 
 
 def set_digital_outputs(serial_number):
@@ -1694,7 +1691,7 @@ def set_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     outputsBits = c_byte()
 
     output = KPC_SetDigitalOutputs(serial_number)
@@ -1704,7 +1701,7 @@ def set_digital_outputs(serial_number):
 
 KPC_SetFeedbackLoopPIconsts = lib.KPC_SetFeedbackLoopPIconsts
 KPC_SetFeedbackLoopPIconsts.restype = c_short
-KPC_SetFeedbackLoopPIconsts.argtypes = [POINTER(c_char)]
+KPC_SetFeedbackLoopPIconsts.argtypes = []
 
 
 def set_feedback_loop_p_iconsts(serial_number):
@@ -1722,7 +1719,7 @@ def set_feedback_loop_p_iconsts(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     proportionalTerm = c_short()
     integralTerm = c_short()
 
@@ -1733,7 +1730,7 @@ def set_feedback_loop_p_iconsts(serial_number):
 
 KPC_SetFeedbackLoopPIconstsBlock = lib.KPC_SetFeedbackLoopPIconstsBlock
 KPC_SetFeedbackLoopPIconstsBlock.restype = c_short
-KPC_SetFeedbackLoopPIconstsBlock.argtypes = [POINTER(c_char)]
+KPC_SetFeedbackLoopPIconstsBlock.argtypes = []
 
 
 def set_feedback_loop_p_iconsts_block(serial_number):
@@ -1750,7 +1747,7 @@ def set_feedback_loop_p_iconsts_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     proportionalAndIntegralConstants = PZ_FeedbackLoopConstants()
 
     output = KPC_SetFeedbackLoopPIconstsBlock(serial_number)
@@ -1760,7 +1757,7 @@ def set_feedback_loop_p_iconsts_block(serial_number):
 
 KPC_SetFrontPanelLock = lib.KPC_SetFrontPanelLock
 KPC_SetFrontPanelLock.restype = c_short
-KPC_SetFrontPanelLock.argtypes = [POINTER(c_char)]
+KPC_SetFrontPanelLock.argtypes = []
 
 
 def set_front_panel_lock(serial_number):
@@ -1777,7 +1774,7 @@ def set_front_panel_lock(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     locked = c_bool()
 
     output = KPC_SetFrontPanelLock(serial_number)
@@ -1787,7 +1784,7 @@ def set_front_panel_lock(serial_number):
 
 KPC_SetHardwareMaxOutputVoltage = lib.KPC_SetHardwareMaxOutputVoltage
 KPC_SetHardwareMaxOutputVoltage.restype = c_short
-KPC_SetHardwareMaxOutputVoltage.argtypes = [POINTER(c_char)]
+KPC_SetHardwareMaxOutputVoltage.argtypes = []
 
 
 def set_hardware_max_output_voltage(serial_number):
@@ -1804,7 +1801,7 @@ def set_hardware_max_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     hardwareMaxVoltage = c_short()
 
     output = KPC_SetHardwareMaxOutputVoltage(serial_number)
@@ -1814,7 +1811,7 @@ def set_hardware_max_output_voltage(serial_number):
 
 KPC_SetHubAnalogInput = lib.KPC_SetHubAnalogInput
 KPC_SetHubAnalogInput.restype = c_short
-KPC_SetHubAnalogInput.argtypes = [POINTER(c_char)]
+KPC_SetHubAnalogInput.argtypes = []
 
 
 def set_hub_analog_input(serial_number):
@@ -1831,7 +1828,7 @@ def set_hub_analog_input(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     hubAnalogInput = KPC_HubAnalogueModes()
 
     output = KPC_SetHubAnalogInput(serial_number)
@@ -1841,7 +1838,7 @@ def set_hub_analog_input(serial_number):
 
 KPC_SetIOSettings = lib.KPC_SetIOSettings
 KPC_SetIOSettings.restype = c_short
-KPC_SetIOSettings.argtypes = [POINTER(c_char)]
+KPC_SetIOSettings.argtypes = []
 
 
 def set_i_o_settings(serial_number):
@@ -1858,7 +1855,7 @@ def set_i_o_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     ioSettings = KPC_IOSettings()
 
     output = KPC_SetIOSettings(serial_number)
@@ -1868,7 +1865,7 @@ def set_i_o_settings(serial_number):
 
 KPC_SetLEDBrightness = lib.KPC_SetLEDBrightness
 KPC_SetLEDBrightness.restype = c_short
-KPC_SetLEDBrightness.argtypes = [POINTER(c_char)]
+KPC_SetLEDBrightness.argtypes = []
 
 
 def set_l_e_d_brightness(serial_number):
@@ -1885,7 +1882,7 @@ def set_l_e_d_brightness(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     brightness = c_short()
 
     output = KPC_SetLEDBrightness(serial_number)
@@ -1895,7 +1892,7 @@ def set_l_e_d_brightness(serial_number):
 
 KPC_SetLUTwaveParams = lib.KPC_SetLUTwaveParams
 KPC_SetLUTwaveParams.restype = c_short
-KPC_SetLUTwaveParams.argtypes = [POINTER(c_char)]
+KPC_SetLUTwaveParams.argtypes = []
 
 
 def set_l_u_twave_params(serial_number):
@@ -1912,7 +1909,7 @@ def set_l_u_twave_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     LUTwaveParams = PZ_LUTWaveParameters()
 
     output = KPC_SetLUTwaveParams(serial_number)
@@ -1922,7 +1919,7 @@ def set_l_u_twave_params(serial_number):
 
 KPC_SetLUTwaveSample = lib.KPC_SetLUTwaveSample
 KPC_SetLUTwaveSample.restype = c_short
-KPC_SetLUTwaveSample.argtypes = [POINTER(c_char)]
+KPC_SetLUTwaveSample.argtypes = []
 
 
 def set_l_u_twave_sample(serial_number):
@@ -1940,7 +1937,7 @@ def set_l_u_twave_sample(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     index = c_short()
     value = c_long()
 
@@ -1951,7 +1948,7 @@ def set_l_u_twave_sample(serial_number):
 
 KPC_SetMMIParams = lib.KPC_SetMMIParams
 KPC_SetMMIParams.restype = c_short
-KPC_SetMMIParams.argtypes = [POINTER(c_char)]
+KPC_SetMMIParams.argtypes = []
 
 
 def set_m_m_i_params(serial_number):
@@ -1977,7 +1974,7 @@ def set_m_m_i_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KPZ_WheelMode()
     voltageAdjustRate = KPZ_WheelChangeRate()
     voltageStep = c_int16()
@@ -1996,7 +1993,7 @@ def set_m_m_i_params(serial_number):
 
 KPC_SetMMIParamsBlock = lib.KPC_SetMMIParamsBlock
 KPC_SetMMIParamsBlock.restype = c_short
-KPC_SetMMIParamsBlock.argtypes = [POINTER(c_char)]
+KPC_SetMMIParamsBlock.argtypes = []
 
 
 def set_m_m_i_params_block(serial_number):
@@ -2013,7 +2010,7 @@ def set_m_m_i_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mmiParams = KPC_MMIParams()
 
     output = KPC_SetMMIParamsBlock(serial_number)
@@ -2023,7 +2020,7 @@ def set_m_m_i_params_block(serial_number):
 
 KPC_SetMMIParamsExt = lib.KPC_SetMMIParamsExt
 KPC_SetMMIParamsExt.restype = c_short
-KPC_SetMMIParamsExt.argtypes = [POINTER(c_char)]
+KPC_SetMMIParamsExt.argtypes = []
 
 
 def set_m_m_i_params_ext(serial_number):
@@ -2051,7 +2048,7 @@ def set_m_m_i_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     wheelMode = KPZ_WheelMode()
     voltageAdjustRate = KPZ_WheelChangeRate()
     voltageStep = c_int16()
@@ -2072,7 +2069,7 @@ def set_m_m_i_params_ext(serial_number):
 
 KPC_SetMaxOutputVoltage = lib.KPC_SetMaxOutputVoltage
 KPC_SetMaxOutputVoltage.restype = c_short
-KPC_SetMaxOutputVoltage.argtypes = [POINTER(c_char)]
+KPC_SetMaxOutputVoltage.argtypes = []
 
 
 def set_max_output_voltage(serial_number):
@@ -2089,7 +2086,7 @@ def set_max_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     maxVoltage = c_short()
 
     output = KPC_SetMaxOutputVoltage(serial_number)
@@ -2099,7 +2096,7 @@ def set_max_output_voltage(serial_number):
 
 KPC_SetOutputVoltage = lib.KPC_SetOutputVoltage
 KPC_SetOutputVoltage.restype = c_short
-KPC_SetOutputVoltage.argtypes = [POINTER(c_char)]
+KPC_SetOutputVoltage.argtypes = []
 
 
 def set_output_voltage(serial_number):
@@ -2116,7 +2113,7 @@ def set_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     volts = c_short()
 
     output = KPC_SetOutputVoltage(serial_number)
@@ -2126,7 +2123,7 @@ def set_output_voltage(serial_number):
 
 KPC_SetPosition = lib.KPC_SetPosition
 KPC_SetPosition.restype = c_short
-KPC_SetPosition.argtypes = [POINTER(c_char)]
+KPC_SetPosition.argtypes = []
 
 
 def set_position(serial_number):
@@ -2143,7 +2140,7 @@ def set_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = c_long()
 
     output = KPC_SetPosition(serial_number)
@@ -2153,7 +2150,7 @@ def set_position(serial_number):
 
 KPC_SetPositionControlMode = lib.KPC_SetPositionControlMode
 KPC_SetPositionControlMode.restype = c_short
-KPC_SetPositionControlMode.argtypes = [POINTER(c_char)]
+KPC_SetPositionControlMode.argtypes = []
 
 
 def set_position_control_mode(serial_number):
@@ -2170,7 +2167,7 @@ def set_position_control_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = PZ_ControlModeTypes()
 
     output = KPC_SetPositionControlMode(serial_number)
@@ -2180,7 +2177,7 @@ def set_position_control_mode(serial_number):
 
 KPC_SetPositionToTolerance = lib.KPC_SetPositionToTolerance
 KPC_SetPositionToTolerance.restype = c_short
-KPC_SetPositionToTolerance.argtypes = [POINTER(c_char)]
+KPC_SetPositionToTolerance.argtypes = []
 
 
 def set_position_to_tolerance(serial_number):
@@ -2198,7 +2195,7 @@ def set_position_to_tolerance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = c_long()
     tolerance = c_long()
 
@@ -2209,7 +2206,7 @@ def set_position_to_tolerance(serial_number):
 
 KPC_SetTriggerConfigParams = lib.KPC_SetTriggerConfigParams
 KPC_SetTriggerConfigParams.restype = c_short
-KPC_SetTriggerConfigParams.argtypes = [POINTER(c_char)]
+KPC_SetTriggerConfigParams.argtypes = []
 
 
 def set_trigger_config_params(serial_number):
@@ -2235,7 +2232,7 @@ def set_trigger_config_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     trigger1Mode = KPC_TriggerPortMode()
     trigger1Polarity = KPC_TriggerPortPolarity()
     trigger2Mode = KPC_TriggerPortMode()
@@ -2254,7 +2251,7 @@ def set_trigger_config_params(serial_number):
 
 KPC_SetTriggerConfigParamsBlock = lib.KPC_SetTriggerConfigParamsBlock
 KPC_SetTriggerConfigParamsBlock.restype = c_short
-KPC_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char)]
+KPC_SetTriggerConfigParamsBlock.argtypes = []
 
 
 def set_trigger_config_params_block(serial_number):
@@ -2271,7 +2268,7 @@ def set_trigger_config_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     triggerConfigParams = KPC_TriggerConfig()
 
     output = KPC_SetTriggerConfigParamsBlock(serial_number)
@@ -2281,7 +2278,7 @@ def set_trigger_config_params_block(serial_number):
 
 KPC_SetVoltageSource = lib.KPC_SetVoltageSource
 KPC_SetVoltageSource.restype = c_short
-KPC_SetVoltageSource.argtypes = [POINTER(c_char)]
+KPC_SetVoltageSource.argtypes = []
 
 
 def set_voltage_source(serial_number):
@@ -2298,7 +2295,7 @@ def set_voltage_source(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     source = PZ_InputSourceFlags()
 
     output = KPC_SetVoltageSource(serial_number)
@@ -2308,7 +2305,7 @@ def set_voltage_source(serial_number):
 
 KPC_SetZero = lib.KPC_SetZero
 KPC_SetZero.restype = c_bool
-KPC_SetZero.argtypes = [POINTER(c_char)]
+KPC_SetZero.argtypes = []
 
 
 def set_zero(serial_number):
@@ -2324,7 +2321,7 @@ def set_zero(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_SetZero(serial_number)
 
@@ -2333,7 +2330,7 @@ def set_zero(serial_number):
 
 KPC_StartLUTwave = lib.KPC_StartLUTwave
 KPC_StartLUTwave.restype = c_short
-KPC_StartLUTwave.argtypes = [POINTER(c_char)]
+KPC_StartLUTwave.argtypes = []
 
 
 def start_l_u_twave(serial_number):
@@ -2349,7 +2346,7 @@ def start_l_u_twave(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_StartLUTwave(serial_number)
 
@@ -2358,7 +2355,7 @@ def start_l_u_twave(serial_number):
 
 KPC_StartPolling = lib.KPC_StartPolling
 KPC_StartPolling.restype = c_bool
-KPC_StartPolling.argtypes = [POINTER(c_char)]
+KPC_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -2375,7 +2372,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     milliseconds = c_int()
 
     output = KPC_StartPolling(serial_number)
@@ -2385,7 +2382,7 @@ def start_polling(serial_number):
 
 KPC_StopLUTwave = lib.KPC_StopLUTwave
 KPC_StopLUTwave.restype = c_short
-KPC_StopLUTwave.argtypes = [POINTER(c_char)]
+KPC_StopLUTwave.argtypes = []
 
 
 def stop_l_u_twave(serial_number):
@@ -2401,7 +2398,7 @@ def stop_l_u_twave(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_StopLUTwave(serial_number)
 
@@ -2410,7 +2407,7 @@ def stop_l_u_twave(serial_number):
 
 KPC_StopPolling = lib.KPC_StopPolling
 KPC_StopPolling.restype = c_void_p
-KPC_StopPolling.argtypes = [POINTER(c_char)]
+KPC_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -2426,7 +2423,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = KPC_StopPolling(serial_number)
 
@@ -2435,7 +2432,7 @@ def stop_polling(serial_number):
 
 KPC_TimeSinceLastMsgReceived = lib.KPC_TimeSinceLastMsgReceived
 KPC_TimeSinceLastMsgReceived.restype = c_bool
-KPC_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+KPC_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serial_number):
@@ -2452,7 +2449,7 @@ def time_since_last_msg_received(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     lastUpdateTimeMS = c_int64()
 
     output = KPC_TimeSinceLastMsgReceived(serial_number)
@@ -2462,7 +2459,7 @@ def time_since_last_msg_received(serial_number):
 
 KPC_WaitForMessage = lib.KPC_WaitForMessage
 KPC_WaitForMessage.restype = c_bool
-KPC_WaitForMessage.argtypes = [POINTER(c_char)]
+KPC_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -2481,7 +2478,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -2519,7 +2516,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -2537,18 +2534,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -2575,7 +2574,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -2597,12 +2596,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -2626,12 +2627,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -2655,12 +2658,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -2686,12 +2691,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -2713,7 +2720,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -2736,7 +2745,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations

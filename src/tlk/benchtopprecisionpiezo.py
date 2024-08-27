@@ -22,6 +22,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -32,7 +36,7 @@ lib = cdll.LoadLibrary(
 
 PPC2_ClearMessageQueue = lib.PPC2_ClearMessageQueue
 PPC2_ClearMessageQueue.restype = c_short
-PPC2_ClearMessageQueue.argtypes = [POINTER(c_char)]
+PPC2_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue2(serial_number):
@@ -49,7 +53,7 @@ def clear_message_queue2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_ClearMessageQueue(serial_number)
@@ -59,7 +63,7 @@ def clear_message_queue2(serial_number):
 
 PPC2_DisableChannel = lib.PPC2_DisableChannel
 PPC2_DisableChannel.restype = c_short
-PPC2_DisableChannel.argtypes = [POINTER(c_char)]
+PPC2_DisableChannel.argtypes = []
 
 
 def disable_channel2(serial_number):
@@ -76,7 +80,7 @@ def disable_channel2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_DisableChannel(serial_number)
@@ -86,7 +90,7 @@ def disable_channel2(serial_number):
 
 PPC2_EnableChannel = lib.PPC2_EnableChannel
 PPC2_EnableChannel.restype = c_short
-PPC2_EnableChannel.argtypes = [POINTER(c_char)]
+PPC2_EnableChannel.argtypes = []
 
 
 def enable_channel2(serial_number):
@@ -103,7 +107,7 @@ def enable_channel2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_EnableChannel(serial_number)
@@ -122,24 +126,15 @@ def get_hardware_info2(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        channel: c_int
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
@@ -167,16 +162,15 @@ def get_hardware_info_block2(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        channel: c_int
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     hardwareInfo = TLI_HardwareInformation()
 
@@ -187,7 +181,7 @@ def get_hardware_info_block2(serial_number):
 
 PPC2_GetIOSettings = lib.PPC2_GetIOSettings
 PPC2_GetIOSettings.restype = c_short
-PPC2_GetIOSettings.argtypes = [POINTER(c_char)]
+PPC2_GetIOSettings.argtypes = []
 
 
 def get_i_o_settings2(serial_number):
@@ -205,7 +199,7 @@ def get_i_o_settings2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     ioSettings = PPC_IOSettings()
 
@@ -216,7 +210,7 @@ def get_i_o_settings2(serial_number):
 
 PPC2_GetMaxOutputVoltage = lib.PPC2_GetMaxOutputVoltage
 PPC2_GetMaxOutputVoltage.restype = c_short
-PPC2_GetMaxOutputVoltage.argtypes = [POINTER(c_char)]
+PPC2_GetMaxOutputVoltage.argtypes = []
 
 
 def get_max_output_voltage2(serial_number):
@@ -233,7 +227,7 @@ def get_max_output_voltage2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_GetMaxOutputVoltage(serial_number)
@@ -243,7 +237,7 @@ def get_max_output_voltage2(serial_number):
 
 PPC2_GetMaximumTravel = lib.PPC2_GetMaximumTravel
 PPC2_GetMaximumTravel.restype = c_long
-PPC2_GetMaximumTravel.argtypes = [POINTER(c_char)]
+PPC2_GetMaximumTravel.argtypes = []
 
 
 def get_maximum_travel2(serial_number):
@@ -260,7 +254,7 @@ def get_maximum_travel2(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_GetMaximumTravel(serial_number)
@@ -270,7 +264,7 @@ def get_maximum_travel2(serial_number):
 
 PPC2_GetMinOutputVoltage = lib.PPC2_GetMinOutputVoltage
 PPC2_GetMinOutputVoltage.restype = c_short
-PPC2_GetMinOutputVoltage.argtypes = [POINTER(c_char)]
+PPC2_GetMinOutputVoltage.argtypes = []
 
 
 def get_min_output_voltage2(serial_number):
@@ -287,7 +281,7 @@ def get_min_output_voltage2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_GetMinOutputVoltage(serial_number)
@@ -297,7 +291,7 @@ def get_min_output_voltage2(serial_number):
 
 PPC2_GetNextMessage = lib.PPC2_GetNextMessage
 PPC2_GetNextMessage.restype = c_bool
-PPC2_GetNextMessage.argtypes = [POINTER(c_char)]
+PPC2_GetNextMessage.argtypes = []
 
 
 def get_next_message2(serial_number):
@@ -317,7 +311,7 @@ def get_next_message2(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     messageType = c_long()
     messageID = c_long()
@@ -330,7 +324,7 @@ def get_next_message2(serial_number):
 
 PPC2_GetNotchParams = lib.PPC2_GetNotchParams
 PPC2_GetNotchParams.restype = c_short
-PPC2_GetNotchParams.argtypes = [POINTER(c_char)]
+PPC2_GetNotchParams.argtypes = []
 
 
 def get_notch_params2(serial_number):
@@ -348,7 +342,7 @@ def get_notch_params2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     notchParams = PPC_NotchParams()
 
@@ -359,7 +353,7 @@ def get_notch_params2(serial_number):
 
 PPC2_GetOutputVoltage = lib.PPC2_GetOutputVoltage
 PPC2_GetOutputVoltage.restype = c_short
-PPC2_GetOutputVoltage.argtypes = [POINTER(c_char)]
+PPC2_GetOutputVoltage.argtypes = []
 
 
 def get_output_voltage2(serial_number):
@@ -376,7 +370,7 @@ def get_output_voltage2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_GetOutputVoltage(serial_number)
@@ -386,7 +380,7 @@ def get_output_voltage2(serial_number):
 
 PPC2_GetPIDConsts = lib.PPC2_GetPIDConsts
 PPC2_GetPIDConsts.restype = c_short
-PPC2_GetPIDConsts.argtypes = [POINTER(c_char)]
+PPC2_GetPIDConsts.argtypes = []
 
 
 def get_p_i_d_consts2(serial_number):
@@ -404,7 +398,7 @@ def get_p_i_d_consts2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     pidConsts = PPC_PIDConsts()
 
@@ -415,7 +409,7 @@ def get_p_i_d_consts2(serial_number):
 
 PPC2_GetPosition = lib.PPC2_GetPosition
 PPC2_GetPosition.restype = c_short
-PPC2_GetPosition.argtypes = [POINTER(c_char)]
+PPC2_GetPosition.argtypes = []
 
 
 def get_position2(serial_number):
@@ -432,7 +426,7 @@ def get_position2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_GetPosition(serial_number)
@@ -442,7 +436,7 @@ def get_position2(serial_number):
 
 PPC2_GetPositionControlMode = lib.PPC2_GetPositionControlMode
 PPC2_GetPositionControlMode.restype = PZ_ControlModeTypes
-PPC2_GetPositionControlMode.argtypes = [POINTER(c_char)]
+PPC2_GetPositionControlMode.argtypes = []
 
 
 def get_position_control_mode2(serial_number):
@@ -459,7 +453,7 @@ def get_position_control_mode2(serial_number):
         PZ_ControlModeTypes
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_GetPositionControlMode(serial_number)
@@ -469,7 +463,7 @@ def get_position_control_mode2(serial_number):
 
 PPC2_GetRackDigitalOutputs = lib.PPC2_GetRackDigitalOutputs
 PPC2_GetRackDigitalOutputs.restype = c_byte
-PPC2_GetRackDigitalOutputs.argtypes = [POINTER(c_char)]
+PPC2_GetRackDigitalOutputs.argtypes = []
 
 
 def get_rack_digital_outputs2(serial_number):
@@ -485,7 +479,7 @@ def get_rack_digital_outputs2(serial_number):
         c_byte
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC2_GetRackDigitalOutputs(serial_number)
 
@@ -494,7 +488,7 @@ def get_rack_digital_outputs2(serial_number):
 
 PPC2_GetRackStatusBits = lib.PPC2_GetRackStatusBits
 PPC2_GetRackStatusBits.restype = c_ulong
-PPC2_GetRackStatusBits.argtypes = [POINTER(c_char)]
+PPC2_GetRackStatusBits.argtypes = []
 
 
 def get_rack_status_bits2(serial_number):
@@ -510,7 +504,7 @@ def get_rack_status_bits2(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC2_GetRackStatusBits(serial_number)
 
@@ -519,7 +513,7 @@ def get_rack_status_bits2(serial_number):
 
 PPC2_GetStatusBits = lib.PPC2_GetStatusBits
 PPC2_GetStatusBits.restype = c_ulong
-PPC2_GetStatusBits.argtypes = [POINTER(c_char)]
+PPC2_GetStatusBits.argtypes = []
 
 
 def get_status_bits2(serial_number):
@@ -536,7 +530,7 @@ def get_status_bits2(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_GetStatusBits(serial_number)
@@ -546,7 +540,7 @@ def get_status_bits2(serial_number):
 
 PPC2_GetVoltageSource = lib.PPC2_GetVoltageSource
 PPC2_GetVoltageSource.restype = PZ_InputSourceFlags
-PPC2_GetVoltageSource.argtypes = [POINTER(c_char)]
+PPC2_GetVoltageSource.argtypes = []
 
 
 def get_voltage_source2(serial_number):
@@ -563,7 +557,7 @@ def get_voltage_source2(serial_number):
         PZ_InputSourceFlags
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_GetVoltageSource(serial_number)
@@ -573,7 +567,7 @@ def get_voltage_source2(serial_number):
 
 PPC2_Identify = lib.PPC2_Identify
 PPC2_Identify.restype = c_void_p
-PPC2_Identify.argtypes = [POINTER(c_char)]
+PPC2_Identify.argtypes = []
 
 
 def identify2(serial_number):
@@ -590,7 +584,7 @@ def identify2(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_Identify(serial_number)
@@ -600,7 +594,7 @@ def identify2(serial_number):
 
 PPC2_LoadNamedSettings = lib.PPC2_LoadNamedSettings
 PPC2_LoadNamedSettings.restype = c_bool
-PPC2_LoadNamedSettings.argtypes = [POINTER(c_char)]
+PPC2_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings2(serial_number):
@@ -618,7 +612,7 @@ def load_named_settings2(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     settingsName = POINTER(c_char)()
 
@@ -629,7 +623,7 @@ def load_named_settings2(serial_number):
 
 PPC2_LoadSettings = lib.PPC2_LoadSettings
 PPC2_LoadSettings.restype = c_bool
-PPC2_LoadSettings.argtypes = [POINTER(c_char)]
+PPC2_LoadSettings.argtypes = []
 
 
 def load_settings2(serial_number):
@@ -646,7 +640,7 @@ def load_settings2(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_LoadSettings(serial_number)
@@ -656,7 +650,7 @@ def load_settings2(serial_number):
 
 PPC2_MessageQueueSize = lib.PPC2_MessageQueueSize
 PPC2_MessageQueueSize.restype = c_int
-PPC2_MessageQueueSize.argtypes = [POINTER(c_char)]
+PPC2_MessageQueueSize.argtypes = []
 
 
 def message_queue_size2(serial_number):
@@ -673,7 +667,7 @@ def message_queue_size2(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_MessageQueueSize(serial_number)
@@ -683,7 +677,7 @@ def message_queue_size2(serial_number):
 
 PPC2_PersistSettings = lib.PPC2_PersistSettings
 PPC2_PersistSettings.restype = c_bool
-PPC2_PersistSettings.argtypes = [POINTER(c_char)]
+PPC2_PersistSettings.argtypes = []
 
 
 def persist_settings2(serial_number):
@@ -700,7 +694,7 @@ def persist_settings2(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_PersistSettings(serial_number)
@@ -710,7 +704,7 @@ def persist_settings2(serial_number):
 
 PPC2_PollingDuration = lib.PPC2_PollingDuration
 PPC2_PollingDuration.restype = c_long
-PPC2_PollingDuration.argtypes = [POINTER(c_char)]
+PPC2_PollingDuration.argtypes = []
 
 
 def polling_duration2(serial_number):
@@ -727,7 +721,7 @@ def polling_duration2(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_PollingDuration(serial_number)
@@ -737,7 +731,7 @@ def polling_duration2(serial_number):
 
 PPC2_RegisterMessageCallback = lib.PPC2_RegisterMessageCallback
 PPC2_RegisterMessageCallback.restype = c_short
-PPC2_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+PPC2_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback2(serial_number):
@@ -755,7 +749,7 @@ def register_message_callback2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_RegisterMessageCallback(serial_number)
@@ -765,7 +759,7 @@ def register_message_callback2(serial_number):
 
 PPC2_RequestActualPosition = lib.PPC2_RequestActualPosition
 PPC2_RequestActualPosition.restype = c_short
-PPC2_RequestActualPosition.argtypes = [POINTER(c_char)]
+PPC2_RequestActualPosition.argtypes = []
 
 
 def request_actual_position2(serial_number):
@@ -782,7 +776,7 @@ def request_actual_position2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_RequestActualPosition(serial_number)
@@ -792,7 +786,7 @@ def request_actual_position2(serial_number):
 
 PPC2_RequestMaxOutputVoltage = lib.PPC2_RequestMaxOutputVoltage
 PPC2_RequestMaxOutputVoltage.restype = c_bool
-PPC2_RequestMaxOutputVoltage.argtypes = [POINTER(c_char)]
+PPC2_RequestMaxOutputVoltage.argtypes = []
 
 
 def request_max_output_voltage2(serial_number):
@@ -809,7 +803,7 @@ def request_max_output_voltage2(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_RequestMaxOutputVoltage(serial_number)
@@ -819,7 +813,7 @@ def request_max_output_voltage2(serial_number):
 
 PPC2_RequestOutputVoltage = lib.PPC2_RequestOutputVoltage
 PPC2_RequestOutputVoltage.restype = c_bool
-PPC2_RequestOutputVoltage.argtypes = [POINTER(c_char)]
+PPC2_RequestOutputVoltage.argtypes = []
 
 
 def request_output_voltage2(serial_number):
@@ -836,7 +830,7 @@ def request_output_voltage2(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_RequestOutputVoltage(serial_number)
@@ -846,7 +840,7 @@ def request_output_voltage2(serial_number):
 
 PPC2_RequestPIDConsts = lib.PPC2_RequestPIDConsts
 PPC2_RequestPIDConsts.restype = c_bool
-PPC2_RequestPIDConsts.argtypes = [POINTER(c_char)]
+PPC2_RequestPIDConsts.argtypes = []
 
 
 def request_p_i_d_consts2(serial_number):
@@ -863,7 +857,7 @@ def request_p_i_d_consts2(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_RequestPIDConsts(serial_number)
@@ -873,7 +867,7 @@ def request_p_i_d_consts2(serial_number):
 
 PPC2_RequestPosition = lib.PPC2_RequestPosition
 PPC2_RequestPosition.restype = c_short
-PPC2_RequestPosition.argtypes = [POINTER(c_char)]
+PPC2_RequestPosition.argtypes = []
 
 
 def request_position2(serial_number):
@@ -890,7 +884,7 @@ def request_position2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_RequestPosition(serial_number)
@@ -900,7 +894,7 @@ def request_position2(serial_number):
 
 PPC2_RequestRackDigitalOutputs = lib.PPC2_RequestRackDigitalOutputs
 PPC2_RequestRackDigitalOutputs.restype = c_short
-PPC2_RequestRackDigitalOutputs.argtypes = [POINTER(c_char)]
+PPC2_RequestRackDigitalOutputs.argtypes = []
 
 
 def request_rack_digital_outputs2(serial_number):
@@ -916,7 +910,7 @@ def request_rack_digital_outputs2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC2_RequestRackDigitalOutputs(serial_number)
 
@@ -925,7 +919,7 @@ def request_rack_digital_outputs2(serial_number):
 
 PPC2_RequestRackStatusBits = lib.PPC2_RequestRackStatusBits
 PPC2_RequestRackStatusBits.restype = c_short
-PPC2_RequestRackStatusBits.argtypes = [POINTER(c_char)]
+PPC2_RequestRackStatusBits.argtypes = []
 
 
 def request_rack_status_bits2(serial_number):
@@ -941,7 +935,7 @@ def request_rack_status_bits2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC2_RequestRackStatusBits(serial_number)
 
@@ -950,7 +944,7 @@ def request_rack_status_bits2(serial_number):
 
 PPC2_RequestSettings = lib.PPC2_RequestSettings
 PPC2_RequestSettings.restype = c_short
-PPC2_RequestSettings.argtypes = [POINTER(c_char)]
+PPC2_RequestSettings.argtypes = []
 
 
 def request_settings2(serial_number):
@@ -967,7 +961,7 @@ def request_settings2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_RequestSettings(serial_number)
@@ -977,7 +971,7 @@ def request_settings2(serial_number):
 
 PPC2_RequestStatus = lib.PPC2_RequestStatus
 PPC2_RequestStatus.restype = c_short
-PPC2_RequestStatus.argtypes = [POINTER(c_char)]
+PPC2_RequestStatus.argtypes = []
 
 
 def request_status2(serial_number):
@@ -994,7 +988,7 @@ def request_status2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_RequestStatus(serial_number)
@@ -1004,7 +998,7 @@ def request_status2(serial_number):
 
 PPC2_RequestStatusBits = lib.PPC2_RequestStatusBits
 PPC2_RequestStatusBits.restype = c_short
-PPC2_RequestStatusBits.argtypes = [POINTER(c_char)]
+PPC2_RequestStatusBits.argtypes = []
 
 
 def request_status_bits2(serial_number):
@@ -1021,7 +1015,7 @@ def request_status_bits2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_RequestStatusBits(serial_number)
@@ -1031,7 +1025,7 @@ def request_status_bits2(serial_number):
 
 PPC2_RequestVoltageSource = lib.PPC2_RequestVoltageSource
 PPC2_RequestVoltageSource.restype = c_bool
-PPC2_RequestVoltageSource.argtypes = [POINTER(c_char)]
+PPC2_RequestVoltageSource.argtypes = []
 
 
 def request_voltage_source2(serial_number):
@@ -1048,7 +1042,7 @@ def request_voltage_source2(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_RequestVoltageSource(serial_number)
@@ -1058,7 +1052,7 @@ def request_voltage_source2(serial_number):
 
 PPC2_ResetParameters = lib.PPC2_ResetParameters
 PPC2_ResetParameters.restype = c_short
-PPC2_ResetParameters.argtypes = [POINTER(c_char)]
+PPC2_ResetParameters.argtypes = []
 
 
 def reset_parameters2(serial_number):
@@ -1075,7 +1069,7 @@ def reset_parameters2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_ResetParameters(serial_number)
@@ -1085,7 +1079,7 @@ def reset_parameters2(serial_number):
 
 PPC2_SetIOSettings = lib.PPC2_SetIOSettings
 PPC2_SetIOSettings.restype = c_short
-PPC2_SetIOSettings.argtypes = [POINTER(c_char)]
+PPC2_SetIOSettings.argtypes = []
 
 
 def set_i_o_settings2(serial_number):
@@ -1103,7 +1097,7 @@ def set_i_o_settings2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     ioSettings = PPC_IOSettings()
 
@@ -1114,7 +1108,7 @@ def set_i_o_settings2(serial_number):
 
 PPC2_SetMaxOutputVoltage = lib.PPC2_SetMaxOutputVoltage
 PPC2_SetMaxOutputVoltage.restype = c_short
-PPC2_SetMaxOutputVoltage.argtypes = [POINTER(c_char)]
+PPC2_SetMaxOutputVoltage.argtypes = []
 
 
 def set_max_output_voltage2(serial_number):
@@ -1132,7 +1126,7 @@ def set_max_output_voltage2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     maxVoltage = c_short()
 
@@ -1143,7 +1137,7 @@ def set_max_output_voltage2(serial_number):
 
 PPC2_SetNotchParams = lib.PPC2_SetNotchParams
 PPC2_SetNotchParams.restype = c_short
-PPC2_SetNotchParams.argtypes = [POINTER(c_char)]
+PPC2_SetNotchParams.argtypes = []
 
 
 def set_notch_params2(serial_number):
@@ -1161,7 +1155,7 @@ def set_notch_params2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     notchParams = PPC_NotchParams()
 
@@ -1172,7 +1166,7 @@ def set_notch_params2(serial_number):
 
 PPC2_SetOutputVoltage = lib.PPC2_SetOutputVoltage
 PPC2_SetOutputVoltage.restype = c_short
-PPC2_SetOutputVoltage.argtypes = [POINTER(c_char)]
+PPC2_SetOutputVoltage.argtypes = []
 
 
 def set_output_voltage2(serial_number):
@@ -1190,7 +1184,7 @@ def set_output_voltage2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     volts = c_short()
 
@@ -1201,7 +1195,7 @@ def set_output_voltage2(serial_number):
 
 PPC2_SetPIDConsts = lib.PPC2_SetPIDConsts
 PPC2_SetPIDConsts.restype = c_short
-PPC2_SetPIDConsts.argtypes = [POINTER(c_char)]
+PPC2_SetPIDConsts.argtypes = []
 
 
 def set_p_i_d_consts2(serial_number):
@@ -1219,7 +1213,7 @@ def set_p_i_d_consts2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     pidConsts = PPC_PIDConsts()
 
@@ -1230,7 +1224,7 @@ def set_p_i_d_consts2(serial_number):
 
 PPC2_SetPosition = lib.PPC2_SetPosition
 PPC2_SetPosition.restype = c_short
-PPC2_SetPosition.argtypes = [POINTER(c_char)]
+PPC2_SetPosition.argtypes = []
 
 
 def set_position2(serial_number):
@@ -1248,7 +1242,7 @@ def set_position2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     position = c_short()
 
@@ -1259,7 +1253,7 @@ def set_position2(serial_number):
 
 PPC2_SetPositionControlMode = lib.PPC2_SetPositionControlMode
 PPC2_SetPositionControlMode.restype = c_short
-PPC2_SetPositionControlMode.argtypes = [POINTER(c_char)]
+PPC2_SetPositionControlMode.argtypes = []
 
 
 def set_position_control_mode2(serial_number):
@@ -1277,7 +1271,7 @@ def set_position_control_mode2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     mode = PZ_ControlModeTypes()
 
@@ -1288,7 +1282,7 @@ def set_position_control_mode2(serial_number):
 
 PPC2_SetPositionToTolerance = lib.PPC2_SetPositionToTolerance
 PPC2_SetPositionToTolerance.restype = c_short
-PPC2_SetPositionToTolerance.argtypes = [POINTER(c_char)]
+PPC2_SetPositionToTolerance.argtypes = []
 
 
 def set_position_to_tolerance2(serial_number):
@@ -1307,7 +1301,7 @@ def set_position_to_tolerance2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     position = c_short()
     tolerance = c_short()
@@ -1319,7 +1313,7 @@ def set_position_to_tolerance2(serial_number):
 
 PPC2_SetRackDigitalOutputs = lib.PPC2_SetRackDigitalOutputs
 PPC2_SetRackDigitalOutputs.restype = c_short
-PPC2_SetRackDigitalOutputs.argtypes = [POINTER(c_char)]
+PPC2_SetRackDigitalOutputs.argtypes = []
 
 
 def set_rack_digital_outputs2(serial_number):
@@ -1336,7 +1330,7 @@ def set_rack_digital_outputs2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     outputsBits = c_byte()
 
     output = PPC2_SetRackDigitalOutputs(serial_number)
@@ -1346,7 +1340,7 @@ def set_rack_digital_outputs2(serial_number):
 
 PPC2_SetVoltageSource = lib.PPC2_SetVoltageSource
 PPC2_SetVoltageSource.restype = c_short
-PPC2_SetVoltageSource.argtypes = [POINTER(c_char)]
+PPC2_SetVoltageSource.argtypes = []
 
 
 def set_voltage_source2(serial_number):
@@ -1364,7 +1358,7 @@ def set_voltage_source2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     source = PZ_InputSourceFlags()
 
@@ -1375,7 +1369,7 @@ def set_voltage_source2(serial_number):
 
 PPC2_SetZero = lib.PPC2_SetZero
 PPC2_SetZero.restype = c_short
-PPC2_SetZero.argtypes = [POINTER(c_char)]
+PPC2_SetZero.argtypes = []
 
 
 def set_zero2(serial_number):
@@ -1392,7 +1386,7 @@ def set_zero2(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_SetZero(serial_number)
@@ -1402,7 +1396,7 @@ def set_zero2(serial_number):
 
 PPC2_StartPolling = lib.PPC2_StartPolling
 PPC2_StartPolling.restype = c_bool
-PPC2_StartPolling.argtypes = [POINTER(c_char)]
+PPC2_StartPolling.argtypes = []
 
 
 def start_polling2(serial_number):
@@ -1420,7 +1414,7 @@ def start_polling2(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     milliseconds = c_int()
 
@@ -1431,7 +1425,7 @@ def start_polling2(serial_number):
 
 PPC2_StopPolling = lib.PPC2_StopPolling
 PPC2_StopPolling.restype = c_void_p
-PPC2_StopPolling.argtypes = [POINTER(c_char)]
+PPC2_StopPolling.argtypes = []
 
 
 def stop_polling2(serial_number):
@@ -1448,7 +1442,7 @@ def stop_polling2(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
 
     output = PPC2_StopPolling(serial_number)
@@ -1458,7 +1452,7 @@ def stop_polling2(serial_number):
 
 PPC2_WaitForMessage = lib.PPC2_WaitForMessage
 PPC2_WaitForMessage.restype = c_bool
-PPC2_WaitForMessage.argtypes = [POINTER(c_char)]
+PPC2_WaitForMessage.argtypes = []
 
 
 def wait_for_message2(serial_number):
@@ -1478,7 +1472,7 @@ def wait_for_message2(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_int()
     messageType = c_long()
     messageID = c_long()
@@ -1500,14 +1494,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_CheckConnection(serial_number)
 
@@ -1516,7 +1511,7 @@ def check_connection(serial_number):
 
 PPC_ClearMessageQueue = lib.PPC_ClearMessageQueue
 PPC_ClearMessageQueue.restype = c_short
-PPC_ClearMessageQueue.argtypes = [POINTER(c_char)]
+PPC_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -1532,7 +1527,7 @@ def clear_message_queue(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_ClearMessageQueue(serial_number)
 
@@ -1541,7 +1536,7 @@ def clear_message_queue(serial_number):
 
 PPC_Close = lib.PPC_Close
 PPC_Close.restype = c_void_p
-PPC_Close.argtypes = [POINTER(c_char)]
+PPC_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -1557,7 +1552,7 @@ def close_device(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_Close(serial_number)
 
@@ -1566,7 +1561,7 @@ def close_device(serial_number):
 
 PPC_DisableChannel = lib.PPC_DisableChannel
 PPC_DisableChannel.restype = c_short
-PPC_DisableChannel.argtypes = [POINTER(c_char)]
+PPC_DisableChannel.argtypes = []
 
 
 def disable_channel(serial_number):
@@ -1582,7 +1577,7 @@ def disable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_DisableChannel(serial_number)
 
@@ -1591,7 +1586,7 @@ def disable_channel(serial_number):
 
 PPC_Disconnect = lib.PPC_Disconnect
 PPC_Disconnect.restype = c_short
-PPC_Disconnect.argtypes = [POINTER(c_char)]
+PPC_Disconnect.argtypes = []
 
 
 def disconnect(serial_number):
@@ -1607,7 +1602,7 @@ def disconnect(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_Disconnect(serial_number)
 
@@ -1616,7 +1611,7 @@ def disconnect(serial_number):
 
 PPC_EnableChannel = lib.PPC_EnableChannel
 PPC_EnableChannel.restype = c_short
-PPC_EnableChannel.argtypes = [POINTER(c_char)]
+PPC_EnableChannel.argtypes = []
 
 
 def enable_channel(serial_number):
@@ -1632,7 +1627,7 @@ def enable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_EnableChannel(serial_number)
 
@@ -1641,7 +1636,7 @@ def enable_channel(serial_number):
 
 PPC_GetFirmwareVersion = lib.PPC_GetFirmwareVersion
 PPC_GetFirmwareVersion.restype = c_ulong
-PPC_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+PPC_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serial_number):
@@ -1657,7 +1652,7 @@ def get_firmware_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetFirmwareVersion(serial_number)
 
@@ -1675,23 +1670,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
     type = c_long()
@@ -1718,15 +1705,15 @@ def get_hardware_info_block(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     hardwareInfo = TLI_HardwareInformation()
 
     output = PPC_GetHardwareInfoBlock(serial_number)
@@ -1736,7 +1723,7 @@ def get_hardware_info_block(serial_number):
 
 PPC_GetIOSettings = lib.PPC_GetIOSettings
 PPC_GetIOSettings.restype = c_short
-PPC_GetIOSettings.argtypes = [POINTER(c_char)]
+PPC_GetIOSettings.argtypes = []
 
 
 def get_i_o_settings(serial_number):
@@ -1753,7 +1740,7 @@ def get_i_o_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     ioSettings = PPC_IOSettings()
 
     output = PPC_GetIOSettings(serial_number)
@@ -1763,7 +1750,7 @@ def get_i_o_settings(serial_number):
 
 PPC_GetMaxOutputVoltage = lib.PPC_GetMaxOutputVoltage
 PPC_GetMaxOutputVoltage.restype = c_short
-PPC_GetMaxOutputVoltage.argtypes = [POINTER(c_char)]
+PPC_GetMaxOutputVoltage.argtypes = []
 
 
 def get_max_output_voltage(serial_number):
@@ -1779,7 +1766,7 @@ def get_max_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetMaxOutputVoltage(serial_number)
 
@@ -1788,7 +1775,7 @@ def get_max_output_voltage(serial_number):
 
 PPC_GetMaximumTravel = lib.PPC_GetMaximumTravel
 PPC_GetMaximumTravel.restype = c_long
-PPC_GetMaximumTravel.argtypes = [POINTER(c_char)]
+PPC_GetMaximumTravel.argtypes = []
 
 
 def get_maximum_travel(serial_number):
@@ -1804,7 +1791,7 @@ def get_maximum_travel(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetMaximumTravel(serial_number)
 
@@ -1813,7 +1800,7 @@ def get_maximum_travel(serial_number):
 
 PPC_GetMinOutputVoltage = lib.PPC_GetMinOutputVoltage
 PPC_GetMinOutputVoltage.restype = c_short
-PPC_GetMinOutputVoltage.argtypes = [POINTER(c_char)]
+PPC_GetMinOutputVoltage.argtypes = []
 
 
 def get_min_output_voltage(serial_number):
@@ -1829,7 +1816,7 @@ def get_min_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetMinOutputVoltage(serial_number)
 
@@ -1838,7 +1825,7 @@ def get_min_output_voltage(serial_number):
 
 PPC_GetNextMessage = lib.PPC_GetNextMessage
 PPC_GetNextMessage.restype = c_bool
-PPC_GetNextMessage.argtypes = [POINTER(c_char)]
+PPC_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -1857,7 +1844,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -1869,7 +1856,7 @@ def get_next_message(serial_number):
 
 PPC_GetNotchParams = lib.PPC_GetNotchParams
 PPC_GetNotchParams.restype = c_short
-PPC_GetNotchParams.argtypes = [POINTER(c_char)]
+PPC_GetNotchParams.argtypes = []
 
 
 def get_notch_params(serial_number):
@@ -1886,7 +1873,7 @@ def get_notch_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     notchParams = PPC_NotchParams()
 
     output = PPC_GetNotchParams(serial_number)
@@ -1896,7 +1883,7 @@ def get_notch_params(serial_number):
 
 PPC_GetOutputVoltage = lib.PPC_GetOutputVoltage
 PPC_GetOutputVoltage.restype = c_short
-PPC_GetOutputVoltage.argtypes = [POINTER(c_char)]
+PPC_GetOutputVoltage.argtypes = []
 
 
 def get_output_voltage(serial_number):
@@ -1912,7 +1899,7 @@ def get_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetOutputVoltage(serial_number)
 
@@ -1921,7 +1908,7 @@ def get_output_voltage(serial_number):
 
 PPC_GetPIDConsts = lib.PPC_GetPIDConsts
 PPC_GetPIDConsts.restype = c_short
-PPC_GetPIDConsts.argtypes = [POINTER(c_char)]
+PPC_GetPIDConsts.argtypes = []
 
 
 def get_p_i_d_consts(serial_number):
@@ -1938,7 +1925,7 @@ def get_p_i_d_consts(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     pidConsts = PPC_PIDConsts()
 
     output = PPC_GetPIDConsts(serial_number)
@@ -1948,7 +1935,7 @@ def get_p_i_d_consts(serial_number):
 
 PPC_GetPosition = lib.PPC_GetPosition
 PPC_GetPosition.restype = c_short
-PPC_GetPosition.argtypes = [POINTER(c_char)]
+PPC_GetPosition.argtypes = []
 
 
 def get_position(serial_number):
@@ -1964,7 +1951,7 @@ def get_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetPosition(serial_number)
 
@@ -1973,7 +1960,7 @@ def get_position(serial_number):
 
 PPC_GetPositionControlMode = lib.PPC_GetPositionControlMode
 PPC_GetPositionControlMode.restype = PZ_ControlModeTypes
-PPC_GetPositionControlMode.argtypes = [POINTER(c_char)]
+PPC_GetPositionControlMode.argtypes = []
 
 
 def get_position_control_mode(serial_number):
@@ -1989,7 +1976,7 @@ def get_position_control_mode(serial_number):
         PZ_ControlModeTypes
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetPositionControlMode(serial_number)
 
@@ -1998,7 +1985,7 @@ def get_position_control_mode(serial_number):
 
 PPC_GetRackDigitalOutputs = lib.PPC_GetRackDigitalOutputs
 PPC_GetRackDigitalOutputs.restype = c_byte
-PPC_GetRackDigitalOutputs.argtypes = [POINTER(c_char)]
+PPC_GetRackDigitalOutputs.argtypes = []
 
 
 def get_rack_digital_outputs(serial_number):
@@ -2014,7 +2001,7 @@ def get_rack_digital_outputs(serial_number):
         c_byte
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetRackDigitalOutputs(serial_number)
 
@@ -2023,7 +2010,7 @@ def get_rack_digital_outputs(serial_number):
 
 PPC_GetRackStatusBits = lib.PPC_GetRackStatusBits
 PPC_GetRackStatusBits.restype = c_ulong
-PPC_GetRackStatusBits.argtypes = [POINTER(c_char)]
+PPC_GetRackStatusBits.argtypes = []
 
 
 def get_rack_status_bits(serial_number):
@@ -2039,7 +2026,7 @@ def get_rack_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetRackStatusBits(serial_number)
 
@@ -2048,7 +2035,7 @@ def get_rack_status_bits(serial_number):
 
 PPC_GetSoftwareVersion = lib.PPC_GetSoftwareVersion
 PPC_GetSoftwareVersion.restype = c_ulong
-PPC_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+PPC_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -2064,7 +2051,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetSoftwareVersion(serial_number)
 
@@ -2073,7 +2060,7 @@ def get_software_version(serial_number):
 
 PPC_GetStatusBits = lib.PPC_GetStatusBits
 PPC_GetStatusBits.restype = c_ulong
-PPC_GetStatusBits.argtypes = [POINTER(c_char)]
+PPC_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -2089,7 +2076,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetStatusBits(serial_number)
 
@@ -2098,7 +2085,7 @@ def get_status_bits(serial_number):
 
 PPC_GetVoltageSource = lib.PPC_GetVoltageSource
 PPC_GetVoltageSource.restype = PZ_InputSourceFlags
-PPC_GetVoltageSource.argtypes = [POINTER(c_char)]
+PPC_GetVoltageSource.argtypes = []
 
 
 def get_voltage_source(serial_number):
@@ -2114,7 +2101,7 @@ def get_voltage_source(serial_number):
         PZ_InputSourceFlags
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_GetVoltageSource(serial_number)
 
@@ -2123,7 +2110,7 @@ def get_voltage_source(serial_number):
 
 PPC_Identify = lib.PPC_Identify
 PPC_Identify.restype = c_void_p
-PPC_Identify.argtypes = [POINTER(c_char)]
+PPC_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -2139,7 +2126,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_Identify(serial_number)
 
@@ -2148,7 +2135,7 @@ def identify(serial_number):
 
 PPC_LoadNamedSettings = lib.PPC_LoadNamedSettings
 PPC_LoadNamedSettings.restype = c_bool
-PPC_LoadNamedSettings.argtypes = [POINTER(c_char)]
+PPC_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -2165,7 +2152,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     settingsName = POINTER(c_char)()
 
     output = PPC_LoadNamedSettings(serial_number)
@@ -2175,7 +2162,7 @@ def load_named_settings(serial_number):
 
 PPC_LoadSettings = lib.PPC_LoadSettings
 PPC_LoadSettings.restype = c_bool
-PPC_LoadSettings.argtypes = [POINTER(c_char)]
+PPC_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -2191,7 +2178,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_LoadSettings(serial_number)
 
@@ -2200,7 +2187,7 @@ def load_settings(serial_number):
 
 PPC_MessageQueueSize = lib.PPC_MessageQueueSize
 PPC_MessageQueueSize.restype = c_int
-PPC_MessageQueueSize.argtypes = [POINTER(c_char)]
+PPC_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -2216,7 +2203,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_MessageQueueSize(serial_number)
 
@@ -2225,7 +2212,7 @@ def message_queue_size(serial_number):
 
 PPC_Open = lib.PPC_Open
 PPC_Open.restype = c_short
-PPC_Open.argtypes = [POINTER(c_char)]
+PPC_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -2241,7 +2228,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_Open(serial_number)
 
@@ -2250,7 +2237,7 @@ def open_device(serial_number):
 
 PPC_PersistSettings = lib.PPC_PersistSettings
 PPC_PersistSettings.restype = c_bool
-PPC_PersistSettings.argtypes = [POINTER(c_char)]
+PPC_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -2266,7 +2253,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_PersistSettings(serial_number)
 
@@ -2275,7 +2262,7 @@ def persist_settings(serial_number):
 
 PPC_PollingDuration = lib.PPC_PollingDuration
 PPC_PollingDuration.restype = c_long
-PPC_PollingDuration.argtypes = [POINTER(c_char)]
+PPC_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -2291,7 +2278,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_PollingDuration(serial_number)
 
@@ -2300,7 +2287,7 @@ def polling_duration(serial_number):
 
 PPC_RegisterMessageCallback = lib.PPC_RegisterMessageCallback
 PPC_RegisterMessageCallback.restype = c_short
-PPC_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+PPC_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -2317,7 +2304,7 @@ def register_message_callback(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RegisterMessageCallback(serial_number)
 
@@ -2326,7 +2313,7 @@ def register_message_callback(serial_number):
 
 PPC_RequestActualPosition = lib.PPC_RequestActualPosition
 PPC_RequestActualPosition.restype = c_short
-PPC_RequestActualPosition.argtypes = [POINTER(c_char)]
+PPC_RequestActualPosition.argtypes = []
 
 
 def request_actual_position(serial_number):
@@ -2342,7 +2329,7 @@ def request_actual_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestActualPosition(serial_number)
 
@@ -2351,7 +2338,7 @@ def request_actual_position(serial_number):
 
 PPC_RequestMaxOutputVoltage = lib.PPC_RequestMaxOutputVoltage
 PPC_RequestMaxOutputVoltage.restype = c_bool
-PPC_RequestMaxOutputVoltage.argtypes = [POINTER(c_char)]
+PPC_RequestMaxOutputVoltage.argtypes = []
 
 
 def request_max_output_voltage(serial_number):
@@ -2367,7 +2354,7 @@ def request_max_output_voltage(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestMaxOutputVoltage(serial_number)
 
@@ -2376,7 +2363,7 @@ def request_max_output_voltage(serial_number):
 
 PPC_RequestOutputVoltage = lib.PPC_RequestOutputVoltage
 PPC_RequestOutputVoltage.restype = c_bool
-PPC_RequestOutputVoltage.argtypes = [POINTER(c_char)]
+PPC_RequestOutputVoltage.argtypes = []
 
 
 def request_output_voltage(serial_number):
@@ -2392,7 +2379,7 @@ def request_output_voltage(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestOutputVoltage(serial_number)
 
@@ -2401,7 +2388,7 @@ def request_output_voltage(serial_number):
 
 PPC_RequestPIDConsts = lib.PPC_RequestPIDConsts
 PPC_RequestPIDConsts.restype = c_bool
-PPC_RequestPIDConsts.argtypes = [POINTER(c_char)]
+PPC_RequestPIDConsts.argtypes = []
 
 
 def request_p_i_d_consts(serial_number):
@@ -2417,7 +2404,7 @@ def request_p_i_d_consts(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestPIDConsts(serial_number)
 
@@ -2426,7 +2413,7 @@ def request_p_i_d_consts(serial_number):
 
 PPC_RequestPosition = lib.PPC_RequestPosition
 PPC_RequestPosition.restype = c_short
-PPC_RequestPosition.argtypes = [POINTER(c_char)]
+PPC_RequestPosition.argtypes = []
 
 
 def request_position(serial_number):
@@ -2442,7 +2429,7 @@ def request_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestPosition(serial_number)
 
@@ -2451,7 +2438,7 @@ def request_position(serial_number):
 
 PPC_RequestPositionControlMode = lib.PPC_RequestPositionControlMode
 PPC_RequestPositionControlMode.restype = c_bool
-PPC_RequestPositionControlMode.argtypes = [POINTER(c_char)]
+PPC_RequestPositionControlMode.argtypes = []
 
 
 def request_position_control_mode(serial_number):
@@ -2467,7 +2454,7 @@ def request_position_control_mode(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestPositionControlMode(serial_number)
 
@@ -2476,7 +2463,7 @@ def request_position_control_mode(serial_number):
 
 PPC_RequestRackDigitalOutputs = lib.PPC_RequestRackDigitalOutputs
 PPC_RequestRackDigitalOutputs.restype = c_short
-PPC_RequestRackDigitalOutputs.argtypes = [POINTER(c_char)]
+PPC_RequestRackDigitalOutputs.argtypes = []
 
 
 def request_rack_digital_outputs(serial_number):
@@ -2492,7 +2479,7 @@ def request_rack_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestRackDigitalOutputs(serial_number)
 
@@ -2501,7 +2488,7 @@ def request_rack_digital_outputs(serial_number):
 
 PPC_RequestRackStatusBits = lib.PPC_RequestRackStatusBits
 PPC_RequestRackStatusBits.restype = c_short
-PPC_RequestRackStatusBits.argtypes = [POINTER(c_char)]
+PPC_RequestRackStatusBits.argtypes = []
 
 
 def request_rack_status_bits(serial_number):
@@ -2517,7 +2504,7 @@ def request_rack_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestRackStatusBits(serial_number)
 
@@ -2526,7 +2513,7 @@ def request_rack_status_bits(serial_number):
 
 PPC_RequestSettings = lib.PPC_RequestSettings
 PPC_RequestSettings.restype = c_short
-PPC_RequestSettings.argtypes = [POINTER(c_char)]
+PPC_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -2542,7 +2529,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestSettings(serial_number)
 
@@ -2551,7 +2538,7 @@ def request_settings(serial_number):
 
 PPC_RequestStatus = lib.PPC_RequestStatus
 PPC_RequestStatus.restype = c_short
-PPC_RequestStatus.argtypes = [POINTER(c_char)]
+PPC_RequestStatus.argtypes = []
 
 
 def request_status(serial_number):
@@ -2567,7 +2554,7 @@ def request_status(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestStatus(serial_number)
 
@@ -2576,7 +2563,7 @@ def request_status(serial_number):
 
 PPC_RequestStatusBits = lib.PPC_RequestStatusBits
 PPC_RequestStatusBits.restype = c_short
-PPC_RequestStatusBits.argtypes = [POINTER(c_char)]
+PPC_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serial_number):
@@ -2592,7 +2579,7 @@ def request_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestStatusBits(serial_number)
 
@@ -2601,7 +2588,7 @@ def request_status_bits(serial_number):
 
 PPC_RequestVoltageSource = lib.PPC_RequestVoltageSource
 PPC_RequestVoltageSource.restype = c_bool
-PPC_RequestVoltageSource.argtypes = [POINTER(c_char)]
+PPC_RequestVoltageSource.argtypes = []
 
 
 def request_voltage_source(serial_number):
@@ -2617,7 +2604,7 @@ def request_voltage_source(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_RequestVoltageSource(serial_number)
 
@@ -2626,7 +2613,7 @@ def request_voltage_source(serial_number):
 
 PPC_ResetParameters = lib.PPC_ResetParameters
 PPC_ResetParameters.restype = c_short
-PPC_ResetParameters.argtypes = [POINTER(c_char)]
+PPC_ResetParameters.argtypes = []
 
 
 def reset_parameters(serial_number):
@@ -2642,7 +2629,7 @@ def reset_parameters(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_ResetParameters(serial_number)
 
@@ -2651,7 +2638,7 @@ def reset_parameters(serial_number):
 
 PPC_SetIOSettings = lib.PPC_SetIOSettings
 PPC_SetIOSettings.restype = c_short
-PPC_SetIOSettings.argtypes = [POINTER(c_char)]
+PPC_SetIOSettings.argtypes = []
 
 
 def set_i_o_settings(serial_number):
@@ -2668,7 +2655,7 @@ def set_i_o_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     ioSettings = PPC_IOSettings()
 
     output = PPC_SetIOSettings(serial_number)
@@ -2678,7 +2665,7 @@ def set_i_o_settings(serial_number):
 
 PPC_SetMaxOutputVoltage = lib.PPC_SetMaxOutputVoltage
 PPC_SetMaxOutputVoltage.restype = c_short
-PPC_SetMaxOutputVoltage.argtypes = [POINTER(c_char)]
+PPC_SetMaxOutputVoltage.argtypes = []
 
 
 def set_max_output_voltage(serial_number):
@@ -2695,7 +2682,7 @@ def set_max_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     maxVoltage = c_short()
 
     output = PPC_SetMaxOutputVoltage(serial_number)
@@ -2705,7 +2692,7 @@ def set_max_output_voltage(serial_number):
 
 PPC_SetNotchParams = lib.PPC_SetNotchParams
 PPC_SetNotchParams.restype = c_short
-PPC_SetNotchParams.argtypes = [POINTER(c_char)]
+PPC_SetNotchParams.argtypes = []
 
 
 def set_notch_params(serial_number):
@@ -2722,7 +2709,7 @@ def set_notch_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     notchParams = PPC_NotchParams()
 
     output = PPC_SetNotchParams(serial_number)
@@ -2732,7 +2719,7 @@ def set_notch_params(serial_number):
 
 PPC_SetOutputVoltage = lib.PPC_SetOutputVoltage
 PPC_SetOutputVoltage.restype = c_short
-PPC_SetOutputVoltage.argtypes = [POINTER(c_char)]
+PPC_SetOutputVoltage.argtypes = []
 
 
 def set_output_voltage(serial_number):
@@ -2749,7 +2736,7 @@ def set_output_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     volts = c_short()
 
     output = PPC_SetOutputVoltage(serial_number)
@@ -2759,7 +2746,7 @@ def set_output_voltage(serial_number):
 
 PPC_SetPIDConsts = lib.PPC_SetPIDConsts
 PPC_SetPIDConsts.restype = c_short
-PPC_SetPIDConsts.argtypes = [POINTER(c_char)]
+PPC_SetPIDConsts.argtypes = []
 
 
 def set_p_i_d_consts(serial_number):
@@ -2776,7 +2763,7 @@ def set_p_i_d_consts(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     pidConsts = PPC_PIDConsts()
 
     output = PPC_SetPIDConsts(serial_number)
@@ -2786,7 +2773,7 @@ def set_p_i_d_consts(serial_number):
 
 PPC_SetPosition = lib.PPC_SetPosition
 PPC_SetPosition.restype = c_short
-PPC_SetPosition.argtypes = [POINTER(c_char)]
+PPC_SetPosition.argtypes = []
 
 
 def set_position(serial_number):
@@ -2803,7 +2790,7 @@ def set_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = c_short()
 
     output = PPC_SetPosition(serial_number)
@@ -2813,7 +2800,7 @@ def set_position(serial_number):
 
 PPC_SetPositionControlMode = lib.PPC_SetPositionControlMode
 PPC_SetPositionControlMode.restype = c_short
-PPC_SetPositionControlMode.argtypes = [POINTER(c_char)]
+PPC_SetPositionControlMode.argtypes = []
 
 
 def set_position_control_mode(serial_number):
@@ -2830,7 +2817,7 @@ def set_position_control_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     mode = PZ_ControlModeTypes()
 
     output = PPC_SetPositionControlMode(serial_number)
@@ -2840,7 +2827,7 @@ def set_position_control_mode(serial_number):
 
 PPC_SetPositionToTolerance = lib.PPC_SetPositionToTolerance
 PPC_SetPositionToTolerance.restype = c_short
-PPC_SetPositionToTolerance.argtypes = [POINTER(c_char)]
+PPC_SetPositionToTolerance.argtypes = []
 
 
 def set_position_to_tolerance(serial_number):
@@ -2858,7 +2845,7 @@ def set_position_to_tolerance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     position = c_short()
     tolerance = c_short()
 
@@ -2869,7 +2856,7 @@ def set_position_to_tolerance(serial_number):
 
 PPC_SetRackDigitalOutputs = lib.PPC_SetRackDigitalOutputs
 PPC_SetRackDigitalOutputs.restype = c_short
-PPC_SetRackDigitalOutputs.argtypes = [POINTER(c_char)]
+PPC_SetRackDigitalOutputs.argtypes = []
 
 
 def set_rack_digital_outputs(serial_number):
@@ -2886,7 +2873,7 @@ def set_rack_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     outputsBits = c_byte()
 
     output = PPC_SetRackDigitalOutputs(serial_number)
@@ -2896,7 +2883,7 @@ def set_rack_digital_outputs(serial_number):
 
 PPC_SetVoltageSource = lib.PPC_SetVoltageSource
 PPC_SetVoltageSource.restype = c_short
-PPC_SetVoltageSource.argtypes = [POINTER(c_char)]
+PPC_SetVoltageSource.argtypes = []
 
 
 def set_voltage_source(serial_number):
@@ -2913,7 +2900,7 @@ def set_voltage_source(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     source = PZ_InputSourceFlags()
 
     output = PPC_SetVoltageSource(serial_number)
@@ -2923,7 +2910,7 @@ def set_voltage_source(serial_number):
 
 PPC_SetZero = lib.PPC_SetZero
 PPC_SetZero.restype = c_short
-PPC_SetZero.argtypes = [POINTER(c_char)]
+PPC_SetZero.argtypes = []
 
 
 def set_zero(serial_number):
@@ -2939,7 +2926,7 @@ def set_zero(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_SetZero(serial_number)
 
@@ -2948,7 +2935,7 @@ def set_zero(serial_number):
 
 PPC_StartPolling = lib.PPC_StartPolling
 PPC_StartPolling.restype = c_bool
-PPC_StartPolling.argtypes = [POINTER(c_char)]
+PPC_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -2965,7 +2952,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     milliseconds = c_int()
 
     output = PPC_StartPolling(serial_number)
@@ -2975,7 +2962,7 @@ def start_polling(serial_number):
 
 PPC_StopPolling = lib.PPC_StopPolling
 PPC_StopPolling.restype = c_void_p
-PPC_StopPolling.argtypes = [POINTER(c_char)]
+PPC_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -2991,7 +2978,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = PPC_StopPolling(serial_number)
 
@@ -3000,7 +2987,7 @@ def stop_polling(serial_number):
 
 PPC_WaitForMessage = lib.PPC_WaitForMessage
 PPC_WaitForMessage.restype = c_bool
-PPC_WaitForMessage.argtypes = [POINTER(c_char)]
+PPC_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -3019,7 +3006,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     messageType = c_long()
     messageID = c_long()
     messageData = c_ulong()
@@ -3057,7 +3044,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -3075,18 +3062,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -3113,7 +3102,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -3135,12 +3124,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -3164,12 +3155,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -3193,12 +3186,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -3224,12 +3219,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -3251,7 +3248,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -3274,7 +3273,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations

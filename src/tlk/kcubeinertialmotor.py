@@ -38,6 +38,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -48,7 +52,7 @@ lib = cdll.LoadLibrary(
 
 KIM_CanDeviceLockFrontPanel = lib.KIM_CanDeviceLockFrontPanel
 KIM_CanDeviceLockFrontPanel.restype = c_bool
-KIM_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
+KIM_CanDeviceLockFrontPanel.argtypes = []
 
 
 def can_device_lock_front_panel(serialNumber):
@@ -76,13 +80,14 @@ KIM_CheckConnection.restype = c_bool
 KIM_CheckConnection.argtypes = [POINTER(c_char)]
 
 
-def check_connection(serialNumber):
+def check_connection(serial_number):
     '''
     Check connection.
 
     Parameters
     ----------
-        serialNumber: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
@@ -98,7 +103,7 @@ def check_connection(serialNumber):
 
 KIM_ClearMessageQueue = lib.KIM_ClearMessageQueue
 KIM_ClearMessageQueue.restype = c_void_p
-KIM_ClearMessageQueue.argtypes = [POINTER(c_char)]
+KIM_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serialNumber):
@@ -123,7 +128,7 @@ def clear_message_queue(serialNumber):
 
 KIM_Close = lib.KIM_Close
 KIM_Close.restype = c_void_p
-KIM_Close.argtypes = [POINTER(c_char)]
+KIM_Close.argtypes = []
 
 
 def close_device(serialNumber):
@@ -148,7 +153,7 @@ def close_device(serialNumber):
 
 KIM_Disable = lib.KIM_Disable
 KIM_Disable.restype = c_short
-KIM_Disable.argtypes = [POINTER(c_char)]
+KIM_Disable.argtypes = []
 
 
 def disable(serialNumber):
@@ -173,7 +178,7 @@ def disable(serialNumber):
 
 KIM_DisableChannel = lib.KIM_DisableChannel
 KIM_DisableChannel.restype = c_short
-KIM_DisableChannel.argtypes = [POINTER(c_char)]
+KIM_DisableChannel.argtypes = []
 
 
 def disable_channel(serialNumber):
@@ -200,7 +205,7 @@ def disable_channel(serialNumber):
 
 KIM_Disconnect = lib.KIM_Disconnect
 KIM_Disconnect.restype = c_short
-KIM_Disconnect.argtypes = [POINTER(c_char)]
+KIM_Disconnect.argtypes = []
 
 
 def disconnect(serialNumber):
@@ -225,7 +230,7 @@ def disconnect(serialNumber):
 
 KIM_Enable = lib.KIM_Enable
 KIM_Enable.restype = c_short
-KIM_Enable.argtypes = [POINTER(c_char)]
+KIM_Enable.argtypes = []
 
 
 def enable(serialNumber):
@@ -250,7 +255,7 @@ def enable(serialNumber):
 
 KIM_EnableChannel = lib.KIM_EnableChannel
 KIM_EnableChannel.restype = c_short
-KIM_EnableChannel.argtypes = [POINTER(c_char)]
+KIM_EnableChannel.argtypes = []
 
 
 def enable_channel(serialNumber):
@@ -277,7 +282,7 @@ def enable_channel(serialNumber):
 
 KIM_EnableLastMsgTimer = lib.KIM_EnableLastMsgTimer
 KIM_EnableLastMsgTimer.restype = c_void_p
-KIM_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+KIM_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serialNumber):
@@ -306,7 +311,7 @@ def enable_last_msg_timer(serialNumber):
 
 KIM_GetAbsoluteMoveParameters = lib.KIM_GetAbsoluteMoveParameters
 KIM_GetAbsoluteMoveParameters.restype = c_short
-KIM_GetAbsoluteMoveParameters.argtypes = [POINTER(c_char)]
+KIM_GetAbsoluteMoveParameters.argtypes = []
 
 
 def get_absolute_move_parameters(serialNumber):
@@ -335,7 +340,7 @@ def get_absolute_move_parameters(serialNumber):
 
 KIM_GetCurrentPosition = lib.KIM_GetCurrentPosition
 KIM_GetCurrentPosition.restype = c_int32
-KIM_GetCurrentPosition.argtypes = [POINTER(c_char)]
+KIM_GetCurrentPosition.argtypes = []
 
 
 def get_current_position(serialNumber):
@@ -362,7 +367,7 @@ def get_current_position(serialNumber):
 
 KIM_GetDriveOPParameters = lib.KIM_GetDriveOPParameters
 KIM_GetDriveOPParameters.restype = c_short
-KIM_GetDriveOPParameters.argtypes = [POINTER(c_char)]
+KIM_GetDriveOPParameters.argtypes = []
 
 
 def get_drive_o_p_parameters(serialNumber):
@@ -395,7 +400,7 @@ def get_drive_o_p_parameters(serialNumber):
 
 KIM_GetDriveOPParametersStruct = lib.KIM_GetDriveOPParametersStruct
 KIM_GetDriveOPParametersStruct.restype = c_short
-KIM_GetDriveOPParametersStruct.argtypes = [POINTER(c_char)]
+KIM_GetDriveOPParametersStruct.argtypes = []
 
 
 def get_drive_o_p_parameters_struct(serialNumber):
@@ -424,7 +429,7 @@ def get_drive_o_p_parameters_struct(serialNumber):
 
 KIM_GetFeedbackSigParameters = lib.KIM_GetFeedbackSigParameters
 KIM_GetFeedbackSigParameters.restype = c_short
-KIM_GetFeedbackSigParameters.argtypes = [POINTER(c_char)]
+KIM_GetFeedbackSigParameters.argtypes = []
 
 
 def get_feedback_sig_parameters(serialNumber):
@@ -455,7 +460,7 @@ def get_feedback_sig_parameters(serialNumber):
 
 KIM_GetFeedbackSigParametersStruct = lib.KIM_GetFeedbackSigParametersStruct
 KIM_GetFeedbackSigParametersStruct.restype = c_short
-KIM_GetFeedbackSigParametersStruct.argtypes = [POINTER(c_char)]
+KIM_GetFeedbackSigParametersStruct.argtypes = []
 
 
 def get_feedback_sig_parameters_struct(serialNumber):
@@ -484,7 +489,7 @@ def get_feedback_sig_parameters_struct(serialNumber):
 
 KIM_GetFirmwareVersion = lib.KIM_GetFirmwareVersion
 KIM_GetFirmwareVersion.restype = c_ulong
-KIM_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+KIM_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serialNumber):
@@ -509,7 +514,7 @@ def get_firmware_version(serialNumber):
 
 KIM_GetFrontPanelLocked = lib.KIM_GetFrontPanelLocked
 KIM_GetFrontPanelLocked.restype = c_bool
-KIM_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
+KIM_GetFrontPanelLocked.argtypes = []
 
 
 def get_front_panel_locked(serialNumber):
@@ -537,22 +542,14 @@ KIM_GetHardwareInfo.restype = c_short
 KIM_GetHardwareInfo.argtypes = [POINTER(c_char)]
 
 
-def get_hardware_info(serialNumber):
+def get_hardware_info(serial_number):
     '''
     Gets the hardware information from the device.
 
     Parameters
     ----------
-        serialNumber: POINTER(c_char)
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
@@ -580,14 +577,14 @@ KIM_GetHardwareInfoBlock.restype = c_short
 KIM_GetHardwareInfoBlock.argtypes = [POINTER(c_char)]
 
 
-def get_hardware_info_block(serialNumber):
+def get_hardware_info_block(serial_number):
     '''
     Gets the hardware information in a block.
 
     Parameters
     ----------
-        serialNumber: POINTER(c_char)
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
@@ -604,7 +601,7 @@ def get_hardware_info_block(serialNumber):
 
 KIM_GetHomeParameters = lib.KIM_GetHomeParameters
 KIM_GetHomeParameters.restype = c_short
-KIM_GetHomeParameters.argtypes = [POINTER(c_char)]
+KIM_GetHomeParameters.argtypes = []
 
 
 def get_home_parameters(serialNumber):
@@ -639,7 +636,7 @@ def get_home_parameters(serialNumber):
 
 KIM_GetHomeParametersStruct = lib.KIM_GetHomeParametersStruct
 KIM_GetHomeParametersStruct.restype = c_short
-KIM_GetHomeParametersStruct.argtypes = [POINTER(c_char)]
+KIM_GetHomeParametersStruct.argtypes = []
 
 
 def get_home_parameters_struct(serialNumber):
@@ -668,7 +665,7 @@ def get_home_parameters_struct(serialNumber):
 
 KIM_GetJogParameters = lib.KIM_GetJogParameters
 KIM_GetJogParameters.restype = c_short
-KIM_GetJogParameters.argtypes = [POINTER(c_char)]
+KIM_GetJogParameters.argtypes = []
 
 
 def get_jog_parameters(serialNumber):
@@ -705,7 +702,7 @@ def get_jog_parameters(serialNumber):
 
 KIM_GetJogParametersStruct = lib.KIM_GetJogParametersStruct
 KIM_GetJogParametersStruct.restype = c_short
-KIM_GetJogParametersStruct.argtypes = [POINTER(c_char)]
+KIM_GetJogParametersStruct.argtypes = []
 
 
 def get_jog_parameters_struct(serialNumber):
@@ -734,7 +731,7 @@ def get_jog_parameters_struct(serialNumber):
 
 KIM_GetLimitSwitchParameters = lib.KIM_GetLimitSwitchParameters
 KIM_GetLimitSwitchParameters.restype = c_short
-KIM_GetLimitSwitchParameters.argtypes = [POINTER(c_char)]
+KIM_GetLimitSwitchParameters.argtypes = []
 
 
 def get_limit_switch_parameters(serialNumber):
@@ -767,7 +764,7 @@ def get_limit_switch_parameters(serialNumber):
 
 KIM_GetLimitSwitchParametersStruct = lib.KIM_GetLimitSwitchParametersStruct
 KIM_GetLimitSwitchParametersStruct.restype = c_short
-KIM_GetLimitSwitchParametersStruct.argtypes = [POINTER(c_char)]
+KIM_GetLimitSwitchParametersStruct.argtypes = []
 
 
 def get_limit_switch_parameters_struct(serialNumber):
@@ -796,7 +793,7 @@ def get_limit_switch_parameters_struct(serialNumber):
 
 KIM_GetMMIChannelParameters = lib.KIM_GetMMIChannelParameters
 KIM_GetMMIChannelParameters.restype = c_short
-KIM_GetMMIChannelParameters.argtypes = [POINTER(c_char)]
+KIM_GetMMIChannelParameters.argtypes = []
 
 
 def get_m_m_i_channel_parameters(serialNumber):
@@ -827,7 +824,7 @@ def get_m_m_i_channel_parameters(serialNumber):
 
 KIM_GetMMIChannelParametersStruct = lib.KIM_GetMMIChannelParametersStruct
 KIM_GetMMIChannelParametersStruct.restype = c_short
-KIM_GetMMIChannelParametersStruct.argtypes = [POINTER(c_char)]
+KIM_GetMMIChannelParametersStruct.argtypes = []
 
 
 def get_m_m_i_channel_parameters_struct(serialNumber):
@@ -856,7 +853,7 @@ def get_m_m_i_channel_parameters_struct(serialNumber):
 
 KIM_GetMMIDeviceParameters = lib.KIM_GetMMIDeviceParameters
 KIM_GetMMIDeviceParameters.restype = c_short
-KIM_GetMMIDeviceParameters.argtypes = [POINTER(c_char)]
+KIM_GetMMIDeviceParameters.argtypes = []
 
 
 def get_m_m_i_device_parameters(serialNumber):
@@ -895,7 +892,7 @@ def get_m_m_i_device_parameters(serialNumber):
 
 KIM_GetMMIDeviceParametersStruct = lib.KIM_GetMMIDeviceParametersStruct
 KIM_GetMMIDeviceParametersStruct.restype = c_short
-KIM_GetMMIDeviceParametersStruct.argtypes = [POINTER(c_char)]
+KIM_GetMMIDeviceParametersStruct.argtypes = []
 
 
 def get_m_m_i_device_parameters_struct(serialNumber):
@@ -922,7 +919,7 @@ def get_m_m_i_device_parameters_struct(serialNumber):
 
 KIM_GetNextMessage = lib.KIM_GetNextMessage
 KIM_GetNextMessage.restype = c_bool
-KIM_GetNextMessage.argtypes = [POINTER(c_char)]
+KIM_GetNextMessage.argtypes = []
 
 
 def get_next_message(serialNumber):
@@ -953,7 +950,7 @@ def get_next_message(serialNumber):
 
 KIM_GetRelativeMoveParameter = lib.KIM_GetRelativeMoveParameter
 KIM_GetRelativeMoveParameter.restype = c_short
-KIM_GetRelativeMoveParameter.argtypes = [POINTER(c_char)]
+KIM_GetRelativeMoveParameter.argtypes = []
 
 
 def get_relative_move_parameter(serialNumber):
@@ -982,7 +979,7 @@ def get_relative_move_parameter(serialNumber):
 
 KIM_GetSoftwareVersion = lib.KIM_GetSoftwareVersion
 KIM_GetSoftwareVersion.restype = c_ulong
-KIM_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+KIM_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serialNumber):
@@ -1007,7 +1004,7 @@ def get_software_version(serialNumber):
 
 KIM_GetStageType = lib.KIM_GetStageType
 KIM_GetStageType.restype = KIM_Stages
-KIM_GetStageType.argtypes = [POINTER(c_char)]
+KIM_GetStageType.argtypes = []
 
 
 def get_stage_type(serialNumber):
@@ -1032,7 +1029,7 @@ def get_stage_type(serialNumber):
 
 KIM_GetStatusBits = lib.KIM_GetStatusBits
 KIM_GetStatusBits.restype = c_ulong
-KIM_GetStatusBits.argtypes = [POINTER(c_char)]
+KIM_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serialNumber):
@@ -1059,7 +1056,7 @@ def get_status_bits(serialNumber):
 
 KIM_GetTrigIOParameters = lib.KIM_GetTrigIOParameters
 KIM_GetTrigIOParameters.restype = c_short
-KIM_GetTrigIOParameters.argtypes = [POINTER(c_char)]
+KIM_GetTrigIOParameters.argtypes = []
 
 
 def get_trig_i_o_parameters(serialNumber):
@@ -1096,7 +1093,7 @@ def get_trig_i_o_parameters(serialNumber):
 
 KIM_GetTrigIOParametersStruct = lib.KIM_GetTrigIOParametersStruct
 KIM_GetTrigIOParametersStruct.restype = c_short
-KIM_GetTrigIOParametersStruct.argtypes = [POINTER(c_char)]
+KIM_GetTrigIOParametersStruct.argtypes = []
 
 
 def get_trig_i_o_parameters_struct(serialNumber):
@@ -1123,7 +1120,7 @@ def get_trig_i_o_parameters_struct(serialNumber):
 
 KIM_GetTrigParamsParameters = lib.KIM_GetTrigParamsParameters
 KIM_GetTrigParamsParameters.restype = c_short
-KIM_GetTrigParamsParameters.argtypes = [POINTER(c_char)]
+KIM_GetTrigParamsParameters.argtypes = []
 
 
 def get_trig_params_parameters(serialNumber):
@@ -1166,7 +1163,7 @@ def get_trig_params_parameters(serialNumber):
 
 KIM_GetTrigParamsParametersStruct = lib.KIM_GetTrigParamsParametersStruct
 KIM_GetTrigParamsParametersStruct.restype = c_short
-KIM_GetTrigParamsParametersStruct.argtypes = [POINTER(c_char)]
+KIM_GetTrigParamsParametersStruct.argtypes = []
 
 
 def get_trig_params_parameters_struct(serialNumber):
@@ -1195,7 +1192,7 @@ def get_trig_params_parameters_struct(serialNumber):
 
 KIM_HasLastMsgTimerOverrun = lib.KIM_HasLastMsgTimerOverrun
 KIM_HasLastMsgTimerOverrun.restype = c_bool
-KIM_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+KIM_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serialNumber):
@@ -1220,7 +1217,7 @@ def has_last_msg_timer_overrun(serialNumber):
 
 KIM_Home = lib.KIM_Home
 KIM_Home.restype = c_short
-KIM_Home.argtypes = [POINTER(c_char)]
+KIM_Home.argtypes = []
 
 
 def home(serialNumber):
@@ -1247,7 +1244,7 @@ def home(serialNumber):
 
 KIM_Identify = lib.KIM_Identify
 KIM_Identify.restype = c_void_p
-KIM_Identify.argtypes = [POINTER(c_char)]
+KIM_Identify.argtypes = []
 
 
 def identify(serialNumber):
@@ -1272,7 +1269,7 @@ def identify(serialNumber):
 
 KIM_IsDualChannelMode = lib.KIM_IsDualChannelMode
 KIM_IsDualChannelMode.restype = c_bool
-KIM_IsDualChannelMode.argtypes = [POINTER(c_char)]
+KIM_IsDualChannelMode.argtypes = []
 
 
 def is_dual_channel_mode(serialNumber):
@@ -1297,7 +1294,7 @@ def is_dual_channel_mode(serialNumber):
 
 KIM_LoadNamedSettings = lib.KIM_LoadNamedSettings
 KIM_LoadNamedSettings.restype = c_bool
-KIM_LoadNamedSettings.argtypes = [POINTER(c_char)]
+KIM_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serialNumber):
@@ -1324,7 +1321,7 @@ def load_named_settings(serialNumber):
 
 KIM_LoadSettings = lib.KIM_LoadSettings
 KIM_LoadSettings.restype = c_bool
-KIM_LoadSettings.argtypes = [POINTER(c_char)]
+KIM_LoadSettings.argtypes = []
 
 
 def load_settings(serialNumber):
@@ -1349,7 +1346,7 @@ def load_settings(serialNumber):
 
 KIM_MessageQueueSize = lib.KIM_MessageQueueSize
 KIM_MessageQueueSize.restype = c_int
-KIM_MessageQueueSize.argtypes = [POINTER(c_char)]
+KIM_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serialNumber):
@@ -1374,7 +1371,7 @@ def message_queue_size(serialNumber):
 
 KIM_MoveAbsolute = lib.KIM_MoveAbsolute
 KIM_MoveAbsolute.restype = c_short
-KIM_MoveAbsolute.argtypes = [POINTER(c_char)]
+KIM_MoveAbsolute.argtypes = []
 
 
 def move_absolute(serialNumber):
@@ -1403,7 +1400,7 @@ def move_absolute(serialNumber):
 
 KIM_MoveJog = lib.KIM_MoveJog
 KIM_MoveJog.restype = c_short
-KIM_MoveJog.argtypes = [POINTER(c_char)]
+KIM_MoveJog.argtypes = []
 
 
 def move_jog(serialNumber):
@@ -1432,7 +1429,7 @@ def move_jog(serialNumber):
 
 KIM_MoveRelative = lib.KIM_MoveRelative
 KIM_MoveRelative.restype = c_short
-KIM_MoveRelative.argtypes = [POINTER(c_char)]
+KIM_MoveRelative.argtypes = []
 
 
 def move_relative(serialNumber):
@@ -1461,7 +1458,7 @@ def move_relative(serialNumber):
 
 KIM_MoveStop = lib.KIM_MoveStop
 KIM_MoveStop.restype = c_short
-KIM_MoveStop.argtypes = [POINTER(c_char)]
+KIM_MoveStop.argtypes = []
 
 
 def move_stop(serialNumber):
@@ -1488,7 +1485,7 @@ def move_stop(serialNumber):
 
 KIM_Open = lib.KIM_Open
 KIM_Open.restype = c_short
-KIM_Open.argtypes = [POINTER(c_char)]
+KIM_Open.argtypes = []
 
 
 def open_device(serialNumber):
@@ -1513,7 +1510,7 @@ def open_device(serialNumber):
 
 KIM_PersistSettings = lib.KIM_PersistSettings
 KIM_PersistSettings.restype = c_bool
-KIM_PersistSettings.argtypes = [POINTER(c_char)]
+KIM_PersistSettings.argtypes = []
 
 
 def persist_settings(serialNumber):
@@ -1538,7 +1535,7 @@ def persist_settings(serialNumber):
 
 KIM_PollingDuration = lib.KIM_PollingDuration
 KIM_PollingDuration.restype = c_long
-KIM_PollingDuration.argtypes = [POINTER(c_char)]
+KIM_PollingDuration.argtypes = []
 
 
 def polling_duration(serialNumber):
@@ -1563,7 +1560,7 @@ def polling_duration(serialNumber):
 
 KIM_RegisterMessageCallback = lib.KIM_RegisterMessageCallback
 KIM_RegisterMessageCallback.restype = c_void_p
-KIM_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+KIM_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serialNumber):
@@ -1589,7 +1586,7 @@ def register_message_callback(serialNumber):
 
 KIM_RequestAbsoluteMoveParameters = lib.KIM_RequestAbsoluteMoveParameters
 KIM_RequestAbsoluteMoveParameters.restype = c_short
-KIM_RequestAbsoluteMoveParameters.argtypes = [POINTER(c_char)]
+KIM_RequestAbsoluteMoveParameters.argtypes = []
 
 
 def request_absolute_move_parameters(serialNumber):
@@ -1616,7 +1613,7 @@ def request_absolute_move_parameters(serialNumber):
 
 KIM_RequestCurrentPosition = lib.KIM_RequestCurrentPosition
 KIM_RequestCurrentPosition.restype = c_short
-KIM_RequestCurrentPosition.argtypes = [POINTER(c_char)]
+KIM_RequestCurrentPosition.argtypes = []
 
 
 def request_current_position(serialNumber):
@@ -1643,7 +1640,7 @@ def request_current_position(serialNumber):
 
 KIM_RequestDriveOPParameters = lib.KIM_RequestDriveOPParameters
 KIM_RequestDriveOPParameters.restype = c_short
-KIM_RequestDriveOPParameters.argtypes = [POINTER(c_char)]
+KIM_RequestDriveOPParameters.argtypes = []
 
 
 def request_drive_o_p_parameters(serialNumber):
@@ -1670,7 +1667,7 @@ def request_drive_o_p_parameters(serialNumber):
 
 KIM_RequestFeedbackSigParameters = lib.KIM_RequestFeedbackSigParameters
 KIM_RequestFeedbackSigParameters.restype = c_short
-KIM_RequestFeedbackSigParameters.argtypes = [POINTER(c_char)]
+KIM_RequestFeedbackSigParameters.argtypes = []
 
 
 def request_feedback_sig_parameters(serialNumber):
@@ -1697,7 +1694,7 @@ def request_feedback_sig_parameters(serialNumber):
 
 KIM_RequestFrontPanelLocked = lib.KIM_RequestFrontPanelLocked
 KIM_RequestFrontPanelLocked.restype = c_short
-KIM_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
+KIM_RequestFrontPanelLocked.argtypes = []
 
 
 def request_front_panel_locked(serialNumber):
@@ -1722,7 +1719,7 @@ def request_front_panel_locked(serialNumber):
 
 KIM_RequestHomeParameters = lib.KIM_RequestHomeParameters
 KIM_RequestHomeParameters.restype = c_short
-KIM_RequestHomeParameters.argtypes = [POINTER(c_char)]
+KIM_RequestHomeParameters.argtypes = []
 
 
 def request_home_parameters(serialNumber):
@@ -1749,7 +1746,7 @@ def request_home_parameters(serialNumber):
 
 KIM_RequestJogParameters = lib.KIM_RequestJogParameters
 KIM_RequestJogParameters.restype = c_short
-KIM_RequestJogParameters.argtypes = [POINTER(c_char)]
+KIM_RequestJogParameters.argtypes = []
 
 
 def request_jog_parameters(serialNumber):
@@ -1776,7 +1773,7 @@ def request_jog_parameters(serialNumber):
 
 KIM_RequestLimitSwitchParameters = lib.KIM_RequestLimitSwitchParameters
 KIM_RequestLimitSwitchParameters.restype = c_short
-KIM_RequestLimitSwitchParameters.argtypes = [POINTER(c_char)]
+KIM_RequestLimitSwitchParameters.argtypes = []
 
 
 def request_limit_switch_parameters(serialNumber):
@@ -1803,7 +1800,7 @@ def request_limit_switch_parameters(serialNumber):
 
 KIM_RequestMMIParameters = lib.KIM_RequestMMIParameters
 KIM_RequestMMIParameters.restype = c_short
-KIM_RequestMMIParameters.argtypes = [POINTER(c_char)]
+KIM_RequestMMIParameters.argtypes = []
 
 
 def request_m_m_i_parameters(serialNumber):
@@ -1830,7 +1827,7 @@ def request_m_m_i_parameters(serialNumber):
 
 KIM_RequestRelativeMoveParameter = lib.KIM_RequestRelativeMoveParameter
 KIM_RequestRelativeMoveParameter.restype = c_short
-KIM_RequestRelativeMoveParameter.argtypes = [POINTER(c_char)]
+KIM_RequestRelativeMoveParameter.argtypes = []
 
 
 def request_relative_move_parameter(serialNumber):
@@ -1857,7 +1854,7 @@ def request_relative_move_parameter(serialNumber):
 
 KIM_RequestSettings = lib.KIM_RequestSettings
 KIM_RequestSettings.restype = c_short
-KIM_RequestSettings.argtypes = [POINTER(c_char)]
+KIM_RequestSettings.argtypes = []
 
 
 def request_settings(serialNumber):
@@ -1882,7 +1879,7 @@ def request_settings(serialNumber):
 
 KIM_RequestStageType = lib.KIM_RequestStageType
 KIM_RequestStageType.restype = c_short
-KIM_RequestStageType.argtypes = [POINTER(c_char)]
+KIM_RequestStageType.argtypes = []
 
 
 def request_stage_type(serialNumber):
@@ -1907,7 +1904,7 @@ def request_stage_type(serialNumber):
 
 KIM_RequestStatus = lib.KIM_RequestStatus
 KIM_RequestStatus.restype = c_short
-KIM_RequestStatus.argtypes = [POINTER(c_char)]
+KIM_RequestStatus.argtypes = []
 
 
 def request_status(serialNumber):
@@ -1932,7 +1929,7 @@ def request_status(serialNumber):
 
 KIM_RequestStatusBits = lib.KIM_RequestStatusBits
 KIM_RequestStatusBits.restype = c_short
-KIM_RequestStatusBits.argtypes = [POINTER(c_char)]
+KIM_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serialNumber):
@@ -1957,7 +1954,7 @@ def request_status_bits(serialNumber):
 
 KIM_RequestTrigIOParameters = lib.KIM_RequestTrigIOParameters
 KIM_RequestTrigIOParameters.restype = c_short
-KIM_RequestTrigIOParameters.argtypes = [POINTER(c_char)]
+KIM_RequestTrigIOParameters.argtypes = []
 
 
 def request_trig_i_o_parameters(serialNumber):
@@ -1982,7 +1979,7 @@ def request_trig_i_o_parameters(serialNumber):
 
 KIM_RequestTrigParamsParameters = lib.KIM_RequestTrigParamsParameters
 KIM_RequestTrigParamsParameters.restype = c_short
-KIM_RequestTrigParamsParameters.argtypes = [POINTER(c_char)]
+KIM_RequestTrigParamsParameters.argtypes = []
 
 
 def request_trig_params_parameters(serialNumber):
@@ -2009,7 +2006,7 @@ def request_trig_params_parameters(serialNumber):
 
 KIM_Reset = lib.KIM_Reset
 KIM_Reset.restype = c_short
-KIM_Reset.argtypes = [POINTER(c_char)]
+KIM_Reset.argtypes = []
 
 
 def reset(serialNumber):
@@ -2034,7 +2031,7 @@ def reset(serialNumber):
 
 KIM_SetAbsoluteMoveParameters = lib.KIM_SetAbsoluteMoveParameters
 KIM_SetAbsoluteMoveParameters.restype = c_short
-KIM_SetAbsoluteMoveParameters.argtypes = [POINTER(c_char)]
+KIM_SetAbsoluteMoveParameters.argtypes = []
 
 
 def set_absolute_move_parameters(serialNumber):
@@ -2063,7 +2060,7 @@ def set_absolute_move_parameters(serialNumber):
 
 KIM_SetDriveOPParameters = lib.KIM_SetDriveOPParameters
 KIM_SetDriveOPParameters.restype = c_short
-KIM_SetDriveOPParameters.argtypes = [POINTER(c_char)]
+KIM_SetDriveOPParameters.argtypes = []
 
 
 def set_drive_o_p_parameters(serialNumber):
@@ -2096,7 +2093,7 @@ def set_drive_o_p_parameters(serialNumber):
 
 KIM_SetDriveOPParametersStruct = lib.KIM_SetDriveOPParametersStruct
 KIM_SetDriveOPParametersStruct.restype = c_short
-KIM_SetDriveOPParametersStruct.argtypes = [POINTER(c_char)]
+KIM_SetDriveOPParametersStruct.argtypes = []
 
 
 def set_drive_o_p_parameters_struct(serialNumber):
@@ -2125,7 +2122,7 @@ def set_drive_o_p_parameters_struct(serialNumber):
 
 KIM_SetDualChannelMode = lib.KIM_SetDualChannelMode
 KIM_SetDualChannelMode.restype = c_short
-KIM_SetDualChannelMode.argtypes = [POINTER(c_char)]
+KIM_SetDualChannelMode.argtypes = []
 
 
 def set_dual_channel_mode(serialNumber):
@@ -2152,7 +2149,7 @@ def set_dual_channel_mode(serialNumber):
 
 KIM_SetFeedbackSigParameters = lib.KIM_SetFeedbackSigParameters
 KIM_SetFeedbackSigParameters.restype = c_short
-KIM_SetFeedbackSigParameters.argtypes = [POINTER(c_char)]
+KIM_SetFeedbackSigParameters.argtypes = []
 
 
 def set_feedback_sig_parameters(serialNumber):
@@ -2183,7 +2180,7 @@ def set_feedback_sig_parameters(serialNumber):
 
 KIM_SetFeedbackSigParametersStruct = lib.KIM_SetFeedbackSigParametersStruct
 KIM_SetFeedbackSigParametersStruct.restype = c_short
-KIM_SetFeedbackSigParametersStruct.argtypes = [POINTER(c_char)]
+KIM_SetFeedbackSigParametersStruct.argtypes = []
 
 
 def set_feedback_sig_parameters_struct(serialNumber):
@@ -2212,7 +2209,7 @@ def set_feedback_sig_parameters_struct(serialNumber):
 
 KIM_SetFrontPanelLock = lib.KIM_SetFrontPanelLock
 KIM_SetFrontPanelLock.restype = c_short
-KIM_SetFrontPanelLock.argtypes = [POINTER(c_char)]
+KIM_SetFrontPanelLock.argtypes = []
 
 
 def set_front_panel_lock(serialNumber):
@@ -2239,7 +2236,7 @@ def set_front_panel_lock(serialNumber):
 
 KIM_SetHomeParameters = lib.KIM_SetHomeParameters
 KIM_SetHomeParameters.restype = c_short
-KIM_SetHomeParameters.argtypes = [POINTER(c_char)]
+KIM_SetHomeParameters.argtypes = []
 
 
 def set_home_parameters(serialNumber):
@@ -2274,7 +2271,7 @@ def set_home_parameters(serialNumber):
 
 KIM_SetHomeParametersStruct = lib.KIM_SetHomeParametersStruct
 KIM_SetHomeParametersStruct.restype = c_short
-KIM_SetHomeParametersStruct.argtypes = [POINTER(c_char)]
+KIM_SetHomeParametersStruct.argtypes = []
 
 
 def set_home_parameters_struct(serialNumber):
@@ -2303,7 +2300,7 @@ def set_home_parameters_struct(serialNumber):
 
 KIM_SetJogParameters = lib.KIM_SetJogParameters
 KIM_SetJogParameters.restype = c_short
-KIM_SetJogParameters.argtypes = [POINTER(c_char)]
+KIM_SetJogParameters.argtypes = []
 
 
 def set_jog_parameters(serialNumber):
@@ -2340,7 +2337,7 @@ def set_jog_parameters(serialNumber):
 
 KIM_SetJogParametersStruct = lib.KIM_SetJogParametersStruct
 KIM_SetJogParametersStruct.restype = c_short
-KIM_SetJogParametersStruct.argtypes = [POINTER(c_char)]
+KIM_SetJogParametersStruct.argtypes = []
 
 
 def set_jog_parameters_struct(serialNumber):
@@ -2369,7 +2366,7 @@ def set_jog_parameters_struct(serialNumber):
 
 KIM_SetLimitSwitchParameters = lib.KIM_SetLimitSwitchParameters
 KIM_SetLimitSwitchParameters.restype = c_short
-KIM_SetLimitSwitchParameters.argtypes = [POINTER(c_char)]
+KIM_SetLimitSwitchParameters.argtypes = []
 
 
 def set_limit_switch_parameters(serialNumber):
@@ -2402,7 +2399,7 @@ def set_limit_switch_parameters(serialNumber):
 
 KIM_SetLimitSwitchParametersStruct = lib.KIM_SetLimitSwitchParametersStruct
 KIM_SetLimitSwitchParametersStruct.restype = c_short
-KIM_SetLimitSwitchParametersStruct.argtypes = [POINTER(c_char)]
+KIM_SetLimitSwitchParametersStruct.argtypes = []
 
 
 def set_limit_switch_parameters_struct(serialNumber):
@@ -2431,7 +2428,7 @@ def set_limit_switch_parameters_struct(serialNumber):
 
 KIM_SetMMIChannelParameters = lib.KIM_SetMMIChannelParameters
 KIM_SetMMIChannelParameters.restype = c_short
-KIM_SetMMIChannelParameters.argtypes = [POINTER(c_char)]
+KIM_SetMMIChannelParameters.argtypes = []
 
 
 def set_m_m_i_channel_parameters(serialNumber):
@@ -2462,7 +2459,7 @@ def set_m_m_i_channel_parameters(serialNumber):
 
 KIM_SetMMIChannelParametersStruct = lib.KIM_SetMMIChannelParametersStruct
 KIM_SetMMIChannelParametersStruct.restype = c_short
-KIM_SetMMIChannelParametersStruct.argtypes = [POINTER(c_char)]
+KIM_SetMMIChannelParametersStruct.argtypes = []
 
 
 def set_m_m_i_channel_parameters_struct(serialNumber):
@@ -2491,7 +2488,7 @@ def set_m_m_i_channel_parameters_struct(serialNumber):
 
 KIM_SetMMIDeviceParameters = lib.KIM_SetMMIDeviceParameters
 KIM_SetMMIDeviceParameters.restype = c_short
-KIM_SetMMIDeviceParameters.argtypes = [POINTER(c_char)]
+KIM_SetMMIDeviceParameters.argtypes = []
 
 
 def set_m_m_i_device_parameters(serialNumber):
@@ -2524,7 +2521,7 @@ def set_m_m_i_device_parameters(serialNumber):
 
 KIM_SetMMIDeviceParametersStruct = lib.KIM_SetMMIDeviceParametersStruct
 KIM_SetMMIDeviceParametersStruct.restype = c_short
-KIM_SetMMIDeviceParametersStruct.argtypes = [POINTER(c_char)]
+KIM_SetMMIDeviceParametersStruct.argtypes = []
 
 
 def set_m_m_i_device_parameters_struct(serialNumber):
@@ -2551,7 +2548,7 @@ def set_m_m_i_device_parameters_struct(serialNumber):
 
 KIM_SetPosition = lib.KIM_SetPosition
 KIM_SetPosition.restype = c_short
-KIM_SetPosition.argtypes = [POINTER(c_char)]
+KIM_SetPosition.argtypes = []
 
 
 def set_position(serialNumber):
@@ -2580,7 +2577,7 @@ def set_position(serialNumber):
 
 KIM_SetRelativeMoveParameter = lib.KIM_SetRelativeMoveParameter
 KIM_SetRelativeMoveParameter.restype = c_short
-KIM_SetRelativeMoveParameter.argtypes = [POINTER(c_char)]
+KIM_SetRelativeMoveParameter.argtypes = []
 
 
 def set_relative_move_parameter(serialNumber):
@@ -2609,7 +2606,7 @@ def set_relative_move_parameter(serialNumber):
 
 KIM_SetStageType = lib.KIM_SetStageType
 KIM_SetStageType.restype = c_short
-KIM_SetStageType.argtypes = [POINTER(c_char)]
+KIM_SetStageType.argtypes = []
 
 
 def set_stage_type(serialNumber):
@@ -2636,7 +2633,7 @@ def set_stage_type(serialNumber):
 
 KIM_SetTrigIOParameters = lib.KIM_SetTrigIOParameters
 KIM_SetTrigIOParameters.restype = c_short
-KIM_SetTrigIOParameters.argtypes = [POINTER(c_char)]
+KIM_SetTrigIOParameters.argtypes = []
 
 
 def set_trig_i_o_parameters(serialNumber):
@@ -2673,7 +2670,7 @@ def set_trig_i_o_parameters(serialNumber):
 
 KIM_SetTrigIOParametersStruct = lib.KIM_SetTrigIOParametersStruct
 KIM_SetTrigIOParametersStruct.restype = c_short
-KIM_SetTrigIOParametersStruct.argtypes = [POINTER(c_char)]
+KIM_SetTrigIOParametersStruct.argtypes = []
 
 
 def set_trig_i_o_parameters_struct(serialNumber):
@@ -2700,7 +2697,7 @@ def set_trig_i_o_parameters_struct(serialNumber):
 
 KIM_SetTrigParamsParameters = lib.KIM_SetTrigParamsParameters
 KIM_SetTrigParamsParameters.restype = c_short
-KIM_SetTrigParamsParameters.argtypes = [POINTER(c_char)]
+KIM_SetTrigParamsParameters.argtypes = []
 
 
 def set_trig_params_parameters(serialNumber):
@@ -2745,7 +2742,7 @@ def set_trig_params_parameters(serialNumber):
 
 KIM_SetTrigParamsParametersStruct = lib.KIM_SetTrigParamsParametersStruct
 KIM_SetTrigParamsParametersStruct.restype = c_short
-KIM_SetTrigParamsParametersStruct.argtypes = [POINTER(c_char)]
+KIM_SetTrigParamsParametersStruct.argtypes = []
 
 
 def set_trig_params_parameters_struct(serialNumber):
@@ -2774,7 +2771,7 @@ def set_trig_params_parameters_struct(serialNumber):
 
 KIM_StartPolling = lib.KIM_StartPolling
 KIM_StartPolling.restype = c_bool
-KIM_StartPolling.argtypes = [POINTER(c_char)]
+KIM_StartPolling.argtypes = []
 
 
 def start_polling(serialNumber):
@@ -2801,7 +2798,7 @@ def start_polling(serialNumber):
 
 KIM_StopPolling = lib.KIM_StopPolling
 KIM_StopPolling.restype = c_void_p
-KIM_StopPolling.argtypes = [POINTER(c_char)]
+KIM_StopPolling.argtypes = []
 
 
 def stop_polling(serialNumber):
@@ -2826,7 +2823,7 @@ def stop_polling(serialNumber):
 
 KIM_SupportsDualChannelMode = lib.KIM_SupportsDualChannelMode
 KIM_SupportsDualChannelMode.restype = c_bool
-KIM_SupportsDualChannelMode.argtypes = [POINTER(c_char)]
+KIM_SupportsDualChannelMode.argtypes = []
 
 
 def supports_dual_channel_mode(serialNumber):
@@ -2851,7 +2848,7 @@ def supports_dual_channel_mode(serialNumber):
 
 KIM_SupportsStageType = lib.KIM_SupportsStageType
 KIM_SupportsStageType.restype = c_bool
-KIM_SupportsStageType.argtypes = [POINTER(c_char)]
+KIM_SupportsStageType.argtypes = []
 
 
 def supports_stage_type(serialNumber):
@@ -2876,7 +2873,7 @@ def supports_stage_type(serialNumber):
 
 KIM_TimeSinceLastMsgReceived = lib.KIM_TimeSinceLastMsgReceived
 KIM_TimeSinceLastMsgReceived.restype = c_bool
-KIM_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+KIM_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serialNumber):
@@ -2903,7 +2900,7 @@ def time_since_last_msg_received(serialNumber):
 
 KIM_WaitForMessage = lib.KIM_WaitForMessage
 KIM_WaitForMessage.restype = c_bool
-KIM_WaitForMessage.argtypes = [POINTER(c_char)]
+KIM_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serialNumber):
@@ -2934,7 +2931,7 @@ def wait_for_message(serialNumber):
 
 KIM_ZeroPosition = lib.KIM_ZeroPosition
 KIM_ZeroPosition.restype = c_short
-KIM_ZeroPosition.argtypes = [POINTER(c_char)]
+KIM_ZeroPosition.argtypes = []
 
 
 def zero_position(serialNumber):
@@ -2987,7 +2984,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -3005,18 +3002,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -3043,7 +3042,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -3065,12 +3064,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -3094,12 +3095,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -3123,12 +3126,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -3154,12 +3159,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -3181,7 +3188,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -3204,7 +3213,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations

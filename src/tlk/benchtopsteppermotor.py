@@ -39,6 +39,10 @@ from .definitions.structures import (
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException
 
+c_short_pointer = type(pointer(c_short()))
+c_ulong_pointer = type(pointer(c_ulong()))
+c_long_pointer = type(pointer(c_ulong()))
+
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
 device_manager = cdll.LoadLibrary(
@@ -49,7 +53,7 @@ lib = cdll.LoadLibrary(
 
 SBC_CanHome = lib.SBC_CanHome
 SBC_CanHome.restype = c_bool
-SBC_CanHome.argtypes = [POINTER(c_char)]
+SBC_CanHome.argtypes = []
 
 
 def can_home(serial_number):
@@ -66,7 +70,7 @@ def can_home(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_CanHome(serial_number)
@@ -76,7 +80,7 @@ def can_home(serial_number):
 
 SBC_CanMoveWithoutHomingFirst = lib.SBC_CanMoveWithoutHomingFirst
 SBC_CanMoveWithoutHomingFirst.restype = c_bool
-SBC_CanMoveWithoutHomingFirst.argtypes = [POINTER(c_char)]
+SBC_CanMoveWithoutHomingFirst.argtypes = []
 
 
 def can_move_without_homing_first(serial_number):
@@ -93,7 +97,7 @@ def can_move_without_homing_first(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_CanMoveWithoutHomingFirst(serial_number)
@@ -112,14 +116,15 @@ def check_connection(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = SBC_CheckConnection(serial_number)
 
@@ -128,7 +133,7 @@ def check_connection(serial_number):
 
 SBC_ClearMessageQueue = lib.SBC_ClearMessageQueue
 SBC_ClearMessageQueue.restype = c_short
-SBC_ClearMessageQueue.argtypes = [POINTER(c_char)]
+SBC_ClearMessageQueue.argtypes = []
 
 
 def clear_message_queue(serial_number):
@@ -145,7 +150,7 @@ def clear_message_queue(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_ClearMessageQueue(serial_number)
@@ -155,7 +160,7 @@ def clear_message_queue(serial_number):
 
 SBC_Close = lib.SBC_Close
 SBC_Close.restype = c_short
-SBC_Close.argtypes = [POINTER(c_char)]
+SBC_Close.argtypes = []
 
 
 def close_device(serial_number):
@@ -171,7 +176,7 @@ def close_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = SBC_Close(serial_number)
 
@@ -180,7 +185,7 @@ def close_device(serial_number):
 
 SBC_DisableChannel = lib.SBC_DisableChannel
 SBC_DisableChannel.restype = c_short
-SBC_DisableChannel.argtypes = [POINTER(c_char)]
+SBC_DisableChannel.argtypes = []
 
 
 def disable_channel(serial_number):
@@ -197,7 +202,7 @@ def disable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_DisableChannel(serial_number)
@@ -207,7 +212,7 @@ def disable_channel(serial_number):
 
 SBC_EnableChannel = lib.SBC_EnableChannel
 SBC_EnableChannel.restype = c_short
-SBC_EnableChannel.argtypes = [POINTER(c_char)]
+SBC_EnableChannel.argtypes = []
 
 
 def enable_channel(serial_number):
@@ -224,7 +229,7 @@ def enable_channel(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_EnableChannel(serial_number)
@@ -234,7 +239,7 @@ def enable_channel(serial_number):
 
 SBC_EnableLastMsgTimer = lib.SBC_EnableLastMsgTimer
 SBC_EnableLastMsgTimer.restype = c_void_p
-SBC_EnableLastMsgTimer.argtypes = [POINTER(c_char)]
+SBC_EnableLastMsgTimer.argtypes = []
 
 
 def enable_last_msg_timer(serial_number):
@@ -253,7 +258,7 @@ def enable_last_msg_timer(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     enable = c_bool()
     lastMsgTimeout = c_int32()
@@ -265,7 +270,7 @@ def enable_last_msg_timer(serial_number):
 
 SBC_GetBacklash = lib.SBC_GetBacklash
 SBC_GetBacklash.restype = c_long
-SBC_GetBacklash.argtypes = [POINTER(c_char)]
+SBC_GetBacklash.argtypes = []
 
 
 def get_backlash(serial_number):
@@ -282,7 +287,7 @@ def get_backlash(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetBacklash(serial_number)
@@ -292,7 +297,7 @@ def get_backlash(serial_number):
 
 SBC_GetBowIndex = lib.SBC_GetBowIndex
 SBC_GetBowIndex.restype = c_short
-SBC_GetBowIndex.argtypes = [POINTER(c_char)]
+SBC_GetBowIndex.argtypes = []
 
 
 def get_bow_index(serial_number):
@@ -309,7 +314,7 @@ def get_bow_index(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetBowIndex(serial_number)
@@ -319,7 +324,7 @@ def get_bow_index(serial_number):
 
 SBC_GetCalibrationFile = lib.SBC_GetCalibrationFile
 SBC_GetCalibrationFile.restype = c_bool
-SBC_GetCalibrationFile.argtypes = [POINTER(c_char)]
+SBC_GetCalibrationFile.argtypes = []
 
 
 def get_calibration_file(serial_number):
@@ -338,7 +343,7 @@ def get_calibration_file(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     filename = POINTER(c_char)()
     sizeOfBuffer = c_short()
@@ -350,7 +355,7 @@ def get_calibration_file(serial_number):
 
 SBC_GetDeviceUnitFromRealValue = lib.SBC_GetDeviceUnitFromRealValue
 SBC_GetDeviceUnitFromRealValue.restype = c_short
-SBC_GetDeviceUnitFromRealValue.argtypes = [POINTER(c_char)]
+SBC_GetDeviceUnitFromRealValue.argtypes = []
 
 
 def get_device_unit_from_real_value(serial_number):
@@ -370,7 +375,7 @@ def get_device_unit_from_real_value(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     real_unit = c_double()
     device_unit = c_int()
@@ -383,7 +388,7 @@ def get_device_unit_from_real_value(serial_number):
 
 SBC_GetDigitalOutputs = lib.SBC_GetDigitalOutputs
 SBC_GetDigitalOutputs.restype = c_byte
-SBC_GetDigitalOutputs.argtypes = [POINTER(c_char)]
+SBC_GetDigitalOutputs.argtypes = []
 
 
 def get_digital_outputs(serial_number):
@@ -400,7 +405,7 @@ def get_digital_outputs(serial_number):
         c_byte
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetDigitalOutputs(serial_number)
@@ -410,7 +415,7 @@ def get_digital_outputs(serial_number):
 
 SBC_GetEncoderCounter = lib.SBC_GetEncoderCounter
 SBC_GetEncoderCounter.restype = c_long
-SBC_GetEncoderCounter.argtypes = [POINTER(c_char)]
+SBC_GetEncoderCounter.argtypes = []
 
 
 def get_encoder_counter(serial_number):
@@ -427,7 +432,7 @@ def get_encoder_counter(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetEncoderCounter(serial_number)
@@ -437,7 +442,7 @@ def get_encoder_counter(serial_number):
 
 SBC_GetFirmwareVersion = lib.SBC_GetFirmwareVersion
 SBC_GetFirmwareVersion.restype = c_ulong
-SBC_GetFirmwareVersion.argtypes = [POINTER(c_char)]
+SBC_GetFirmwareVersion.argtypes = []
 
 
 def get_firmware_version(serial_number):
@@ -454,7 +459,7 @@ def get_firmware_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetFirmwareVersion(serial_number)
@@ -473,24 +478,15 @@ def get_hardware_info(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        channel: c_short
-        modelNo: POINTER(c_char)
-        sizeOfModelNo: c_ulong
-        type: c_long
-        numChannels: c_long
-        notes: POINTER(c_char)
-        sizeOfNotes: c_ulong
-        firmwareVersion: c_ulong
-        hardwareVersion: c_long
-        modificationState: c_long
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     modelNo = POINTER(c_char)()
     sizeOfModelNo = c_ulong()
@@ -518,16 +514,15 @@ def get_hardware_info_block(serial_number):
 
     Parameters
     ----------
-        serial_number: POINTER(c_char)
-        channel: c_short
-        hardwareInfo: TLI_HardwareInformation
+    serial_number - int
+        serial_number of instrument
 
     Returns
     -------
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     hardwareInfo = TLI_HardwareInformation()
 
@@ -538,7 +533,7 @@ def get_hardware_info_block(serial_number):
 
 SBC_GetHomingParamsBlock = lib.SBC_GetHomingParamsBlock
 SBC_GetHomingParamsBlock.restype = c_short
-SBC_GetHomingParamsBlock.argtypes = [POINTER(c_char)]
+SBC_GetHomingParamsBlock.argtypes = []
 
 
 def get_homing_params_block(serial_number):
@@ -556,7 +551,7 @@ def get_homing_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     homingParams = MOT_HomingParameters()
 
@@ -567,7 +562,7 @@ def get_homing_params_block(serial_number):
 
 SBC_GetHomingVelocity = lib.SBC_GetHomingVelocity
 SBC_GetHomingVelocity.restype = c_uint
-SBC_GetHomingVelocity.argtypes = [POINTER(c_char)]
+SBC_GetHomingVelocity.argtypes = []
 
 
 def get_homing_velocity(serial_number):
@@ -584,7 +579,7 @@ def get_homing_velocity(serial_number):
         c_uint
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetHomingVelocity(serial_number)
@@ -594,7 +589,7 @@ def get_homing_velocity(serial_number):
 
 SBC_GetInputVoltage = lib.SBC_GetInputVoltage
 SBC_GetInputVoltage.restype = c_long
-SBC_GetInputVoltage.argtypes = [POINTER(c_char)]
+SBC_GetInputVoltage.argtypes = []
 
 
 def get_input_voltage(serial_number):
@@ -611,7 +606,7 @@ def get_input_voltage(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetInputVoltage(serial_number)
@@ -621,7 +616,7 @@ def get_input_voltage(serial_number):
 
 SBC_GetJogMode = lib.SBC_GetJogMode
 SBC_GetJogMode.restype = c_short
-SBC_GetJogMode.argtypes = [POINTER(c_char)]
+SBC_GetJogMode.argtypes = []
 
 
 def get_jog_mode(serial_number):
@@ -640,7 +635,7 @@ def get_jog_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     mode = MOT_JogModes()
     stopMode = MOT_StopModes()
@@ -652,7 +647,7 @@ def get_jog_mode(serial_number):
 
 SBC_GetJogParamsBlock = lib.SBC_GetJogParamsBlock
 SBC_GetJogParamsBlock.restype = c_short
-SBC_GetJogParamsBlock.argtypes = [POINTER(c_char)]
+SBC_GetJogParamsBlock.argtypes = []
 
 
 def get_jog_params_block(serial_number):
@@ -671,7 +666,7 @@ def get_jog_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     jogParams = MOT_JogParameters()
     jogParameters = MOT_JogParameters()
@@ -683,7 +678,7 @@ def get_jog_params_block(serial_number):
 
 SBC_GetJogStepSize = lib.SBC_GetJogStepSize
 SBC_GetJogStepSize.restype = c_uint
-SBC_GetJogStepSize.argtypes = [POINTER(c_char)]
+SBC_GetJogStepSize.argtypes = []
 
 
 def get_jog_step_size(serial_number):
@@ -700,7 +695,7 @@ def get_jog_step_size(serial_number):
         c_uint
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetJogStepSize(serial_number)
@@ -710,7 +705,7 @@ def get_jog_step_size(serial_number):
 
 SBC_GetJogVelParams = lib.SBC_GetJogVelParams
 SBC_GetJogVelParams.restype = c_short
-SBC_GetJogVelParams.argtypes = [POINTER(c_char)]
+SBC_GetJogVelParams.argtypes = []
 
 
 def get_jog_vel_params(serial_number):
@@ -729,7 +724,7 @@ def get_jog_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     acceleration = c_int()
     maxVelocity = c_int()
@@ -741,7 +736,7 @@ def get_jog_vel_params(serial_number):
 
 SBC_GetJoystickParams = lib.SBC_GetJoystickParams
 SBC_GetJoystickParams.restype = c_short
-SBC_GetJoystickParams.argtypes = [POINTER(c_char)]
+SBC_GetJoystickParams.argtypes = []
 
 
 def get_joystick_params(serial_number):
@@ -759,7 +754,7 @@ def get_joystick_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     joystickParams = MOT_JoystickParameters()
 
@@ -770,7 +765,7 @@ def get_joystick_params(serial_number):
 
 SBC_GetLimitSwitchParams = lib.SBC_GetLimitSwitchParams
 SBC_GetLimitSwitchParams.restype = c_short
-SBC_GetLimitSwitchParams.argtypes = [POINTER(c_char)]
+SBC_GetLimitSwitchParams.argtypes = []
 
 
 def get_limit_switch_params(serial_number):
@@ -792,7 +787,7 @@ def get_limit_switch_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     clockwiseHardwareLimit = MOT_LimitSwitchModes()
     anticlockwiseHardwareLimit = MOT_LimitSwitchModes()
@@ -807,7 +802,7 @@ def get_limit_switch_params(serial_number):
 
 SBC_GetLimitSwitchParamsBlock = lib.SBC_GetLimitSwitchParamsBlock
 SBC_GetLimitSwitchParamsBlock.restype = c_short
-SBC_GetLimitSwitchParamsBlock.argtypes = [POINTER(c_char)]
+SBC_GetLimitSwitchParamsBlock.argtypes = []
 
 
 def get_limit_switch_params_block(serial_number):
@@ -825,7 +820,7 @@ def get_limit_switch_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     limitSwitchParams = MOT_LimitSwitchParameters()
 
@@ -836,7 +831,7 @@ def get_limit_switch_params_block(serial_number):
 
 SBC_GetMotorParams = lib.SBC_GetMotorParams
 SBC_GetMotorParams.restype = c_short
-SBC_GetMotorParams.argtypes = [POINTER(c_char)]
+SBC_GetMotorParams.argtypes = []
 
 
 def get_motor_params(serial_number):
@@ -856,7 +851,7 @@ def get_motor_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     stepsPerRev = c_long()
     gearBoxRatio = c_long()
@@ -869,7 +864,7 @@ def get_motor_params(serial_number):
 
 SBC_GetMotorParamsExt = lib.SBC_GetMotorParamsExt
 SBC_GetMotorParamsExt.restype = c_short
-SBC_GetMotorParamsExt.argtypes = [POINTER(c_char)]
+SBC_GetMotorParamsExt.argtypes = []
 
 
 def get_motor_params_ext(serial_number):
@@ -889,7 +884,7 @@ def get_motor_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     stepsPerRev = c_double()
     gearBoxRatio = c_double()
@@ -902,7 +897,7 @@ def get_motor_params_ext(serial_number):
 
 SBC_GetMotorTravelLimits = lib.SBC_GetMotorTravelLimits
 SBC_GetMotorTravelLimits.restype = c_short
-SBC_GetMotorTravelLimits.argtypes = [POINTER(c_char)]
+SBC_GetMotorTravelLimits.argtypes = []
 
 
 def get_motor_travel_limits(serial_number):
@@ -921,7 +916,7 @@ def get_motor_travel_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     minPosition = c_double()
     maxPosition = c_double()
@@ -933,7 +928,7 @@ def get_motor_travel_limits(serial_number):
 
 SBC_GetMotorTravelMode = lib.SBC_GetMotorTravelMode
 SBC_GetMotorTravelMode.restype = MOT_TravelModes
-SBC_GetMotorTravelMode.argtypes = [POINTER(c_char)]
+SBC_GetMotorTravelMode.argtypes = []
 
 
 def get_motor_travel_mode(serial_number):
@@ -950,7 +945,7 @@ def get_motor_travel_mode(serial_number):
         MOT_TravelModes
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetMotorTravelMode(serial_number)
@@ -960,7 +955,7 @@ def get_motor_travel_mode(serial_number):
 
 SBC_GetMotorVelocityLimits = lib.SBC_GetMotorVelocityLimits
 SBC_GetMotorVelocityLimits.restype = c_short
-SBC_GetMotorVelocityLimits.argtypes = [POINTER(c_char)]
+SBC_GetMotorVelocityLimits.argtypes = []
 
 
 def get_motor_velocity_limits(serial_number):
@@ -979,7 +974,7 @@ def get_motor_velocity_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     maxVelocity = c_double()
     maxAcceleration = c_double()
@@ -991,7 +986,7 @@ def get_motor_velocity_limits(serial_number):
 
 SBC_GetMoveAbsolutePosition = lib.SBC_GetMoveAbsolutePosition
 SBC_GetMoveAbsolutePosition.restype = c_int
-SBC_GetMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+SBC_GetMoveAbsolutePosition.argtypes = []
 
 
 def get_move_absolute_position(serial_number):
@@ -1008,7 +1003,7 @@ def get_move_absolute_position(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetMoveAbsolutePosition(serial_number)
@@ -1018,7 +1013,7 @@ def get_move_absolute_position(serial_number):
 
 SBC_GetMoveRelativeDistance = lib.SBC_GetMoveRelativeDistance
 SBC_GetMoveRelativeDistance.restype = c_int
-SBC_GetMoveRelativeDistance.argtypes = [POINTER(c_char)]
+SBC_GetMoveRelativeDistance.argtypes = []
 
 
 def get_move_relative_distance(serial_number):
@@ -1035,7 +1030,7 @@ def get_move_relative_distance(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetMoveRelativeDistance(serial_number)
@@ -1045,7 +1040,7 @@ def get_move_relative_distance(serial_number):
 
 SBC_GetNextMessage = lib.SBC_GetNextMessage
 SBC_GetNextMessage.restype = c_bool
-SBC_GetNextMessage.argtypes = [POINTER(c_char)]
+SBC_GetNextMessage.argtypes = []
 
 
 def get_next_message(serial_number):
@@ -1065,7 +1060,7 @@ def get_next_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     messageType = c_long()
     messageID = c_long()
@@ -1078,7 +1073,7 @@ def get_next_message(serial_number):
 
 SBC_GetNumChannels = lib.SBC_GetNumChannels
 SBC_GetNumChannels.restype = c_short
-SBC_GetNumChannels.argtypes = [POINTER(c_char)]
+SBC_GetNumChannels.argtypes = []
 
 
 def get_num_channels(serial_number):
@@ -1094,7 +1089,7 @@ def get_num_channels(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = SBC_GetNumChannels(serial_number)
 
@@ -1103,7 +1098,7 @@ def get_num_channels(serial_number):
 
 SBC_GetNumberPositions = lib.SBC_GetNumberPositions
 SBC_GetNumberPositions.restype = c_int
-SBC_GetNumberPositions.argtypes = [POINTER(c_char)]
+SBC_GetNumberPositions.argtypes = []
 
 
 def get_number_positions(serial_number):
@@ -1120,7 +1115,7 @@ def get_number_positions(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetNumberPositions(serial_number)
@@ -1130,7 +1125,7 @@ def get_number_positions(serial_number):
 
 SBC_GetPIDLoopEncoderCoeff = lib.SBC_GetPIDLoopEncoderCoeff
 SBC_GetPIDLoopEncoderCoeff.restype = c_double
-SBC_GetPIDLoopEncoderCoeff.argtypes = [POINTER(c_char)]
+SBC_GetPIDLoopEncoderCoeff.argtypes = []
 
 
 def get_p_i_d_loop_encoder_coeff(serial_number):
@@ -1147,7 +1142,7 @@ def get_p_i_d_loop_encoder_coeff(serial_number):
         c_double
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetPIDLoopEncoderCoeff(serial_number)
@@ -1157,7 +1152,7 @@ def get_p_i_d_loop_encoder_coeff(serial_number):
 
 SBC_GetPIDLoopEncoderParams = lib.SBC_GetPIDLoopEncoderParams
 SBC_GetPIDLoopEncoderParams.restype = c_short
-SBC_GetPIDLoopEncoderParams.argtypes = [POINTER(c_char)]
+SBC_GetPIDLoopEncoderParams.argtypes = []
 
 
 def get_p_i_d_loop_encoder_params(serial_number):
@@ -1175,7 +1170,7 @@ def get_p_i_d_loop_encoder_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     params = MOT_PIDLoopEncoderParams()
 
@@ -1186,7 +1181,7 @@ def get_p_i_d_loop_encoder_params(serial_number):
 
 SBC_GetPosition = lib.SBC_GetPosition
 SBC_GetPosition.restype = c_int
-SBC_GetPosition.argtypes = [POINTER(c_char)]
+SBC_GetPosition.argtypes = []
 
 
 def get_position(serial_number):
@@ -1203,7 +1198,7 @@ def get_position(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetPosition(serial_number)
@@ -1213,7 +1208,7 @@ def get_position(serial_number):
 
 SBC_GetPositionCounter = lib.SBC_GetPositionCounter
 SBC_GetPositionCounter.restype = c_long
-SBC_GetPositionCounter.argtypes = [POINTER(c_char)]
+SBC_GetPositionCounter.argtypes = []
 
 
 def get_position_counter(serial_number):
@@ -1230,7 +1225,7 @@ def get_position_counter(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetPositionCounter(serial_number)
@@ -1240,7 +1235,7 @@ def get_position_counter(serial_number):
 
 SBC_GetPowerParams = lib.SBC_GetPowerParams
 SBC_GetPowerParams.restype = c_short
-SBC_GetPowerParams.argtypes = [POINTER(c_char)]
+SBC_GetPowerParams.argtypes = []
 
 
 def get_power_params(serial_number):
@@ -1258,7 +1253,7 @@ def get_power_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     powerParams = MOT_PowerParameters()
 
@@ -1269,7 +1264,7 @@ def get_power_params(serial_number):
 
 SBC_GetRackDigitalOutputs = lib.SBC_GetRackDigitalOutputs
 SBC_GetRackDigitalOutputs.restype = c_byte
-SBC_GetRackDigitalOutputs.argtypes = [POINTER(c_char)]
+SBC_GetRackDigitalOutputs.argtypes = []
 
 
 def get_rack_digital_outputs(serial_number):
@@ -1285,7 +1280,7 @@ def get_rack_digital_outputs(serial_number):
         c_byte
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = SBC_GetRackDigitalOutputs(serial_number)
 
@@ -1294,7 +1289,7 @@ def get_rack_digital_outputs(serial_number):
 
 SBC_GetRackStatusBits = lib.SBC_GetRackStatusBits
 SBC_GetRackStatusBits.restype = c_ulong
-SBC_GetRackStatusBits.argtypes = [POINTER(c_char)]
+SBC_GetRackStatusBits.argtypes = []
 
 
 def get_rack_status_bits(serial_number):
@@ -1310,7 +1305,7 @@ def get_rack_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = SBC_GetRackStatusBits(serial_number)
 
@@ -1319,7 +1314,7 @@ def get_rack_status_bits(serial_number):
 
 SBC_GetRealValueFromDeviceUnit = lib.SBC_GetRealValueFromDeviceUnit
 SBC_GetRealValueFromDeviceUnit.restype = c_short
-SBC_GetRealValueFromDeviceUnit.argtypes = [POINTER(c_char)]
+SBC_GetRealValueFromDeviceUnit.argtypes = []
 
 
 def get_real_value_from_device_unit(serial_number):
@@ -1339,7 +1334,7 @@ def get_real_value_from_device_unit(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     device_unit = c_int()
     real_unit = c_double()
@@ -1352,7 +1347,7 @@ def get_real_value_from_device_unit(serial_number):
 
 SBC_GetSoftLimitMode = lib.SBC_GetSoftLimitMode
 SBC_GetSoftLimitMode.restype = MOT_LimitsSoftwareApproachPolicy
-SBC_GetSoftLimitMode.argtypes = [POINTER(c_char)]
+SBC_GetSoftLimitMode.argtypes = []
 
 
 def get_soft_limit_mode(serial_number):
@@ -1369,7 +1364,7 @@ def get_soft_limit_mode(serial_number):
         MOT_LimitsSoftwareApproachPolicy
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetSoftLimitMode(serial_number)
@@ -1379,7 +1374,7 @@ def get_soft_limit_mode(serial_number):
 
 SBC_GetSoftwareVersion = lib.SBC_GetSoftwareVersion
 SBC_GetSoftwareVersion.restype = c_ulong
-SBC_GetSoftwareVersion.argtypes = [POINTER(c_char)]
+SBC_GetSoftwareVersion.argtypes = []
 
 
 def get_software_version(serial_number):
@@ -1395,7 +1390,7 @@ def get_software_version(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = SBC_GetSoftwareVersion(serial_number)
 
@@ -1404,7 +1399,7 @@ def get_software_version(serial_number):
 
 SBC_GetStageAxisMaxPos = lib.SBC_GetStageAxisMaxPos
 SBC_GetStageAxisMaxPos.restype = c_int
-SBC_GetStageAxisMaxPos.argtypes = [POINTER(c_char)]
+SBC_GetStageAxisMaxPos.argtypes = []
 
 
 def get_stage_axis_max_pos(serial_number):
@@ -1421,7 +1416,7 @@ def get_stage_axis_max_pos(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetStageAxisMaxPos(serial_number)
@@ -1431,7 +1426,7 @@ def get_stage_axis_max_pos(serial_number):
 
 SBC_GetStageAxisMinPos = lib.SBC_GetStageAxisMinPos
 SBC_GetStageAxisMinPos.restype = c_int
-SBC_GetStageAxisMinPos.argtypes = [POINTER(c_char)]
+SBC_GetStageAxisMinPos.argtypes = []
 
 
 def get_stage_axis_min_pos(serial_number):
@@ -1448,7 +1443,7 @@ def get_stage_axis_min_pos(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetStageAxisMinPos(serial_number)
@@ -1458,7 +1453,7 @@ def get_stage_axis_min_pos(serial_number):
 
 SBC_GetStatusBits = lib.SBC_GetStatusBits
 SBC_GetStatusBits.restype = c_ulong
-SBC_GetStatusBits.argtypes = [POINTER(c_char)]
+SBC_GetStatusBits.argtypes = []
 
 
 def get_status_bits(serial_number):
@@ -1475,7 +1470,7 @@ def get_status_bits(serial_number):
         c_ulong
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetStatusBits(serial_number)
@@ -1485,7 +1480,7 @@ def get_status_bits(serial_number):
 
 SBC_GetTriggerSwitches = lib.SBC_GetTriggerSwitches
 SBC_GetTriggerSwitches.restype = c_byte
-SBC_GetTriggerSwitches.argtypes = [POINTER(c_char)]
+SBC_GetTriggerSwitches.argtypes = []
 
 
 def get_trigger_switches(serial_number):
@@ -1502,7 +1497,7 @@ def get_trigger_switches(serial_number):
         c_byte
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_GetTriggerSwitches(serial_number)
@@ -1512,7 +1507,7 @@ def get_trigger_switches(serial_number):
 
 SBC_GetVelParams = lib.SBC_GetVelParams
 SBC_GetVelParams.restype = c_short
-SBC_GetVelParams.argtypes = [POINTER(c_char)]
+SBC_GetVelParams.argtypes = []
 
 
 def get_vel_params(serial_number):
@@ -1531,7 +1526,7 @@ def get_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     acceleration = c_int()
     maxVelocity = c_int()
@@ -1543,7 +1538,7 @@ def get_vel_params(serial_number):
 
 SBC_GetVelParamsBlock = lib.SBC_GetVelParamsBlock
 SBC_GetVelParamsBlock.restype = c_short
-SBC_GetVelParamsBlock.argtypes = [POINTER(c_char)]
+SBC_GetVelParamsBlock.argtypes = []
 
 
 def get_vel_params_block(serial_number):
@@ -1562,7 +1557,7 @@ def get_vel_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     velocityParams = MOT_VelocityParameters()
     velocityParameters = MOT_VelocityParameters()
@@ -1574,7 +1569,7 @@ def get_vel_params_block(serial_number):
 
 SBC_HasLastMsgTimerOverrun = lib.SBC_HasLastMsgTimerOverrun
 SBC_HasLastMsgTimerOverrun.restype = c_bool
-SBC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
+SBC_HasLastMsgTimerOverrun.argtypes = []
 
 
 def has_last_msg_timer_overrun(serial_number):
@@ -1591,7 +1586,7 @@ def has_last_msg_timer_overrun(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_HasLastMsgTimerOverrun(serial_number)
@@ -1601,7 +1596,7 @@ def has_last_msg_timer_overrun(serial_number):
 
 SBC_Home = lib.SBC_Home
 SBC_Home.restype = c_short
-SBC_Home.argtypes = [POINTER(c_char)]
+SBC_Home.argtypes = []
 
 
 def home(serial_number):
@@ -1618,7 +1613,7 @@ def home(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_Home(serial_number)
@@ -1628,7 +1623,7 @@ def home(serial_number):
 
 SBC_Identify = lib.SBC_Identify
 SBC_Identify.restype = c_void_p
-SBC_Identify.argtypes = [POINTER(c_char)]
+SBC_Identify.argtypes = []
 
 
 def identify(serial_number):
@@ -1645,7 +1640,7 @@ def identify(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_Identify(serial_number)
@@ -1655,7 +1650,7 @@ def identify(serial_number):
 
 SBC_IsCalibrationActive = lib.SBC_IsCalibrationActive
 SBC_IsCalibrationActive.restype = c_bool
-SBC_IsCalibrationActive.argtypes = [POINTER(c_char)]
+SBC_IsCalibrationActive.argtypes = []
 
 
 def is_calibration_active(serial_number):
@@ -1672,7 +1667,7 @@ def is_calibration_active(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_IsCalibrationActive(serial_number)
@@ -1682,7 +1677,7 @@ def is_calibration_active(serial_number):
 
 SBC_IsChannelValid = lib.SBC_IsChannelValid
 SBC_IsChannelValid.restype = c_bool
-SBC_IsChannelValid.argtypes = [POINTER(c_char)]
+SBC_IsChannelValid.argtypes = []
 
 
 def is_channel_valid(serial_number):
@@ -1699,7 +1694,7 @@ def is_channel_valid(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_IsChannelValid(serial_number)
@@ -1709,7 +1704,7 @@ def is_channel_valid(serial_number):
 
 SBC_LoadNamedSettings = lib.SBC_LoadNamedSettings
 SBC_LoadNamedSettings.restype = c_bool
-SBC_LoadNamedSettings.argtypes = [POINTER(c_char)]
+SBC_LoadNamedSettings.argtypes = []
 
 
 def load_named_settings(serial_number):
@@ -1727,7 +1722,7 @@ def load_named_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     settingsName = POINTER(c_char)()
 
@@ -1738,7 +1733,7 @@ def load_named_settings(serial_number):
 
 SBC_LoadSettings = lib.SBC_LoadSettings
 SBC_LoadSettings.restype = c_bool
-SBC_LoadSettings.argtypes = [POINTER(c_char)]
+SBC_LoadSettings.argtypes = []
 
 
 def load_settings(serial_number):
@@ -1755,7 +1750,7 @@ def load_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_LoadSettings(serial_number)
@@ -1765,7 +1760,7 @@ def load_settings(serial_number):
 
 SBC_MaxChannelCount = lib.SBC_MaxChannelCount
 SBC_MaxChannelCount.restype = c_int
-SBC_MaxChannelCount.argtypes = [POINTER(c_char)]
+SBC_MaxChannelCount.argtypes = []
 
 
 def max_channel_count(serial_number):
@@ -1781,7 +1776,7 @@ def max_channel_count(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = SBC_MaxChannelCount(serial_number)
 
@@ -1790,7 +1785,7 @@ def max_channel_count(serial_number):
 
 SBC_MessageQueueSize = lib.SBC_MessageQueueSize
 SBC_MessageQueueSize.restype = c_int
-SBC_MessageQueueSize.argtypes = [POINTER(c_char)]
+SBC_MessageQueueSize.argtypes = []
 
 
 def message_queue_size(serial_number):
@@ -1807,7 +1802,7 @@ def message_queue_size(serial_number):
         c_int
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_MessageQueueSize(serial_number)
@@ -1817,7 +1812,7 @@ def message_queue_size(serial_number):
 
 SBC_MoveAbsolute = lib.SBC_MoveAbsolute
 SBC_MoveAbsolute.restype = c_short
-SBC_MoveAbsolute.argtypes = [POINTER(c_char)]
+SBC_MoveAbsolute.argtypes = []
 
 
 def move_absolute(serial_number):
@@ -1834,7 +1829,7 @@ def move_absolute(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_MoveAbsolute(serial_number)
@@ -1844,7 +1839,7 @@ def move_absolute(serial_number):
 
 SBC_MoveAtVelocity = lib.SBC_MoveAtVelocity
 SBC_MoveAtVelocity.restype = c_short
-SBC_MoveAtVelocity.argtypes = [POINTER(c_char)]
+SBC_MoveAtVelocity.argtypes = []
 
 
 def move_at_velocity(serial_number):
@@ -1862,7 +1857,7 @@ def move_at_velocity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     direction = MOT_TravelDirection()
 
@@ -1873,7 +1868,7 @@ def move_at_velocity(serial_number):
 
 SBC_MoveJog = lib.SBC_MoveJog
 SBC_MoveJog.restype = c_short
-SBC_MoveJog.argtypes = [POINTER(c_char)]
+SBC_MoveJog.argtypes = []
 
 
 def move_jog(serial_number):
@@ -1891,7 +1886,7 @@ def move_jog(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     jogDirection = MOT_TravelDirection()
 
@@ -1902,7 +1897,7 @@ def move_jog(serial_number):
 
 SBC_MoveRelative = lib.SBC_MoveRelative
 SBC_MoveRelative.restype = c_short
-SBC_MoveRelative.argtypes = [POINTER(c_char)]
+SBC_MoveRelative.argtypes = []
 
 
 def move_relative(serial_number):
@@ -1920,7 +1915,7 @@ def move_relative(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     displacement = c_int()
 
@@ -1931,7 +1926,7 @@ def move_relative(serial_number):
 
 SBC_MoveRelativeDistance = lib.SBC_MoveRelativeDistance
 SBC_MoveRelativeDistance.restype = c_short
-SBC_MoveRelativeDistance.argtypes = [POINTER(c_char)]
+SBC_MoveRelativeDistance.argtypes = []
 
 
 def move_relative_distance(serial_number):
@@ -1948,7 +1943,7 @@ def move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_MoveRelativeDistance(serial_number)
@@ -1958,7 +1953,7 @@ def move_relative_distance(serial_number):
 
 SBC_MoveToPosition = lib.SBC_MoveToPosition
 SBC_MoveToPosition.restype = c_short
-SBC_MoveToPosition.argtypes = [POINTER(c_char)]
+SBC_MoveToPosition.argtypes = []
 
 
 def move_to_position(serial_number):
@@ -1976,7 +1971,7 @@ def move_to_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     index = c_int()
 
@@ -1987,7 +1982,7 @@ def move_to_position(serial_number):
 
 SBC_NeedsHoming = lib.SBC_NeedsHoming
 SBC_NeedsHoming.restype = c_bool
-SBC_NeedsHoming.argtypes = [POINTER(c_char)]
+SBC_NeedsHoming.argtypes = []
 
 
 def needs_homing(serial_number):
@@ -2004,7 +1999,7 @@ def needs_homing(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_NeedsHoming(serial_number)
@@ -2014,7 +2009,7 @@ def needs_homing(serial_number):
 
 SBC_Open = lib.SBC_Open
 SBC_Open.restype = c_short
-SBC_Open.argtypes = [POINTER(c_char)]
+SBC_Open.argtypes = []
 
 
 def open_device(serial_number):
@@ -2030,7 +2025,7 @@ def open_device(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = SBC_Open(serial_number)
 
@@ -2039,7 +2034,7 @@ def open_device(serial_number):
 
 SBC_PersistSettings = lib.SBC_PersistSettings
 SBC_PersistSettings.restype = c_bool
-SBC_PersistSettings.argtypes = [POINTER(c_char)]
+SBC_PersistSettings.argtypes = []
 
 
 def persist_settings(serial_number):
@@ -2056,7 +2051,7 @@ def persist_settings(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_PersistSettings(serial_number)
@@ -2066,7 +2061,7 @@ def persist_settings(serial_number):
 
 SBC_PollingDuration = lib.SBC_PollingDuration
 SBC_PollingDuration.restype = c_long
-SBC_PollingDuration.argtypes = [POINTER(c_char)]
+SBC_PollingDuration.argtypes = []
 
 
 def polling_duration(serial_number):
@@ -2083,7 +2078,7 @@ def polling_duration(serial_number):
         c_long
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_PollingDuration(serial_number)
@@ -2093,7 +2088,7 @@ def polling_duration(serial_number):
 
 SBC_RegisterMessageCallback = lib.SBC_RegisterMessageCallback
 SBC_RegisterMessageCallback.restype = c_short
-SBC_RegisterMessageCallback.argtypes = [POINTER(c_char)]
+SBC_RegisterMessageCallback.argtypes = []
 
 
 def register_message_callback(serial_number):
@@ -2111,7 +2106,7 @@ def register_message_callback(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RegisterMessageCallback(serial_number)
@@ -2121,7 +2116,7 @@ def register_message_callback(serial_number):
 
 SBC_RequestBacklash = lib.SBC_RequestBacklash
 SBC_RequestBacklash.restype = c_short
-SBC_RequestBacklash.argtypes = [POINTER(c_char)]
+SBC_RequestBacklash.argtypes = []
 
 
 def request_backlash(serial_number):
@@ -2138,7 +2133,7 @@ def request_backlash(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestBacklash(serial_number)
@@ -2148,7 +2143,7 @@ def request_backlash(serial_number):
 
 SBC_RequestBowIndex = lib.SBC_RequestBowIndex
 SBC_RequestBowIndex.restype = c_short
-SBC_RequestBowIndex.argtypes = [POINTER(c_char)]
+SBC_RequestBowIndex.argtypes = []
 
 
 def request_bow_index(serial_number):
@@ -2165,7 +2160,7 @@ def request_bow_index(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestBowIndex(serial_number)
@@ -2175,7 +2170,7 @@ def request_bow_index(serial_number):
 
 SBC_RequestDigitalOutputs = lib.SBC_RequestDigitalOutputs
 SBC_RequestDigitalOutputs.restype = c_short
-SBC_RequestDigitalOutputs.argtypes = [POINTER(c_char)]
+SBC_RequestDigitalOutputs.argtypes = []
 
 
 def request_digital_outputs(serial_number):
@@ -2192,7 +2187,7 @@ def request_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestDigitalOutputs(serial_number)
@@ -2202,7 +2197,7 @@ def request_digital_outputs(serial_number):
 
 SBC_RequestEncoderCounter = lib.SBC_RequestEncoderCounter
 SBC_RequestEncoderCounter.restype = c_short
-SBC_RequestEncoderCounter.argtypes = [POINTER(c_char)]
+SBC_RequestEncoderCounter.argtypes = []
 
 
 def request_encoder_counter(serial_number):
@@ -2219,7 +2214,7 @@ def request_encoder_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestEncoderCounter(serial_number)
@@ -2229,7 +2224,7 @@ def request_encoder_counter(serial_number):
 
 SBC_RequestHomingParams = lib.SBC_RequestHomingParams
 SBC_RequestHomingParams.restype = c_short
-SBC_RequestHomingParams.argtypes = [POINTER(c_char)]
+SBC_RequestHomingParams.argtypes = []
 
 
 def request_homing_params(serial_number):
@@ -2246,7 +2241,7 @@ def request_homing_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestHomingParams(serial_number)
@@ -2256,7 +2251,7 @@ def request_homing_params(serial_number):
 
 SBC_RequestInputVoltage = lib.SBC_RequestInputVoltage
 SBC_RequestInputVoltage.restype = c_short
-SBC_RequestInputVoltage.argtypes = [POINTER(c_char)]
+SBC_RequestInputVoltage.argtypes = []
 
 
 def request_input_voltage(serial_number):
@@ -2273,7 +2268,7 @@ def request_input_voltage(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestInputVoltage(serial_number)
@@ -2283,7 +2278,7 @@ def request_input_voltage(serial_number):
 
 SBC_RequestJogParams = lib.SBC_RequestJogParams
 SBC_RequestJogParams.restype = c_short
-SBC_RequestJogParams.argtypes = [POINTER(c_char)]
+SBC_RequestJogParams.argtypes = []
 
 
 def request_jog_params(serial_number):
@@ -2300,7 +2295,7 @@ def request_jog_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestJogParams(serial_number)
@@ -2310,7 +2305,7 @@ def request_jog_params(serial_number):
 
 SBC_RequestJoystickParams = lib.SBC_RequestJoystickParams
 SBC_RequestJoystickParams.restype = c_short
-SBC_RequestJoystickParams.argtypes = [POINTER(c_char)]
+SBC_RequestJoystickParams.argtypes = []
 
 
 def request_joystick_params(serial_number):
@@ -2327,7 +2322,7 @@ def request_joystick_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestJoystickParams(serial_number)
@@ -2337,7 +2332,7 @@ def request_joystick_params(serial_number):
 
 SBC_RequestLimitSwitchParams = lib.SBC_RequestLimitSwitchParams
 SBC_RequestLimitSwitchParams.restype = c_short
-SBC_RequestLimitSwitchParams.argtypes = [POINTER(c_char)]
+SBC_RequestLimitSwitchParams.argtypes = []
 
 
 def request_limit_switch_params(serial_number):
@@ -2354,7 +2349,7 @@ def request_limit_switch_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestLimitSwitchParams(serial_number)
@@ -2364,7 +2359,7 @@ def request_limit_switch_params(serial_number):
 
 SBC_RequestMoveAbsolutePosition = lib.SBC_RequestMoveAbsolutePosition
 SBC_RequestMoveAbsolutePosition.restype = c_short
-SBC_RequestMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+SBC_RequestMoveAbsolutePosition.argtypes = []
 
 
 def request_move_absolute_position(serial_number):
@@ -2381,7 +2376,7 @@ def request_move_absolute_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestMoveAbsolutePosition(serial_number)
@@ -2391,7 +2386,7 @@ def request_move_absolute_position(serial_number):
 
 SBC_RequestMoveRelativeDistance = lib.SBC_RequestMoveRelativeDistance
 SBC_RequestMoveRelativeDistance.restype = c_short
-SBC_RequestMoveRelativeDistance.argtypes = [POINTER(c_char)]
+SBC_RequestMoveRelativeDistance.argtypes = []
 
 
 def request_move_relative_distance(serial_number):
@@ -2408,7 +2403,7 @@ def request_move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestMoveRelativeDistance(serial_number)
@@ -2418,7 +2413,7 @@ def request_move_relative_distance(serial_number):
 
 SBC_RequestPIDLoopEncoderParams = lib.SBC_RequestPIDLoopEncoderParams
 SBC_RequestPIDLoopEncoderParams.restype = c_short
-SBC_RequestPIDLoopEncoderParams.argtypes = [POINTER(c_char)]
+SBC_RequestPIDLoopEncoderParams.argtypes = []
 
 
 def request_p_i_d_loop_encoder_params(serial_number):
@@ -2435,7 +2430,7 @@ def request_p_i_d_loop_encoder_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestPIDLoopEncoderParams(serial_number)
@@ -2445,7 +2440,7 @@ def request_p_i_d_loop_encoder_params(serial_number):
 
 SBC_RequestPosition = lib.SBC_RequestPosition
 SBC_RequestPosition.restype = c_short
-SBC_RequestPosition.argtypes = [POINTER(c_char)]
+SBC_RequestPosition.argtypes = []
 
 
 def request_position(serial_number):
@@ -2462,7 +2457,7 @@ def request_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestPosition(serial_number)
@@ -2472,7 +2467,7 @@ def request_position(serial_number):
 
 SBC_RequestPowerParams = lib.SBC_RequestPowerParams
 SBC_RequestPowerParams.restype = c_short
-SBC_RequestPowerParams.argtypes = [POINTER(c_char)]
+SBC_RequestPowerParams.argtypes = []
 
 
 def request_power_params(serial_number):
@@ -2489,7 +2484,7 @@ def request_power_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestPowerParams(serial_number)
@@ -2499,7 +2494,7 @@ def request_power_params(serial_number):
 
 SBC_RequestRackDigitalOutputs = lib.SBC_RequestRackDigitalOutputs
 SBC_RequestRackDigitalOutputs.restype = c_short
-SBC_RequestRackDigitalOutputs.argtypes = [POINTER(c_char)]
+SBC_RequestRackDigitalOutputs.argtypes = []
 
 
 def request_rack_digital_outputs(serial_number):
@@ -2515,7 +2510,7 @@ def request_rack_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = SBC_RequestRackDigitalOutputs(serial_number)
 
@@ -2524,7 +2519,7 @@ def request_rack_digital_outputs(serial_number):
 
 SBC_RequestRackStatusBits = lib.SBC_RequestRackStatusBits
 SBC_RequestRackStatusBits.restype = c_short
-SBC_RequestRackStatusBits.argtypes = [POINTER(c_char)]
+SBC_RequestRackStatusBits.argtypes = []
 
 
 def request_rack_status_bits(serial_number):
@@ -2540,7 +2535,7 @@ def request_rack_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
 
     output = SBC_RequestRackStatusBits(serial_number)
 
@@ -2549,7 +2544,7 @@ def request_rack_status_bits(serial_number):
 
 SBC_RequestSettings = lib.SBC_RequestSettings
 SBC_RequestSettings.restype = c_short
-SBC_RequestSettings.argtypes = [POINTER(c_char)]
+SBC_RequestSettings.argtypes = []
 
 
 def request_settings(serial_number):
@@ -2566,7 +2561,7 @@ def request_settings(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestSettings(serial_number)
@@ -2576,7 +2571,7 @@ def request_settings(serial_number):
 
 SBC_RequestStatusBits = lib.SBC_RequestStatusBits
 SBC_RequestStatusBits.restype = c_short
-SBC_RequestStatusBits.argtypes = [POINTER(c_char)]
+SBC_RequestStatusBits.argtypes = []
 
 
 def request_status_bits(serial_number):
@@ -2593,7 +2588,7 @@ def request_status_bits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestStatusBits(serial_number)
@@ -2603,7 +2598,7 @@ def request_status_bits(serial_number):
 
 SBC_RequestTriggerSwitches = lib.SBC_RequestTriggerSwitches
 SBC_RequestTriggerSwitches.restype = c_short
-SBC_RequestTriggerSwitches.argtypes = [POINTER(c_char)]
+SBC_RequestTriggerSwitches.argtypes = []
 
 
 def request_trigger_switches(serial_number):
@@ -2620,7 +2615,7 @@ def request_trigger_switches(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestTriggerSwitches(serial_number)
@@ -2630,7 +2625,7 @@ def request_trigger_switches(serial_number):
 
 SBC_RequestVelParams = lib.SBC_RequestVelParams
 SBC_RequestVelParams.restype = c_short
-SBC_RequestVelParams.argtypes = [POINTER(c_char)]
+SBC_RequestVelParams.argtypes = []
 
 
 def request_vel_params(serial_number):
@@ -2647,7 +2642,7 @@ def request_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_RequestVelParams(serial_number)
@@ -2657,7 +2652,7 @@ def request_vel_params(serial_number):
 
 SBC_ResetRotationModes = lib.SBC_ResetRotationModes
 SBC_ResetRotationModes.restype = c_short
-SBC_ResetRotationModes.argtypes = [POINTER(c_char)]
+SBC_ResetRotationModes.argtypes = []
 
 
 def reset_rotation_modes(serial_number):
@@ -2674,7 +2669,7 @@ def reset_rotation_modes(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_ResetRotationModes(serial_number)
@@ -2684,7 +2679,7 @@ def reset_rotation_modes(serial_number):
 
 SBC_ResumeMoveMessages = lib.SBC_ResumeMoveMessages
 SBC_ResumeMoveMessages.restype = c_short
-SBC_ResumeMoveMessages.argtypes = [POINTER(c_char)]
+SBC_ResumeMoveMessages.argtypes = []
 
 
 def resume_move_messages(serial_number):
@@ -2701,7 +2696,7 @@ def resume_move_messages(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_ResumeMoveMessages(serial_number)
@@ -2711,7 +2706,7 @@ def resume_move_messages(serial_number):
 
 SBC_SetBacklash = lib.SBC_SetBacklash
 SBC_SetBacklash.restype = c_short
-SBC_SetBacklash.argtypes = [POINTER(c_char)]
+SBC_SetBacklash.argtypes = []
 
 
 def set_backlash(serial_number):
@@ -2729,7 +2724,7 @@ def set_backlash(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     distance = c_long()
 
@@ -2740,7 +2735,7 @@ def set_backlash(serial_number):
 
 SBC_SetBowIndex = lib.SBC_SetBowIndex
 SBC_SetBowIndex.restype = c_short
-SBC_SetBowIndex.argtypes = [POINTER(c_char)]
+SBC_SetBowIndex.argtypes = []
 
 
 def set_bow_index(serial_number):
@@ -2758,7 +2753,7 @@ def set_bow_index(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     bowIndex = c_short()
 
@@ -2769,7 +2764,7 @@ def set_bow_index(serial_number):
 
 SBC_SetCalibrationFile = lib.SBC_SetCalibrationFile
 SBC_SetCalibrationFile.restype = c_void_p
-SBC_SetCalibrationFile.argtypes = [POINTER(c_char)]
+SBC_SetCalibrationFile.argtypes = []
 
 
 def set_calibration_file(serial_number):
@@ -2788,7 +2783,7 @@ def set_calibration_file(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     filename = POINTER(c_char)()
     enabled = c_bool()
@@ -2800,7 +2795,7 @@ def set_calibration_file(serial_number):
 
 SBC_SetDigitalOutputs = lib.SBC_SetDigitalOutputs
 SBC_SetDigitalOutputs.restype = c_short
-SBC_SetDigitalOutputs.argtypes = [POINTER(c_char)]
+SBC_SetDigitalOutputs.argtypes = []
 
 
 def set_digital_outputs(serial_number):
@@ -2818,7 +2813,7 @@ def set_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     outputsBits = c_byte()
 
@@ -2829,7 +2824,7 @@ def set_digital_outputs(serial_number):
 
 SBC_SetDirection = lib.SBC_SetDirection
 SBC_SetDirection.restype = c_short
-SBC_SetDirection.argtypes = [POINTER(c_char)]
+SBC_SetDirection.argtypes = []
 
 
 def set_direction(serial_number):
@@ -2847,7 +2842,7 @@ def set_direction(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     reverse = c_bool()
 
@@ -2858,7 +2853,7 @@ def set_direction(serial_number):
 
 SBC_SetEncoderCounter = lib.SBC_SetEncoderCounter
 SBC_SetEncoderCounter.restype = c_short
-SBC_SetEncoderCounter.argtypes = [POINTER(c_char)]
+SBC_SetEncoderCounter.argtypes = []
 
 
 def set_encoder_counter(serial_number):
@@ -2876,7 +2871,7 @@ def set_encoder_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     count = c_long()
 
@@ -2887,7 +2882,7 @@ def set_encoder_counter(serial_number):
 
 SBC_SetHomingParamsBlock = lib.SBC_SetHomingParamsBlock
 SBC_SetHomingParamsBlock.restype = c_short
-SBC_SetHomingParamsBlock.argtypes = [POINTER(c_char)]
+SBC_SetHomingParamsBlock.argtypes = []
 
 
 def set_homing_params_block(serial_number):
@@ -2905,7 +2900,7 @@ def set_homing_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     homingParams = MOT_HomingParameters()
 
@@ -2916,7 +2911,7 @@ def set_homing_params_block(serial_number):
 
 SBC_SetHomingVelocity = lib.SBC_SetHomingVelocity
 SBC_SetHomingVelocity.restype = c_short
-SBC_SetHomingVelocity.argtypes = [POINTER(c_char)]
+SBC_SetHomingVelocity.argtypes = []
 
 
 def set_homing_velocity(serial_number):
@@ -2934,7 +2929,7 @@ def set_homing_velocity(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     velocity = c_uint()
 
@@ -2945,7 +2940,7 @@ def set_homing_velocity(serial_number):
 
 SBC_SetJogMode = lib.SBC_SetJogMode
 SBC_SetJogMode.restype = c_short
-SBC_SetJogMode.argtypes = [POINTER(c_char)]
+SBC_SetJogMode.argtypes = []
 
 
 def set_jog_mode(serial_number):
@@ -2964,7 +2959,7 @@ def set_jog_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     mode = MOT_JogModes()
     stopMode = MOT_StopModes()
@@ -2976,7 +2971,7 @@ def set_jog_mode(serial_number):
 
 SBC_SetJogParamsBlock = lib.SBC_SetJogParamsBlock
 SBC_SetJogParamsBlock.restype = c_short
-SBC_SetJogParamsBlock.argtypes = [POINTER(c_char)]
+SBC_SetJogParamsBlock.argtypes = []
 
 
 def set_jog_params_block(serial_number):
@@ -2995,7 +2990,7 @@ def set_jog_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     jogParams = MOT_JogParameters()
     jogParameters = MOT_JogParameters()
@@ -3007,7 +3002,7 @@ def set_jog_params_block(serial_number):
 
 SBC_SetJogStepSize = lib.SBC_SetJogStepSize
 SBC_SetJogStepSize.restype = c_short
-SBC_SetJogStepSize.argtypes = [POINTER(c_char)]
+SBC_SetJogStepSize.argtypes = []
 
 
 def set_jog_step_size(serial_number):
@@ -3025,7 +3020,7 @@ def set_jog_step_size(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     stepSize = c_uint()
 
@@ -3036,7 +3031,7 @@ def set_jog_step_size(serial_number):
 
 SBC_SetJogVelParams = lib.SBC_SetJogVelParams
 SBC_SetJogVelParams.restype = c_short
-SBC_SetJogVelParams.argtypes = [POINTER(c_char)]
+SBC_SetJogVelParams.argtypes = []
 
 
 def set_jog_vel_params(serial_number):
@@ -3055,7 +3050,7 @@ def set_jog_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     acceleration = c_int()
     maxVelocity = c_int()
@@ -3067,7 +3062,7 @@ def set_jog_vel_params(serial_number):
 
 SBC_SetJoystickParams = lib.SBC_SetJoystickParams
 SBC_SetJoystickParams.restype = c_short
-SBC_SetJoystickParams.argtypes = [POINTER(c_char)]
+SBC_SetJoystickParams.argtypes = []
 
 
 def set_joystick_params(serial_number):
@@ -3085,7 +3080,7 @@ def set_joystick_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     joystickParams = MOT_JoystickParameters()
 
@@ -3096,7 +3091,7 @@ def set_joystick_params(serial_number):
 
 SBC_SetLimitSwitchParams = lib.SBC_SetLimitSwitchParams
 SBC_SetLimitSwitchParams.restype = c_short
-SBC_SetLimitSwitchParams.argtypes = [POINTER(c_char)]
+SBC_SetLimitSwitchParams.argtypes = []
 
 
 def set_limit_switch_params(serial_number):
@@ -3118,7 +3113,7 @@ def set_limit_switch_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     clockwiseHardwareLimit = MOT_LimitSwitchModes()
     anticlockwiseHardwareLimit = MOT_LimitSwitchModes()
@@ -3133,7 +3128,7 @@ def set_limit_switch_params(serial_number):
 
 SBC_SetLimitSwitchParamsBlock = lib.SBC_SetLimitSwitchParamsBlock
 SBC_SetLimitSwitchParamsBlock.restype = c_short
-SBC_SetLimitSwitchParamsBlock.argtypes = [POINTER(c_char)]
+SBC_SetLimitSwitchParamsBlock.argtypes = []
 
 
 def set_limit_switch_params_block(serial_number):
@@ -3151,7 +3146,7 @@ def set_limit_switch_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     limitSwitchParams = MOT_LimitSwitchParameters()
 
@@ -3162,7 +3157,7 @@ def set_limit_switch_params_block(serial_number):
 
 SBC_SetLimitsSoftwareApproachPolicy = lib.SBC_SetLimitsSoftwareApproachPolicy
 SBC_SetLimitsSoftwareApproachPolicy.restype = c_void_p
-SBC_SetLimitsSoftwareApproachPolicy.argtypes = [POINTER(c_char)]
+SBC_SetLimitsSoftwareApproachPolicy.argtypes = []
 
 
 def set_limits_software_approach_policy(serial_number):
@@ -3180,7 +3175,7 @@ def set_limits_software_approach_policy(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     limitsSoftwareApproachPolicy = MOT_LimitsSoftwareApproachPolicy()
 
@@ -3191,7 +3186,7 @@ def set_limits_software_approach_policy(serial_number):
 
 SBC_SetMotorParams = lib.SBC_SetMotorParams
 SBC_SetMotorParams.restype = c_short
-SBC_SetMotorParams.argtypes = [POINTER(c_char)]
+SBC_SetMotorParams.argtypes = []
 
 
 def set_motor_params(serial_number):
@@ -3211,7 +3206,7 @@ def set_motor_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     stepsPerRev = c_long()
     gearBoxRatio = c_long()
@@ -3224,7 +3219,7 @@ def set_motor_params(serial_number):
 
 SBC_SetMotorParamsExt = lib.SBC_SetMotorParamsExt
 SBC_SetMotorParamsExt.restype = c_short
-SBC_SetMotorParamsExt.argtypes = [POINTER(c_char)]
+SBC_SetMotorParamsExt.argtypes = []
 
 
 def set_motor_params_ext(serial_number):
@@ -3244,7 +3239,7 @@ def set_motor_params_ext(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     stepsPerRev = c_double()
     gearBoxRatio = c_double()
@@ -3257,7 +3252,7 @@ def set_motor_params_ext(serial_number):
 
 SBC_SetMotorTravelLimits = lib.SBC_SetMotorTravelLimits
 SBC_SetMotorTravelLimits.restype = c_short
-SBC_SetMotorTravelLimits.argtypes = [POINTER(c_char)]
+SBC_SetMotorTravelLimits.argtypes = []
 
 
 def set_motor_travel_limits(serial_number):
@@ -3276,7 +3271,7 @@ def set_motor_travel_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     minPosition = c_double()
     maxPosition = c_double()
@@ -3288,7 +3283,7 @@ def set_motor_travel_limits(serial_number):
 
 SBC_SetMotorTravelMode = lib.SBC_SetMotorTravelMode
 SBC_SetMotorTravelMode.restype = c_short
-SBC_SetMotorTravelMode.argtypes = [POINTER(c_char)]
+SBC_SetMotorTravelMode.argtypes = []
 
 
 def set_motor_travel_mode(serial_number):
@@ -3306,7 +3301,7 @@ def set_motor_travel_mode(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     travelMode = MOT_TravelModes()
 
@@ -3317,7 +3312,7 @@ def set_motor_travel_mode(serial_number):
 
 SBC_SetMotorVelocityLimits = lib.SBC_SetMotorVelocityLimits
 SBC_SetMotorVelocityLimits.restype = c_short
-SBC_SetMotorVelocityLimits.argtypes = [POINTER(c_char)]
+SBC_SetMotorVelocityLimits.argtypes = []
 
 
 def set_motor_velocity_limits(serial_number):
@@ -3336,7 +3331,7 @@ def set_motor_velocity_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     maxVelocity = c_double()
     maxAcceleration = c_double()
@@ -3348,7 +3343,7 @@ def set_motor_velocity_limits(serial_number):
 
 SBC_SetMoveAbsolutePosition = lib.SBC_SetMoveAbsolutePosition
 SBC_SetMoveAbsolutePosition.restype = c_short
-SBC_SetMoveAbsolutePosition.argtypes = [POINTER(c_char)]
+SBC_SetMoveAbsolutePosition.argtypes = []
 
 
 def set_move_absolute_position(serial_number):
@@ -3366,7 +3361,7 @@ def set_move_absolute_position(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     position = c_int()
 
@@ -3377,7 +3372,7 @@ def set_move_absolute_position(serial_number):
 
 SBC_SetMoveRelativeDistance = lib.SBC_SetMoveRelativeDistance
 SBC_SetMoveRelativeDistance.restype = c_short
-SBC_SetMoveRelativeDistance.argtypes = [POINTER(c_char)]
+SBC_SetMoveRelativeDistance.argtypes = []
 
 
 def set_move_relative_distance(serial_number):
@@ -3395,7 +3390,7 @@ def set_move_relative_distance(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     distance = c_int()
 
@@ -3406,7 +3401,7 @@ def set_move_relative_distance(serial_number):
 
 SBC_SetPIDLoopEncoderCoeff = lib.SBC_SetPIDLoopEncoderCoeff
 SBC_SetPIDLoopEncoderCoeff.restype = c_short
-SBC_SetPIDLoopEncoderCoeff.argtypes = [POINTER(c_char)]
+SBC_SetPIDLoopEncoderCoeff.argtypes = []
 
 
 def set_p_i_d_loop_encoder_coeff(serial_number):
@@ -3424,7 +3419,7 @@ def set_p_i_d_loop_encoder_coeff(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     coeff = c_double()
 
@@ -3435,7 +3430,7 @@ def set_p_i_d_loop_encoder_coeff(serial_number):
 
 SBC_SetPIDLoopEncoderParams = lib.SBC_SetPIDLoopEncoderParams
 SBC_SetPIDLoopEncoderParams.restype = c_short
-SBC_SetPIDLoopEncoderParams.argtypes = [POINTER(c_char)]
+SBC_SetPIDLoopEncoderParams.argtypes = []
 
 
 def set_p_i_d_loop_encoder_params(serial_number):
@@ -3453,7 +3448,7 @@ def set_p_i_d_loop_encoder_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     params = MOT_PIDLoopEncoderParams()
 
@@ -3464,7 +3459,7 @@ def set_p_i_d_loop_encoder_params(serial_number):
 
 SBC_SetPositionCounter = lib.SBC_SetPositionCounter
 SBC_SetPositionCounter.restype = c_short
-SBC_SetPositionCounter.argtypes = [POINTER(c_char)]
+SBC_SetPositionCounter.argtypes = []
 
 
 def set_position_counter(serial_number):
@@ -3482,7 +3477,7 @@ def set_position_counter(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     count = c_long()
 
@@ -3493,7 +3488,7 @@ def set_position_counter(serial_number):
 
 SBC_SetPowerParams = lib.SBC_SetPowerParams
 SBC_SetPowerParams.restype = c_short
-SBC_SetPowerParams.argtypes = [POINTER(c_char)]
+SBC_SetPowerParams.argtypes = []
 
 
 def set_power_params(serial_number):
@@ -3511,7 +3506,7 @@ def set_power_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     powerParams = MOT_PowerParameters()
 
@@ -3522,7 +3517,7 @@ def set_power_params(serial_number):
 
 SBC_SetRackDigitalOutputs = lib.SBC_SetRackDigitalOutputs
 SBC_SetRackDigitalOutputs.restype = c_short
-SBC_SetRackDigitalOutputs.argtypes = [POINTER(c_char)]
+SBC_SetRackDigitalOutputs.argtypes = []
 
 
 def set_rack_digital_outputs(serial_number):
@@ -3539,7 +3534,7 @@ def set_rack_digital_outputs(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     outputsBits = c_byte()
 
     output = SBC_SetRackDigitalOutputs(serial_number)
@@ -3549,7 +3544,7 @@ def set_rack_digital_outputs(serial_number):
 
 SBC_SetRotationModes = lib.SBC_SetRotationModes
 SBC_SetRotationModes.restype = c_short
-SBC_SetRotationModes.argtypes = [POINTER(c_char)]
+SBC_SetRotationModes.argtypes = []
 
 
 def set_rotation_modes(serial_number):
@@ -3568,7 +3563,7 @@ def set_rotation_modes(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     mode = MOT_MovementModes()
     direction = MOT_MovementDirections()
@@ -3580,7 +3575,7 @@ def set_rotation_modes(serial_number):
 
 SBC_SetStageAxisLimits = lib.SBC_SetStageAxisLimits
 SBC_SetStageAxisLimits.restype = c_short
-SBC_SetStageAxisLimits.argtypes = [POINTER(c_char)]
+SBC_SetStageAxisLimits.argtypes = []
 
 
 def set_stage_axis_limits(serial_number):
@@ -3599,7 +3594,7 @@ def set_stage_axis_limits(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     minPosition = c_int()
     maxPosition = c_int()
@@ -3611,7 +3606,7 @@ def set_stage_axis_limits(serial_number):
 
 SBC_SetTriggerSwitches = lib.SBC_SetTriggerSwitches
 SBC_SetTriggerSwitches.restype = c_short
-SBC_SetTriggerSwitches.argtypes = [POINTER(c_char)]
+SBC_SetTriggerSwitches.argtypes = []
 
 
 def set_trigger_switches(serial_number):
@@ -3629,7 +3624,7 @@ def set_trigger_switches(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     indicatorBits = c_byte()
 
@@ -3640,7 +3635,7 @@ def set_trigger_switches(serial_number):
 
 SBC_SetVelParams = lib.SBC_SetVelParams
 SBC_SetVelParams.restype = c_short
-SBC_SetVelParams.argtypes = [POINTER(c_char)]
+SBC_SetVelParams.argtypes = []
 
 
 def set_vel_params(serial_number):
@@ -3659,7 +3654,7 @@ def set_vel_params(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     acceleration = c_int()
     maxVelocity = c_int()
@@ -3671,7 +3666,7 @@ def set_vel_params(serial_number):
 
 SBC_SetVelParamsBlock = lib.SBC_SetVelParamsBlock
 SBC_SetVelParamsBlock.restype = c_short
-SBC_SetVelParamsBlock.argtypes = [POINTER(c_char)]
+SBC_SetVelParamsBlock.argtypes = []
 
 
 def set_vel_params_block(serial_number):
@@ -3690,7 +3685,7 @@ def set_vel_params_block(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     velocityParams = MOT_VelocityParameters()
     velocityParameters = MOT_VelocityParameters()
@@ -3702,7 +3697,7 @@ def set_vel_params_block(serial_number):
 
 SBC_StartPolling = lib.SBC_StartPolling
 SBC_StartPolling.restype = c_bool
-SBC_StartPolling.argtypes = [POINTER(c_char)]
+SBC_StartPolling.argtypes = []
 
 
 def start_polling(serial_number):
@@ -3720,7 +3715,7 @@ def start_polling(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     milliseconds = c_int()
 
@@ -3731,7 +3726,7 @@ def start_polling(serial_number):
 
 SBC_StopImmediate = lib.SBC_StopImmediate
 SBC_StopImmediate.restype = c_short
-SBC_StopImmediate.argtypes = [POINTER(c_char)]
+SBC_StopImmediate.argtypes = []
 
 
 def stop_immediate(serial_number):
@@ -3748,7 +3743,7 @@ def stop_immediate(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_StopImmediate(serial_number)
@@ -3758,7 +3753,7 @@ def stop_immediate(serial_number):
 
 SBC_StopPolling = lib.SBC_StopPolling
 SBC_StopPolling.restype = c_void_p
-SBC_StopPolling.argtypes = [POINTER(c_char)]
+SBC_StopPolling.argtypes = []
 
 
 def stop_polling(serial_number):
@@ -3775,7 +3770,7 @@ def stop_polling(serial_number):
         c_void_p
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_StopPolling(serial_number)
@@ -3785,7 +3780,7 @@ def stop_polling(serial_number):
 
 SBC_StopProfiled = lib.SBC_StopProfiled
 SBC_StopProfiled.restype = c_short
-SBC_StopProfiled.argtypes = [POINTER(c_char)]
+SBC_StopProfiled.argtypes = []
 
 
 def stop_profiled(serial_number):
@@ -3802,7 +3797,7 @@ def stop_profiled(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_StopProfiled(serial_number)
@@ -3812,7 +3807,7 @@ def stop_profiled(serial_number):
 
 SBC_SuspendMoveMessages = lib.SBC_SuspendMoveMessages
 SBC_SuspendMoveMessages.restype = c_short
-SBC_SuspendMoveMessages.argtypes = [POINTER(c_char)]
+SBC_SuspendMoveMessages.argtypes = []
 
 
 def suspend_move_messages(serial_number):
@@ -3829,7 +3824,7 @@ def suspend_move_messages(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_SuspendMoveMessages(serial_number)
@@ -3839,7 +3834,7 @@ def suspend_move_messages(serial_number):
 
 SBC_TimeSinceLastMsgReceived = lib.SBC_TimeSinceLastMsgReceived
 SBC_TimeSinceLastMsgReceived.restype = c_bool
-SBC_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char)]
+SBC_TimeSinceLastMsgReceived.argtypes = []
 
 
 def time_since_last_msg_received(serial_number):
@@ -3857,7 +3852,7 @@ def time_since_last_msg_received(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     lastUpdateTimeMS = c_int64()
 
@@ -3868,7 +3863,7 @@ def time_since_last_msg_received(serial_number):
 
 SBC_UsesPIDLoopEncoding = lib.SBC_UsesPIDLoopEncoding
 SBC_UsesPIDLoopEncoding.restype = c_bool
-SBC_UsesPIDLoopEncoding.argtypes = [POINTER(c_char)]
+SBC_UsesPIDLoopEncoding.argtypes = []
 
 
 def uses_p_i_d_loop_encoding(serial_number):
@@ -3885,7 +3880,7 @@ def uses_p_i_d_loop_encoding(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
 
     output = SBC_UsesPIDLoopEncoding(serial_number)
@@ -3895,7 +3890,7 @@ def uses_p_i_d_loop_encoding(serial_number):
 
 SBC_WaitForMessage = lib.SBC_WaitForMessage
 SBC_WaitForMessage.restype = c_bool
-SBC_WaitForMessage.argtypes = [POINTER(c_char)]
+SBC_WaitForMessage.argtypes = []
 
 
 def wait_for_message(serial_number):
@@ -3915,7 +3910,7 @@ def wait_for_message(serial_number):
         c_bool
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     channel = c_short()
     messageType = c_long()
     messageID = c_long()
@@ -3954,7 +3949,7 @@ def build_device_list():
 
 TLI_GetDeviceInfo = lib.TLI_GetDeviceInfo
 TLI_GetDeviceInfo.restype = c_short
-TLI_GetDeviceInfo.argtypes = [POINTER(c_char)]
+TLI_GetDeviceInfo.argtypes = []
 
 
 def get_device_info(serial_number):
@@ -3972,18 +3967,20 @@ def get_device_info(serial_number):
         c_short
     '''
 
-    serial_number = c_char_p(bytes(str(serial_number), "utf-8"))
+    serial_number = c_char_pointer(serial_number)
     serialNumber = POINTER(c_char)()
     info = TLI_DeviceInfo()
 
     output = TLI_GetDeviceInfo(serial_number)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceList = lib.TLI_GetDeviceList
 TLI_GetDeviceList.restype = c_short
-TLI_GetDeviceList.argtypes = [SafeArray]
+TLI_GetDeviceList.argtypes = []
 
 
 def get_device_list(stringsReceiver):
@@ -4010,7 +4007,7 @@ def get_device_list(stringsReceiver):
 
 TLI_GetDeviceListByType = lib.TLI_GetDeviceListByType
 TLI_GetDeviceListByType.restype = c_short
-TLI_GetDeviceListByType.argtypes = [SafeArray]
+TLI_GetDeviceListByType.argtypes = []
 
 
 def get_device_list_by_type(stringsReceiver):
@@ -4032,12 +4029,14 @@ def get_device_list_by_type(stringsReceiver):
 
     output = TLI_GetDeviceListByType(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypeExt = lib.TLI_GetDeviceListByTypeExt
 TLI_GetDeviceListByTypeExt.restype = c_short
-TLI_GetDeviceListByTypeExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypeExt.argtypes = []
 
 
 def get_device_list_by_type_ext(receiveBuffer):
@@ -4061,12 +4060,14 @@ def get_device_list_by_type_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypeExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypes = lib.TLI_GetDeviceListByTypes
 TLI_GetDeviceListByTypes.restype = c_short
-TLI_GetDeviceListByTypes.argtypes = [SafeArray]
+TLI_GetDeviceListByTypes.argtypes = []
 
 
 def get_device_list_by_types(stringsReceiver):
@@ -4090,12 +4091,14 @@ def get_device_list_by_types(stringsReceiver):
 
     output = TLI_GetDeviceListByTypes(stringsReceiver)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListByTypesExt = lib.TLI_GetDeviceListByTypesExt
 TLI_GetDeviceListByTypesExt.restype = c_short
-TLI_GetDeviceListByTypesExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListByTypesExt.argtypes = []
 
 
 def get_device_list_by_types_ext(receiveBuffer):
@@ -4121,12 +4124,14 @@ def get_device_list_by_types_ext(receiveBuffer):
 
     output = TLI_GetDeviceListByTypesExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListExt = lib.TLI_GetDeviceListExt
 TLI_GetDeviceListExt.restype = c_short
-TLI_GetDeviceListExt.argtypes = [POINTER(c_char)]
+TLI_GetDeviceListExt.argtypes = []
 
 
 def get_device_list_ext(receiveBuffer):
@@ -4148,7 +4153,9 @@ def get_device_list_ext(receiveBuffer):
 
     output = TLI_GetDeviceListExt(receiveBuffer)
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
@@ -4171,7 +4178,9 @@ def get_device_list_size():
 
     output = TLI_GetDeviceListSize()
 
-    return output
+    if output != 0:
+        raise KinesisException(output)
+
 
 
 TLI_InitializeSimulations = lib.TLI_InitializeSimulations
