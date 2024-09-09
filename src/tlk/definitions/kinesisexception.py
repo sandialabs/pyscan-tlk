@@ -1,5 +1,9 @@
 class KinesisException(Exception):
 
+    def __init__(self, error):
+
+        super().__init__(self.error_codes[error])
+
     error_codes = {
         1: 'FT_InvalidHandle - The FTDI functions have not been initialized.',
         2: '''FT_DeviceNotFound - The Device could not be found\n
