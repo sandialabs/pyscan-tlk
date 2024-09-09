@@ -1,5 +1,5 @@
-# tlk
-Python wrappers for Thorlabs Kinesis dlls, still in initial testing
+# pyscan-tlk
+Python wrappers for Thorlabs Kinesis dlls. 
 
 # Installation
 Don't yet!
