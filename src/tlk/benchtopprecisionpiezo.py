@@ -3,14 +3,12 @@ from ctypes import (
     c_byte,
     c_bool,
     c_char,
-    c_char_p,
     c_int,
     c_long,
     c_short,
     c_ulong,
     c_void_p,
-    cdll,
-    pointer)
+    cdll)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     PZ_ControlModeTypes,
@@ -19,9 +17,7 @@ from .definitions.structures import (
     PPC_IOSettings,
     PPC_NotchParams,
     PPC_PIDConsts,
-    TLI_DeviceInfo,
-    TLI_HardwareInformation)
-from .definitions.kinesisexception import KinesisException
+    TLI_DeviceInfo)
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -756,4 +752,3 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
-

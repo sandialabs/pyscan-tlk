@@ -3,7 +3,6 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
-    c_char_p,
     c_double,
     c_float,
     c_int,
@@ -14,8 +13,7 @@ from ctypes import (
     c_uint,
     c_ulong,
     c_void_p,
-    cdll,
-    pointer)
+    cdll)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KMOT_TriggerPortMode,
@@ -34,9 +32,7 @@ from .definitions.structures import (
     MOT_HomingParameters,
     MOT_JogParameters,
     MOT_VelocityParameters,
-    TLI_DeviceInfo,
-    TLI_HardwareInformation)
-from .definitions.kinesisexception import KinesisException
+    TLI_DeviceInfo)
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -326,7 +322,12 @@ KVS_GetTrackSettleParams.argtypes = [POINTER(c_char), MOT_BrushlessTrackSettlePa
 # Get the Trigger Configuration Parameters.
 KVS_GetTriggerConfigParams = lib.KVS_GetTriggerConfigParams
 KVS_GetTriggerConfigParams.restype = c_short
-KVS_GetTriggerConfigParams.argtypes = [POINTER(c_char), KMOT_TriggerPortMode, KMOT_TriggerPortPolarity, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity]
+KVS_GetTriggerConfigParams.argtypes = [
+    POINTER(c_char),
+    KMOT_TriggerPortMode,
+    KMOT_TriggerPortPolarity,
+    KMOT_TriggerPortMode,
+    KMOT_TriggerPortPolarity]
 
 
 # Gets the trigger configuration parameters block.
@@ -338,7 +339,16 @@ KVS_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KMOT_TriggerConfig]
 # Get the Trigger Parameters Parameters.
 KVS_GetTriggerParamsParams = lib.KVS_GetTriggerParamsParams
 KVS_GetTriggerParamsParams.restype = c_short
-KVS_GetTriggerParamsParams.argtypes = [POINTER(c_char), c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
+KVS_GetTriggerParamsParams.argtypes = [
+    POINTER(c_char),
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32]
 
 
 # Gets the trigger parameters block.
@@ -359,7 +369,9 @@ KVS_GetVelParamsBlock.restype = c_short
 KVS_GetVelParamsBlock.argtypes = [POINTER(c_char), MOT_VelocityParameters]
 
 
-# Queries if the time since the last message has exceeded the lastMsgTimeout set by KVS_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the
+# lastMsgTimeout set by KVS_EnableLastMsgTimer(char const * serialNo, bool
+# enable, __int32 lastMsgTimeout ).
 KVS_HasLastMsgTimerOverrun = lib.KVS_HasLastMsgTimerOverrun
 KVS_HasLastMsgTimerOverrun.restype = c_bool
 KVS_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -728,7 +740,12 @@ KVS_SetTrackSettleParams.argtypes = [POINTER(c_char), MOT_BrushlessTrackSettlePa
 # Set the Trigger Configuration Parameters.
 KVS_SetTriggerConfigParams = lib.KVS_SetTriggerConfigParams
 KVS_SetTriggerConfigParams.restype = c_short
-KVS_SetTriggerConfigParams.argtypes = [POINTER(c_char), KMOT_TriggerPortMode, KMOT_TriggerPortPolarity, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity]
+KVS_SetTriggerConfigParams.argtypes = [
+    POINTER(c_char),
+    KMOT_TriggerPortMode,
+    KMOT_TriggerPortPolarity,
+    KMOT_TriggerPortMode,
+    KMOT_TriggerPortPolarity]
 
 
 # Sets the trigger configuration parameters block.
@@ -740,7 +757,16 @@ KVS_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KMOT_TriggerConfig]
 # Set the Trigger Parameters Parameters.
 KVS_SetTriggerParamsParams = lib.KVS_SetTriggerParamsParams
 KVS_SetTriggerParamsParams.restype = c_short
-KVS_SetTriggerParamsParams.argtypes = [POINTER(c_char), c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
+KVS_SetTriggerParamsParams.argtypes = [
+    POINTER(c_char),
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32]
 
 
 # Sets the trigger parameters block.
@@ -849,4 +875,3 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
-

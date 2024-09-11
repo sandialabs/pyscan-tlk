@@ -3,7 +3,6 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
-    c_char_p,
     c_int,
     c_int16,
     c_int32,
@@ -11,8 +10,7 @@ from ctypes import (
     c_short,
     c_ulong,
     c_void_p,
-    cdll,
-    pointer)
+    cdll)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KPZ_WheelChangeRate,
@@ -27,9 +25,7 @@ from .definitions.structures import (
     PPC_IOSettings,
     PPC_PIDConsts,
     PPC_PIDCriteria,
-    TLI_DeviceInfo,
-    TLI_HardwareInformation)
-from .definitions.kinesisexception import KinesisException
+    TLI_DeviceInfo)
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -127,7 +123,17 @@ IPP_GetIOSettings.argtypes = [POINTER(c_char), PPC_IOSettings]
 # Get the MMI Parameters for the Integrated Precision Piezo.
 IPP_GetMMIParams = lib.IPP_GetMMIParams
 IPP_GetMMIParams.restype = c_short
-IPP_GetMMIParams.argtypes = [POINTER(c_char), KPZ_WheelMode, KPZ_WheelChangeRate, c_int32, KPZ_WheelDirectionSense, c_int32, c_int32, c_int16, c_int16, c_int16]
+IPP_GetMMIParams.argtypes = [
+    POINTER(c_char),
+    KPZ_WheelMode,
+    KPZ_WheelChangeRate,
+    c_int32,
+    KPZ_WheelDirectionSense,
+    c_int32,
+    c_int32,
+    c_int16,
+    c_int16,
+    c_int16]
 
 
 # Gets the maximum output voltage (140V) in units of 1 tenth of a volt
@@ -193,7 +199,15 @@ IPP_GetStatusBits.argtypes = [POINTER(c_char)]
 # Get the Trigger Configuration Parameters.
 IPP_GetTriggerConfigParams = lib.IPP_GetTriggerConfigParams
 IPP_GetTriggerConfigParams.restype = c_short
-IPP_GetTriggerConfigParams.argtypes = [POINTER(c_char), KSG_TriggerPortMode, KSG_TriggerPortPolarity, KSG_TriggerPortMode, KSG_TriggerPortPolarity, c_int32, c_int32, c_int16]
+IPP_GetTriggerConfigParams.argtypes = [
+    POINTER(c_char),
+    KSG_TriggerPortMode,
+    KSG_TriggerPortPolarity,
+    KSG_TriggerPortMode,
+    KSG_TriggerPortPolarity,
+    c_int32,
+    c_int32,
+    c_int16]
 
 
 # Gets the trigger configuration parameters block.
@@ -355,7 +369,17 @@ IPP_SetIOSettings.argtypes = [POINTER(c_char), PPC_IOSettings]
 # Set the MMI Parameters for the Integrated PrecisionPiezo.
 IPP_SetMMIParams = lib.IPP_SetMMIParams
 IPP_SetMMIParams.restype = c_short
-IPP_SetMMIParams.argtypes = [POINTER(c_char), KPZ_WheelMode, KPZ_WheelChangeRate, c_int32, KPZ_WheelDirectionSense, c_int32, c_int32, c_int16, c_int16, c_int16]
+IPP_SetMMIParams.argtypes = [
+    POINTER(c_char),
+    KPZ_WheelMode,
+    KPZ_WheelChangeRate,
+    c_int32,
+    KPZ_WheelDirectionSense,
+    c_int32,
+    c_int32,
+    c_int16,
+    c_int16,
+    c_int16]
 
 
 # Sets the output voltage.
@@ -391,7 +415,15 @@ IPP_SetPositionControlMode.argtypes = [POINTER(c_char), PZ_ControlModeTypes]
 # Set the Trigger Configuration Parameters.
 IPP_SetTriggerConfigParams = lib.IPP_SetTriggerConfigParams
 IPP_SetTriggerConfigParams.restype = c_short
-IPP_SetTriggerConfigParams.argtypes = [POINTER(c_char), KSG_TriggerPortMode, KSG_TriggerPortPolarity, KSG_TriggerPortMode, KSG_TriggerPortPolarity, c_int32, c_int32, c_int16]
+IPP_SetTriggerConfigParams.argtypes = [
+    POINTER(c_char),
+    KSG_TriggerPortMode,
+    KSG_TriggerPortPolarity,
+    KSG_TriggerPortMode,
+    KSG_TriggerPortPolarity,
+    c_int32,
+    c_int32,
+    c_int16]
 
 
 # Sets the trigger configuration parameters block.
@@ -476,4 +508,3 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
-

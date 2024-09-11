@@ -1073,6 +1073,7 @@ class PZ_LUTWaveParameters(Structure):
         ("preCycleDelay", c_uint),
     ]
 
+
 class PZ_StageAxisParameters(Structure):
     _fields_ = [
         ('stageID', c_long),
@@ -1093,7 +1094,7 @@ class PZ_StageAxisParameters(Structure):
         ('reserved6', c_long),
         ('reserved7', c_long),
         ('reserved8', c_long),
-        ]
+    ]
 
 
 class QD_ClosedLoopPosition(Structure):
@@ -1233,13 +1234,15 @@ class TIM_DriveOPParameters(Structure):
         ('stepAcceleration', c_int32)
     ]
 
+
 class TIM_JogParameters(Structure):
     _fields_ = [
         ('jogMode', TIM_JogMode),
-        ('jogStepSize', c_int32), 
+        ('jogStepSize', c_int32),
         ('jogStepRate', c_int32),
         ('jogStepAcceleration', c_int32)
     ]
+
 
 class TLI_DeviceInfo(Structure):
     _fields_ = [
