@@ -65,7 +65,7 @@ device_manager = cdll.LoadLibrary(
     lib_path + "Thorlabs.MotionControl.DeviceManager.dll")
 
 lib = cdll.LoadLibrary(
-    lib_path + "Thorlabs.MotionControl.Bencthop.BrushlessMotor.dll")
+    lib_path + "Thorlabs.MotionControl.Benchtop.BrushlessMotor.dll")
 
 
 # Build the DeviceList.

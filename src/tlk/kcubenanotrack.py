@@ -30,6 +30,7 @@ from .definitions.enumerations import (
     NT_Mode,
     NT_OddOrEven,
     NT_OutputVoltageRoute,
+    NT_SignalState,
     NT_TIARange,
     NT_TIARangeMode,
     NT_VoltageRange)
@@ -307,9 +308,9 @@ NT_GetXYScanLine.argtypes = [POINTER(c_char), c_int, c_byte, c_int]
 
 
 # Gets XY scan range.
-NT_GetXYScanRange = lib.NT_GetXYScanRange
-NT_GetXYScanRange.restype = KNA_TIARange
-NT_GetXYScanRange.argtypes = [POINTER(c_char)]
+# NT_GetXYScanRange = lib.NT_GetXYScanRange
+# NT_GetXYScanRange.restype = KNA_TIARange
+# NT_GetXYScanRange.argtypes = [POINTER(c_char)]
 
 
 # Queries if the time since the last message has exceeded the lastMsgTimeout set by NT_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).

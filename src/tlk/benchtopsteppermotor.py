@@ -607,9 +607,9 @@ SBC_RequestStatusBits.argtypes = [POINTER(c_char), c_short]
 
 
 # Requests the trigger switch parameter.
-SBC_RequestTriggerSwitches = lib.SBC_RequestTriggerSwitches
-SBC_RequestTriggerSwitches.restype = c_short
-SBC_RequestTriggerSwitches.argtypes = [POINTER(c_char), c_short]
+# SBC_RequestTriggerSwitches = lib.SBC_RequestTriggerSwitches
+# SBC_RequestTriggerSwitches.restype = c_short
+# SBC_RequestTriggerSwitches.argtypes = [POINTER(c_char), c_short]
 
 
 # Requests the velocity parameters.

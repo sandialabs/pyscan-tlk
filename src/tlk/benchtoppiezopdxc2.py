@@ -7,6 +7,7 @@ from ctypes import (
     c_int32,
     c_int64,
     c_long,
+    c_short,
     c_ulong,
     c_void_p,
     cdll,
@@ -16,12 +17,12 @@ from .definitions.enumerations import (
     MOT_TravelDirection,
     PDXC2_TriggerModes,
     PZ_AmpOutParameters,
-    PZ_ControlModeTypes,
-    PZ_StageAxisParameters)
+    PZ_ControlModeTypes)
 from .definitions.structures import (
     PDXC2_ClosedLoopParameters,
     PDXC2_JogParameters,
     PDXC2_OpenLoopMoveParameters,
+    PZ_StageAxisParameters,
     PDXC2_TriggerParams,
     TLI_DeviceInfo,
     TLI_HardwareInformation)
@@ -33,7 +34,7 @@ device_manager = cdll.LoadLibrary(
     lib_path + "Thorlabs.MotionControl.DeviceManager.dll")
 
 lib = cdll.LoadLibrary(
-    lib_path + "MotionControl.Benchtop.Piezo.DLL")
+    lib_path + "Thorlabs.MotionControl.Benchtop.Piezo.dll")
 
 
 # Build the DeviceList.

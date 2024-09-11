@@ -1,6 +1,7 @@
 from ctypes import (
     POINTER,
     c_bool,
+    c_byte,
     c_char,
     c_char_p,
     c_float,
@@ -192,9 +193,9 @@ LD_GetLaserSetPoint.argtypes = [POINTER(c_char)]
 
 
 # Gets the maximum current dig pot position.
-LD_GetMaxCurrentDigPot = lib.LD_GetMaxCurrentDigPot
-LD_GetMaxCurrentDigPot.restype = c_long
-LD_GetMaxCurrentDigPot.argtypes = [POINTER(c_char)]
+# LD_GetMaxCurrentDigPot = lib.LD_GetMaxCurrentDigPot
+# LD_GetMaxCurrentDigPot.restype = c_long
+# LD_GetMaxCurrentDigPot.argtypes = [POINTER(c_char)]
 
 
 # Get the next MessageQueue item.
@@ -462,9 +463,9 @@ LD_WaitForMessage.argtypes = [POINTER(c_char), c_long, c_long, c_ulong]
 
 
 # Gets the MMI parameters.
-LS_GetMMIParams = lib.LS_GetMMIParams
-LS_GetMMIParams.restype = c_short
-LS_GetMMIParams.argtypes = [POINTER(c_char)]
+# LS_GetMMIParams = lib.LS_GetMMIParams
+# LS_GetMMIParams.restype = c_short
+# LS_GetMMIParams.argtypes = [POINTER(c_char)]
 
 
 # Gets the MMI parameters.
@@ -498,9 +499,9 @@ LS_RequestTrigIOParams.argtypes = [POINTER(c_char)]
 
 
 # Sets the MMI parameters.
-LS_SetMMIParams = lib.LS_SetMMIParams
-LS_SetMMIParams.restype = c_short
-LS_SetMMIParams.argtypes = [POINTER(c_char), c_short]
+# LS_SetMMIParams = lib.LS_SetMMIParams
+# LS_SetMMIParams.restype = c_short
+# LS_SetMMIParams.argtypes = [POINTER(c_char), c_short]
 
 
 # Sets the MMI parameters.

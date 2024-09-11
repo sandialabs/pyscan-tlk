@@ -22,6 +22,7 @@ from .definitions.enumerations import (
     NT_FeedbackSource,
     NT_Mode,
     NT_OddOrEven,
+    NT_SignalState,
     NT_TIARange,
     NT_TIARangeMode)
 from .definitions.structures import (

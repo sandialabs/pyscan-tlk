@@ -70,9 +70,9 @@ TLI_InitializeSimulations.argtypes = []
 
 
 # Determine if the device front panel can be locked.
-SCC_CanDeviceLockFrontPanel = lib.SCC_CanDeviceLockFrontPanel
-SCC_CanDeviceLockFrontPanel.restype = c_bool
-SCC_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
+# SCC_CanDeviceLockFrontPanel = lib.SCC_CanDeviceLockFrontPanel
+# SCC_CanDeviceLockFrontPanel.restype = c_bool
+# SCC_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
 
 
 # Can the device perform a Home.
@@ -160,9 +160,9 @@ SCC_GetEncoderCounter.argtypes = [POINTER(c_char)]
 
 
 # Query if the device front panel locked.
-SCC_GetFrontPanelLocked = lib.SCC_GetFrontPanelLocked
-SCC_GetFrontPanelLocked.restype = c_bool
-SCC_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
+# SCC_GetFrontPanelLocked = lib.SCC_GetFrontPanelLocked
+# SCC_GetFrontPanelLocked.restype = c_bool
+# SCC_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
 
 
 # Gets the hardware information from the device.
@@ -538,9 +538,9 @@ SCC_RequestEncoderCounter.argtypes = [POINTER(c_char)]
 
 
 # Ask the device if its front panel is locked.
-SCC_RequestFrontPanelLocked = lib.SCC_RequestFrontPanelLocked
-SCC_RequestFrontPanelLocked.restype = c_short
-SCC_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
+# SCC_RequestFrontPanelLocked = lib.SCC_RequestFrontPanelLocked
+# SCC_RequestFrontPanelLocked.restype = c_short
+# SCC_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
 
 
 # Requests the homing parameters.
@@ -676,9 +676,9 @@ SCC_SetEncoderCounter.argtypes = [POINTER(c_char), c_long]
 
 
 # Sets the device front panel lock state.
-SCC_SetFrontPanelLock = lib.SCC_SetFrontPanelLock
-SCC_SetFrontPanelLock.restype = c_short
-SCC_SetFrontPanelLock.argtypes = [POINTER(c_char), c_bool]
+# SCC_SetFrontPanelLock = lib.SCC_SetFrontPanelLock
+# SCC_SetFrontPanelLock.restype = c_short
+# SCC_SetFrontPanelLock.argtypes = [POINTER(c_char), c_bool]
 
 
 # Set the homing parameters.

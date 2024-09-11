@@ -15,14 +15,14 @@ from ctypes import (
     pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
-    TIM_ButtonParameters,
     TIM_ButtonsMode,
     TIM_Channels,
     TIM_Direction,
-    TIM_DriveOPParameters,
-    TIM_JogMode,
-    TIM_JogParameters)
+    TIM_JogMode)
 from .definitions.structures import (
+    TIM_ButtonParameters,
+    TIM_DriveOPParameters,
+    TIM_JogParameters,
     TLI_DeviceInfo,
     TLI_HardwareInformation)
 from .definitions.kinesisexception import KinesisException

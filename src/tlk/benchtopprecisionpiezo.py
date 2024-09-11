@@ -1,6 +1,7 @@
 from ctypes import (
     POINTER,
     c_byte,
+    c_bool,
     c_char,
     c_char_p,
     c_int,
@@ -152,9 +153,9 @@ PPC2_GetStatusBits.argtypes = [POINTER(c_char), c_int]
 
 
 # Gets the control voltage source.
-PPC2_GetVoltageSource = lib.PPC2_GetVoltageSource
-PPC2_GetVoltageSource.restype = PZ_InputSourceFlags
-PPC2_GetVoltageSource.argtypes = [POINTER(c_char), c_int]
+# PPC2_GetVoltageSource = lib.PPC2_GetVoltageSource
+# PPC2_GetVoltageSource.restype = PZ_InputSourceFlags
+# PPC2_GetVoltageSource.argtypes = [POINTER(c_char), c_int]
 
 
 # Sends a command to the device to make it identify iteself.
@@ -260,9 +261,9 @@ PPC2_RequestStatusBits.argtypes = [POINTER(c_char), c_int]
 
 
 # Requests that the current input voltage source be read from the device.
-PPC2_RequestVoltageSource = lib.PPC2_RequestVoltageSource
-PPC2_RequestVoltageSource.restype = c_bool
-PPC2_RequestVoltageSource.argtypes = [POINTER(c_char), c_int]
+# PPC2_RequestVoltageSource = lib.PPC2_RequestVoltageSource
+# PPC2_RequestVoltageSource.restype = c_bool
+# PPC2_RequestVoltageSource.argtypes = [POINTER(c_char), c_int]
 
 
 # Resets all parameters to power-up values.
@@ -326,9 +327,9 @@ PPC2_SetRackDigitalOutputs.argtypes = [POINTER(c_char), c_byte]
 
 
 # Sets the control voltage source.
-PPC2_SetVoltageSource = lib.PPC2_SetVoltageSource
-PPC2_SetVoltageSource.restype = c_short
-PPC2_SetVoltageSource.argtypes = [POINTER(c_char), c_int, PZ_InputSourceFlags]
+# PPC2_SetVoltageSource = lib.PPC2_SetVoltageSource
+# PPC2_SetVoltageSource.restype = c_short
+# PPC2_SetVoltageSource.argtypes = [POINTER(c_char), c_int, PZ_InputSourceFlags]
 
 
 # Sets the voltage output to zero and defines the ensuing actuator position az zero.

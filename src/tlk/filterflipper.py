@@ -7,6 +7,7 @@ from ctypes import (
     c_int32,
     c_int64,
     c_long,
+    c_short,
     c_uint,
     c_ulong,
     c_void_p,

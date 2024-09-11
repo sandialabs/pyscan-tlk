@@ -67,9 +67,9 @@ BMC_CanHome.argtypes = [POINTER(c_char), c_short]
 
 
 # Can this device be moved without Homing.
-BMC_CanMoveWithoutHomingFirst = lib.BMC_CanMoveWithoutHomingFirst
-BMC_CanMoveWithoutHomingFirst.restype = c_bool
-BMC_CanMoveWithoutHomingFirst.argtypes = [POINTER(c_char), c_short]
+# BMC_CanMoveWithoutHomingFirst = lib.BMC_CanMoveWithoutHomingFirst
+# BMC_CanMoveWithoutHomingFirst.restype = c_bool
+# BMC_CanMoveWithoutHomingFirst.argtypes = [POINTER(c_char), c_short]
 
 
 # Check connection.

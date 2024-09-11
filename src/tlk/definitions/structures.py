@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_double,
     c_float,
     c_int,
     c_int16,
@@ -105,6 +106,8 @@ from .enumerations import (
     QD_KPA_TrigPolarities,
     QD_LowVoltageRoute,
     QD_OpenLoopHoldValues,
+    TIM_ButtonsMode,
+    TIM_JogMode,
     TSG_DisplayModes,
     TSG_Hub_Analogue_Modes)
 
@@ -993,6 +996,16 @@ class PDXC2_TriggerParams(Structure):
     ]
 
 
+class PolarizerParameters(Structure):
+    _fields_ = [
+        ('Velocity', c_ushort),
+        ('HomePosition', c_double),
+        ('JogSize1', c_double),
+        ('JogSize2', c_double),
+        ('JogSize3', c_double)
+    ]
+
+
 class PPC_IOSettings(Structure):
     _fields_ = [
         ("controlSrc", PPC_IOControlMode),
@@ -1059,6 +1072,28 @@ class PZ_LUTWaveParameters(Structure):
         ("postCycleDelay", c_uint),
         ("preCycleDelay", c_uint),
     ]
+
+class PZ_StageAxisParameters(Structure):
+    _fields_ = [
+        ('stageID', c_long),
+        ('axisID', c_long),
+        ('partNumber', 16 * c_char),
+        ('serialNumber', c_long),
+        ('countsPerUnit', c_long),
+        ('minPosition', c_int),
+        ('maxPosition', c_int),
+        ('maxAcceleration', c_int),
+        ('maxDeceleration', c_int),
+        ('maxVelocity', c_int),
+        ('reserved1', c_long),
+        ('reserved2', c_long),
+        ('reserved3', c_long),
+        ('reserved4', c_long),
+        ('reserved5', c_long),
+        ('reserved6', c_long),
+        ('reserved7', c_long),
+        ('reserved8', c_long),
+        ]
 
 
 class QD_ClosedLoopPosition(Structure):
@@ -1180,6 +1215,31 @@ class TC_LoopParameters(Structure):
         ("proportionalGain", c_ushort),
     ]
 
+
+class TIM_ButtonParameters(Structure):
+    _fields_ = [
+        ('TIM_ButtonMode', TIM_ButtonsMode),
+        ('Position1', c_int32),
+        ('Position2', c_int32),
+        ('reserved1', c_int16),
+        ('reserved2', c_int16)
+    ]
+
+
+class TIM_DriveOPParameters(Structure):
+    _fields_ = [
+        ('maxVoltage', c_int16),
+        ('stepRate', c_int32),
+        ('stepAcceleration', c_int32)
+    ]
+
+class TIM_JogParameters(Structure):
+    _fields_ = [
+        ('jogMode', TIM_JogMode),
+        ('jogStepSize', c_int32), 
+        ('jogStepRate', c_int32),
+        ('jogStepAcceleration', c_int32)
+    ]
 
 class TLI_DeviceInfo(Structure):
     _fields_ = [

@@ -17,9 +17,9 @@ from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     MOT_TravelDirection,
     POL_PaddleBits,
-    POL_Paddles,
-    PolarizerParameters)
+    POL_Paddles)
 from .definitions.structures import (
+    PolarizerParameters,
     TLI_DeviceInfo)
 from .definitions.kinesisexception import KinesisException
 

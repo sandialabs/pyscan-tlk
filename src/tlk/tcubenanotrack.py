@@ -23,6 +23,7 @@ from .definitions.enumerations import (
     NT_Mode,
     NT_OddOrEven,
     NT_OutputVoltageRoute,
+    NT_SignalState,
     NT_TIARange,
     NT_TIARangeMode,
     NT_VoltageRange)
