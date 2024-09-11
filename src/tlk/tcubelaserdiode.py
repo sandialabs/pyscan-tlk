@@ -1,6 +1,7 @@
 from ctypes import (
     POINTER,
     c_bool,
+    c_byte,
     c_char,
     c_char_p,
     c_float,

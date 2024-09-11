@@ -10,6 +10,7 @@ from ctypes import (
     c_int32,
     c_int64,
     c_long,
+    c_short,
     c_uint,
     c_ulong,
     c_void_p,
@@ -59,33 +60,33 @@ TLI_InitializeSimulations.argtypes = []
 
 
 # Determine if the device front panel can be locked.
-KVS_CanDeviceLockFrontPanel = lib.KVS_CanDeviceLockFrontPanel
-KVS_CanDeviceLockFrontPanel.restype = c_bool
-KVS_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
+# KVS_CanDeviceLockFrontPanel = lib.KVS_CanDeviceLockFrontPanel
+# KVS_CanDeviceLockFrontPanel.restype = c_bool
+# KVS_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
 
 
 # Can the device perform a Home.
-KVS_CanHome = lib.KVS_CanHome
-KVS_CanHome.restype = c_bool
-KVS_CanHome.argtypes = [POINTER(c_char)]
+# KVS_CanHome = lib.KVS_CanHome
+# KVS_CanHome.restype = c_bool
+# KVS_CanHome.argtypes = [POINTER(c_char)]
 
 
 # Can this device be moved without Homing.
-KVS_CanMoveWithoutHomingFirst = lib.KVS_CanMoveWithoutHomingFirst
-KVS_CanMoveWithoutHomingFirst.restype = c_bool
-KVS_CanMoveWithoutHomingFirst.argtypes = [POINTER(c_char)]
+# KVS_CanMoveWithoutHomingFirst = lib.KVS_CanMoveWithoutHomingFirst
+# KVS_CanMoveWithoutHomingFirst.restype = c_bool
+# KVS_CanMoveWithoutHomingFirst.argtypes = [POINTER(c_char)]
 
 
 # Check connection.
-KVS_CheckConnection = lib.KVS_CheckConnection
-KVS_CheckConnection.restype = c_bool
-KVS_CheckConnection.argtypes = [POINTER(c_char)]
+# KVS_CheckConnection = lib.KVS_CheckConnection
+# KVS_CheckConnection.restype = c_bool
+# KVS_CheckConnection.argtypes = [POINTER(c_char)]
 
 
 # Clears the device message queue.
-KVS_ClearMessageQueue = lib.KVS_ClearMessageQueue
-KVS_ClearMessageQueue.restype = c_void_p
-KVS_ClearMessageQueue.argtypes = [POINTER(c_char)]
+# KVS_ClearMessageQueue = lib.KVS_ClearMessageQueue
+# KVS_ClearMessageQueue.restype = c_void_p
+# KVS_ClearMessageQueue.argtypes = [POINTER(c_char)]
 
 
 # Disconnect and close the device.

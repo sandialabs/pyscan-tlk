@@ -1,6 +1,7 @@
 from ctypes import (
     POINTER,
     c_bool,
+    c_byte,
     c_char,
     c_char_p,
     c_int,
@@ -153,9 +154,9 @@ LS_GetLimits.argtypes = [POINTER(c_char), c_long, c_long]
 
 
 # Gets the MMI parameters.
-LS_GetMMIParams = lib.LS_GetMMIParams
-LS_GetMMIParams.restype = c_short
-LS_GetMMIParams.argtypes = [POINTER(c_char)]
+# LS_GetMMIParams = lib.LS_GetMMIParams
+# LS_GetMMIParams.restype = c_short
+# LS_GetMMIParams.argtypes = [POINTER(c_char)]
 
 
 # Gets the MMI parameters.
@@ -357,9 +358,9 @@ LS_SetFrontPanelLock.argtypes = [POINTER(c_char), c_bool]
 
 
 # Sets the MMI parameters.
-LS_SetMMIParams = lib.LS_SetMMIParams
-LS_SetMMIParams.restype = c_short
-LS_SetMMIParams.argtypes = [POINTER(c_char), c_short]
+# LS_SetMMIParams = lib.LS_SetMMIParams
+# LS_SetMMIParams.restype = c_short
+# LS_SetMMIParams.argtypes = [POINTER(c_char), c_short]
 
 
 # Sets the MMI parameters.

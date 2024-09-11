@@ -41,7 +41,7 @@ device_manager = cdll.LoadLibrary(
     lib_path + "Thorlabs.MotionControl.DeviceManager.dll")
 
 lib = cdll.LoadLibrary(
-    lib_path + "Thorlabs.MotionControl.Modular.DLL")
+    lib_path + "Thorlabs.MotionControl.ModularRack.Nanotrak.dll")
 
 
 # Enable / Disable the specified channel.

@@ -1,6 +1,7 @@
 from ctypes import (
     POINTER,
     c_bool,
+    c_byte,
     c_char,
     c_char_p,
     c_int,
@@ -247,9 +248,9 @@ LS_RequestDisplayUnits.argtypes = [POINTER(c_char)]
 
 
 # Requests the LED Brightness.
-LS_RequestLEDBrightness = lib.LS_RequestLEDBrightness
-LS_RequestLEDBrightness.restype = c_short
-LS_RequestLEDBrightness.argtypes = [POINTER(c_char)]
+# LS_RequestLEDBrightness = lib.LS_RequestLEDBrightness
+# LS_RequestLEDBrightness.restype = c_short
+# LS_RequestLEDBrightness.argtypes = [POINTER(c_char)]
 
 
 # Requests the limits MaxPower and MaxCurrent.

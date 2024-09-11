@@ -7,6 +7,7 @@ from ctypes import (
     c_int32,
     c_int64,
     c_long,
+    c_short,
     c_uint,
     c_ulong,
     c_void_p,
@@ -129,7 +130,7 @@ SC_GetSoftwareVersion.argtypes = [POINTER(c_char)]
 
 # Gets the current solenoid state.
 SC_GetSolenoidState = lib.SC_GetSolenoidState
-SC_GetSolenoidState.restype = SC_SolenoidStates
+SC_GetSolenoidState.restype = SC_GetSolenoidState
 SC_GetSolenoidState.argtypes = [POINTER(c_char)]
 
 

@@ -650,9 +650,9 @@ BMC_RequestVelocityProfileParams.argtypes = [POINTER(c_char), c_short]
 
 
 # Reset the rotation modes for a rotational device.
-BMC_ResetRotationModes = lib.BMC_ResetRotationModes
-BMC_ResetRotationModes.restype = c_short
-BMC_ResetRotationModes.argtypes = [POINTER(c_char), c_short]
+# BMC_ResetRotationModes = lib.BMC_ResetRotationModes
+# BMC_ResetRotationModes.restype = c_short
+# BMC_ResetRotationModes.argtypes = [POINTER(c_char), c_short]
 
 
 # Reset the stage settings to defaults.
@@ -824,9 +824,9 @@ BMC_SetPositionCounter.argtypes = [POINTER(c_char), c_short, c_long]
 
 
 # Set the rotation modes for a rotational device.
-BMC_SetRotationModes = lib.BMC_SetRotationModes
-BMC_SetRotationModes.restype = c_short
-BMC_SetRotationModes.argtypes = [POINTER(c_char), c_short, MOT_MovementModes, MOT_MovementDirections]
+# BMC_SetRotationModes = lib.BMC_SetRotationModes
+# BMC_SetRotationModes.restype = c_short
+# BMC_SetRotationModes.argtypes = [POINTER(c_char), c_short, MOT_MovementModes, MOT_MovementDirections]
 
 
 # Sets the stage axis position limits.

@@ -8,6 +8,7 @@ from ctypes import (
     c_int32,
     c_int64,
     c_long,
+    c_short,
     c_ulong,
     c_void_p,
     cdll,
@@ -44,7 +45,7 @@ device_manager = cdll.LoadLibrary(
     lib_path + "Thorlabs.MotionControl.DeviceManager.dll")
 
 lib = cdll.LoadLibrary(
-    lib_path + "Thorlabs.MotionControl.KCube.DCServo.dll")
+    lib_path + "Thorlabs.MotionControl.KCube.InertialMotor.dll")
 
 
 # Build the DeviceList.
@@ -618,9 +619,9 @@ KIM_SetTrigIOParametersStruct.argtypes = [POINTER(c_char), KIM_TrigIOConfig]
 
 
 # Sets the trigger parameters.
-KIM_SetTrigParamsParameters = lib.KIM_SetTrigParamsParameters
-KIM_SetTrigParamsParameters.restype = c_short
-KIM_SetTrigParamsParameters.argtypes = [POINTER(c_char), KIM_Channels, KIM_TrigParamsParameters, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
+# KIM_SetTrigParamsParameters = lib.KIM_SetTrigParamsParameters
+# KIM_SetTrigParamsParameters.restype = c_short
+# KIM_SetTrigParamsParameters.argtypes = [POINTER(c_char), KIM_Channels, KIM_TrigParamsParameters, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
 
 
 # Sets the trigger parameters.

@@ -9,6 +9,7 @@ from ctypes import (
     c_int32,
     c_int64,
     c_long,
+    c_short,
     c_uint,
     c_ulong,
     c_void_p,
@@ -122,9 +123,9 @@ SC_GetMMIParams.argtypes = [POINTER(c_char), c_int16]
 
 
 # Gets the MMI parameters for the device.
-SC_GetMMIParamsBlock = lib.SC_GetMMIParamsBlock
-SC_GetMMIParamsBlock.restype = c_short
-SC_GetMMIParamsBlock.argtypes = [POINTER(c_char), KSC_MMIParams]
+# SC_GetMMIParamsBlock = lib.SC_GetMMIParamsBlock
+# SC_GetMMIParamsBlock.restype = c_short
+# SC_GetMMIParamsBlock.argtypes = [POINTER(c_char), KSC_MMIParams]
 
 
 # Get the MMI Parameters for the KCube Display Interface.
@@ -159,7 +160,7 @@ SC_GetSoftwareVersion.argtypes = [POINTER(c_char)]
 
 # Gets the current solenoid state.
 SC_GetSolenoidState = lib.SC_GetSolenoidState
-SC_GetSolenoidState.restype = SC_SolenoidStates
+SC_GetSolenoidState.restype = SC_GetSolenoidState
 SC_GetSolenoidState.argtypes = [POINTER(c_char)]
 
 
@@ -332,9 +333,9 @@ SC_SetMMIParams.argtypes = [POINTER(c_char), c_int16]
 
 
 # Sets the MMI parameters for the device.
-SC_SetMMIParamsBlock = lib.SC_SetMMIParamsBlock
-SC_SetMMIParamsBlock.restype = c_short
-SC_SetMMIParamsBlock.argtypes = [POINTER(c_char), KSC_MMIParams]
+# SC_SetMMIParamsBlock = lib.SC_SetMMIParamsBlock
+# SC_SetMMIParamsBlock.restype = c_short
+# SC_SetMMIParamsBlock.argtypes = [POINTER(c_char), KSC_MMIParams]
 
 
 # Set the MMI Parameters for the KCube Display Interface.

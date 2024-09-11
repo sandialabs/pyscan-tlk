@@ -243,15 +243,15 @@ SG_RequestForceCalib.argtypes = [POINTER(c_char)]
 
 
 # Requests the Hub Analog Output.
-SG_RequestHubAnalogOutput = lib.SG_RequestHubAnalogOutput
-SG_RequestHubAnalogOutput.restype = c_short
-SG_RequestHubAnalogOutput.argtypes = [POINTER(c_char)]
+# SG_RequestHubAnalogOutput = lib.SG_RequestHubAnalogOutput
+# SG_RequestHubAnalogOutput.restype = c_short
+# SG_RequestHubAnalogOutput.argtypes = [POINTER(c_char)]
 
 
 # Requests the IO settings.
-SG_RequestIOsettings = lib.SG_RequestIOsettings
-SG_RequestIOsettings.restype = c_short
-SG_RequestIOsettings.argtypes = [POINTER(c_char)]
+# SG_RequestIOsettings = lib.SG_RequestIOsettings
+# SG_RequestIOsettings.restype = c_short
+# SG_RequestIOsettings.argtypes = [POINTER(c_char)]
 
 
 # Requests the LED brightness.
