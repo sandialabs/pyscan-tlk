@@ -2,7 +2,6 @@ from ctypes import (
     POINTER,
     c_bool,
     c_char,
-    c_char_p,
     c_double,
     c_float,
     c_int,
@@ -13,8 +12,7 @@ from ctypes import (
     c_uint,
     c_ulong,
     c_void_p,
-    cdll,
-    pointer)
+    cdll)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KST_Stages,
@@ -37,9 +35,7 @@ from .definitions.structures import (
     MOT_PotentiometerSteps,
     MOT_PowerParameters,
     MOT_VelocityParameters,
-    TLI_DeviceInfo,
-    TLI_HardwareInformation)
-from .definitions.kinesisexception import KinesisException
+    TLI_DeviceInfo)
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -215,7 +211,13 @@ SCC_GetLEDswitches.argtypes = [POINTER(c_char)]
 # Gets the limit switch parameters.
 SCC_GetLimitSwitchParams = lib.SCC_GetLimitSwitchParams
 SCC_GetLimitSwitchParams.restype = c_short
-SCC_GetLimitSwitchParams.argtypes = [POINTER(c_char), MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
+SCC_GetLimitSwitchParams.argtypes = [
+    POINTER(c_char),
+    MOT_LimitSwitchModes,
+    MOT_LimitSwitchModes,
+    c_uint,
+    c_uint,
+    MOT_LimitSwitchSWModes]
 
 
 # Get the limit switch parameters.
@@ -356,7 +358,9 @@ SCC_GetVelParamsBlock.restype = c_short
 SCC_GetVelParamsBlock.argtypes = [POINTER(c_char), MOT_VelocityParameters]
 
 
-# Queries if the time since the last message has exceeded the lastMsgTimeout set by SCC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the
+# lastMsgTimeout set by SCC_EnableLastMsgTimer(char const * serialNo, bool
+# enable, __int32 lastMsgTimeout ).
 SCC_HasLastMsgTimerOverrun = lib.SCC_HasLastMsgTimerOverrun
 SCC_HasLastMsgTimerOverrun.restype = c_bool
 SCC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -659,7 +663,13 @@ SCC_SetLEDswitches.argtypes = [POINTER(c_char), c_long]
 # Sets the limit switch parameters.
 SCC_SetLimitSwitchParams = lib.SCC_SetLimitSwitchParams
 SCC_SetLimitSwitchParams.restype = c_short
-SCC_SetLimitSwitchParams.argtypes = [POINTER(c_char), MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
+SCC_SetLimitSwitchParams.argtypes = [
+    POINTER(c_char),
+    MOT_LimitSwitchModes,
+    MOT_LimitSwitchModes,
+    c_uint,
+    c_uint,
+    MOT_LimitSwitchSWModes]
 
 
 # Set the limit switch parameters.
@@ -858,4 +868,3 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
-

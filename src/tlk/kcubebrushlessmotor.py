@@ -3,7 +3,6 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
-    c_char_p,
     c_double,
     c_int,
     c_int16,
@@ -14,8 +13,7 @@ from ctypes import (
     c_uint,
     c_ulong,
     c_void_p,
-    cdll,
-    pointer)
+    cdll)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KMOT_TriggerPortMode,
@@ -24,8 +22,6 @@ from .definitions.enumerations import (
     KMOT_WheelMode,
     MOT_JogModes,
     MOT_LimitsSoftwareApproachPolicy,
-    MOT_MovementDirections,
-    MOT_MovementModes,
     MOT_StopModes,
     MOT_TravelDirection,
     MOT_TravelModes)
@@ -42,9 +38,7 @@ from .definitions.structures import (
     MOT_StageAxisParameters,
     MOT_VelocityParameters,
     MOT_VelocityProfileParameters,
-    TLI_DeviceInfo,
-    TLI_HardwareInformation)
-from .definitions.kinesisexception import KinesisException
+    TLI_DeviceInfo)
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -220,7 +214,15 @@ BMC_GetJogVelParams.argtypes = [POINTER(c_char), c_short, c_int, c_int]
 # Get the MMI Parameters for the KCube Display Interface.
 BMC_GetMMIParams = lib.BMC_GetMMIParams
 BMC_GetMMIParams.restype = c_short
-BMC_GetMMIParams.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16]
+BMC_GetMMIParams.argtypes = [
+    POINTER(c_char),
+    KMOT_WheelMode,
+    c_int32,
+    c_int32,
+    KMOT_WheelDirectionSense,
+    c_int32,
+    c_int32,
+    c_int16]
 
 
 # Gets the MMI parameters for the device.
@@ -232,7 +234,17 @@ BMC_GetMMIParamsBlock.argtypes = [POINTER(c_char), KMOT_MMIParams]
 # Get the MMI Parameters for the KCube Display Interface.
 BMC_GetMMIParamsExt = lib.BMC_GetMMIParamsExt
 BMC_GetMMIParamsExt.restype = c_short
-BMC_GetMMIParamsExt.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16, c_int16, c_int16]
+BMC_GetMMIParamsExt.argtypes = [
+    POINTER(c_char),
+    KMOT_WheelMode,
+    c_int32,
+    c_int32,
+    KMOT_WheelDirectionSense,
+    c_int32,
+    c_int32,
+    c_int16,
+    c_int16,
+    c_int16]
 
 
 # Get the motor parameters for the Brushless Votor.
@@ -340,7 +352,20 @@ BMC_GetStageAxisMinPos.argtypes = [POINTER(c_char), c_short]
 # Gets the Brushless Motor stage axis parameters.
 BMC_GetStageAxisParams = lib.BMC_GetStageAxisParams
 BMC_GetStageAxisParams.restype = c_short
-BMC_GetStageAxisParams.argtypes = [POINTER(c_char), c_short, c_long, c_long, POINTER(c_char), c_ulong, c_ulong, c_ulong, c_int, c_int, c_int, c_int, c_int]
+BMC_GetStageAxisParams.argtypes = [
+    POINTER(c_char),
+    c_short,
+    c_long,
+    c_long,
+    POINTER(c_char),
+    c_ulong,
+    c_ulong,
+    c_ulong,
+    c_int,
+    c_int,
+    c_int,
+    c_int,
+    c_int]
 
 
 # Gets the Brushless Motor stage axis parameters.
@@ -364,7 +389,12 @@ BMC_GetTrackSettleParams.argtypes = [POINTER(c_char), c_short, MOT_BrushlessTrac
 # Get the Trigger Configuration Parameters.
 BMC_GetTriggerConfigParams = lib.BMC_GetTriggerConfigParams
 BMC_GetTriggerConfigParams.restype = c_short
-BMC_GetTriggerConfigParams.argtypes = [POINTER(c_char), KMOT_TriggerPortMode, KMOT_TriggerPortPolarity, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity]
+BMC_GetTriggerConfigParams.argtypes = [
+    POINTER(c_char),
+    KMOT_TriggerPortMode,
+    KMOT_TriggerPortPolarity,
+    KMOT_TriggerPortMode,
+    KMOT_TriggerPortPolarity]
 
 
 # Gets the trigger configuration parameters block.
@@ -376,7 +406,16 @@ BMC_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KMOT_TriggerConfig]
 # Get the Trigger Parameters Parameters.
 BMC_GetTriggerParamsParams = lib.BMC_GetTriggerParamsParams
 BMC_GetTriggerParamsParams.restype = c_short
-BMC_GetTriggerParamsParams.argtypes = [POINTER(c_char), c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
+BMC_GetTriggerParamsParams.argtypes = [
+    POINTER(c_char),
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32]
 
 
 # Gets the trigger parameters block.
@@ -409,7 +448,9 @@ BMC_GetVelocityProfileParams.restype = c_short
 BMC_GetVelocityProfileParams.argtypes = [POINTER(c_char), c_short, MOT_VelocityProfileParameters]
 
 
-# Queries if the time since the last message has exceeded the lastMsgTimeout set by BMC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the
+# lastMsgTimeout set by BMC_EnableLastMsgTimer(char const * serialNo, bool
+# enable, __int32 lastMsgTimeout ).
 BMC_HasLastMsgTimerOverrun = lib.BMC_HasLastMsgTimerOverrun
 BMC_HasLastMsgTimerOverrun.restype = c_bool
 BMC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char), c_short]
@@ -754,7 +795,15 @@ BMC_SetLimitsSoftwareApproachPolicy.argtypes = [POINTER(c_char), c_short, MOT_Li
 # Set the MMI Parameters for the KCube Display Interface.
 BMC_SetMMIParams = lib.BMC_SetMMIParams
 BMC_SetMMIParams.restype = c_short
-BMC_SetMMIParams.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16]
+BMC_SetMMIParams.argtypes = [
+    POINTER(c_char),
+    KMOT_WheelMode,
+    c_int32,
+    c_int32,
+    KMOT_WheelDirectionSense,
+    c_int32,
+    c_int32,
+    c_int16]
 
 
 # Sets the MMI parameters for the device.
@@ -766,7 +815,17 @@ BMC_SetMMIParamsBlock.argtypes = [POINTER(c_char), KMOT_MMIParams]
 # Set the MMI Parameters for the KCube Display Interface.
 BMC_SetMMIParamsExt = lib.BMC_SetMMIParamsExt
 BMC_SetMMIParamsExt.restype = c_short
-BMC_SetMMIParamsExt.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16, c_int16, c_int16]
+BMC_SetMMIParamsExt.argtypes = [
+    POINTER(c_char),
+    KMOT_WheelMode,
+    c_int32,
+    c_int32,
+    KMOT_WheelDirectionSense,
+    c_int32,
+    c_int32,
+    c_int16,
+    c_int16,
+    c_int16]
 
 
 # Set the motor parameters for the Brushless Votor.
@@ -844,7 +903,12 @@ BMC_SetTrackSettleParams.argtypes = [POINTER(c_char), c_short, MOT_BrushlessTrac
 # Set the Trigger Configuration Parameters.
 BMC_SetTriggerConfigParams = lib.BMC_SetTriggerConfigParams
 BMC_SetTriggerConfigParams.restype = c_short
-BMC_SetTriggerConfigParams.argtypes = [POINTER(c_char), KMOT_TriggerPortMode, KMOT_TriggerPortPolarity, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity]
+BMC_SetTriggerConfigParams.argtypes = [
+    POINTER(c_char),
+    KMOT_TriggerPortMode,
+    KMOT_TriggerPortPolarity,
+    KMOT_TriggerPortMode,
+    KMOT_TriggerPortPolarity]
 
 
 # Sets the trigger configuration parameters block.
@@ -856,7 +920,16 @@ BMC_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KMOT_TriggerConfig]
 # Set the Trigger Parameters Parameters.
 BMC_SetTriggerParamsParams = lib.BMC_SetTriggerParamsParams
 BMC_SetTriggerParamsParams.restype = c_short
-BMC_SetTriggerParamsParams.argtypes = [POINTER(c_char), c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
+BMC_SetTriggerParamsParams.argtypes = [
+    POINTER(c_char),
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32,
+    c_int32]
 
 
 # Sets the trigger parameters block.
@@ -977,4 +1050,3 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
-

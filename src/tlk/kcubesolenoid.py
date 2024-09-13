@@ -3,7 +3,6 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
-    c_char_p,
     c_int,
     c_int16,
     c_int32,
@@ -13,8 +12,7 @@ from ctypes import (
     c_uint,
     c_ulong,
     c_void_p,
-    cdll,
-    pointer)
+    cdll)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KSC_TriggerPortMode,
@@ -22,12 +20,9 @@ from .definitions.enumerations import (
     SC_OperatingModes,
     SC_OperatingStates)
 from .definitions.structures import (
-    KSC_MMIParams,
     KSC_TriggerConfig,
     SC_CycleParameters,
-    TLI_DeviceInfo,
-    TLI_HardwareInformation)
-from .definitions.kinesisexception import KinesisException
+    TLI_DeviceInfo)
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -173,7 +168,12 @@ SC_GetStatusBits.argtypes = [POINTER(c_char)]
 # Get the Trigger Configuration Parameters.
 SC_GetTriggerConfigParams = lib.SC_GetTriggerConfigParams
 SC_GetTriggerConfigParams.restype = c_short
-SC_GetTriggerConfigParams.argtypes = [POINTER(c_char), KSC_TriggerPortMode, KSC_TriggerPortPolarity, KSC_TriggerPortMode, KSC_TriggerPortPolarity]
+SC_GetTriggerConfigParams.argtypes = [
+    POINTER(c_char),
+    KSC_TriggerPortMode,
+    KSC_TriggerPortPolarity,
+    KSC_TriggerPortMode,
+    KSC_TriggerPortPolarity]
 
 
 # Gets the trigger configuration parameters block.
@@ -182,7 +182,9 @@ SC_GetTriggerConfigParamsBlock.restype = c_short
 SC_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KSC_TriggerConfig]
 
 
-# Queries if the time since the last message has exceeded the lastMsgTimeout set by SC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the
+# lastMsgTimeout set by SC_EnableLastMsgTimer(char const * serialNo, bool
+# enable, __int32 lastMsgTimeout ).
 SC_HasLastMsgTimerOverrun = lib.SC_HasLastMsgTimerOverrun
 SC_HasLastMsgTimerOverrun.restype = c_bool
 SC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -359,7 +361,12 @@ SC_SetOperatingState.argtypes = [POINTER(c_char), SC_OperatingStates]
 # Set the Trigger Configuration Parameters.
 SC_SetTriggerConfigParams = lib.SC_SetTriggerConfigParams
 SC_SetTriggerConfigParams.restype = c_short
-SC_SetTriggerConfigParams.argtypes = [POINTER(c_char), KSC_TriggerPortMode, KSC_TriggerPortPolarity, KSC_TriggerPortMode, KSC_TriggerPortPolarity]
+SC_SetTriggerConfigParams.argtypes = [
+    POINTER(c_char),
+    KSC_TriggerPortMode,
+    KSC_TriggerPortPolarity,
+    KSC_TriggerPortMode,
+    KSC_TriggerPortPolarity]
 
 
 # Sets the trigger configuration parameters block.
@@ -438,4 +445,3 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
-

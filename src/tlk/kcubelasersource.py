@@ -3,7 +3,6 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
-    c_char_p,
     c_int,
     c_int32,
     c_int64,
@@ -11,8 +10,7 @@ from ctypes import (
     c_short,
     c_ulong,
     c_void_p,
-    cdll,
-    pointer)
+    cdll)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KLD_TrigPolarity,
@@ -26,9 +24,7 @@ from .definitions.structures import (
     KLD_TrigIOParams,
     KLS_MMIParams,
     KLS_TrigIOParams,
-    TLI_DeviceInfo,
-    TLI_HardwareInformation)
-from .definitions.kinesisexception import KinesisException
+    TLI_DeviceInfo)
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -204,7 +200,16 @@ LS_GetStatusBits.argtypes = [POINTER(c_char)]
 # Gets the Trigger IO parameters.
 LS_GetTrigIOParams = lib.LS_GetTrigIOParams
 LS_GetTrigIOParams.restype = c_short
-LS_GetTrigIOParams.argtypes = [POINTER(c_char), KLD_TriggerMode, KLS_TriggerMode, KLD_TrigPolarity, KLS_TrigPolarity, KLD_TriggerMode, KLS_TriggerMode, KLD_TrigPolarity, KLS_TrigPolarity]
+LS_GetTrigIOParams.argtypes = [
+    POINTER(c_char),
+    KLD_TriggerMode,
+    KLS_TriggerMode,
+    KLD_TrigPolarity,
+    KLS_TrigPolarity,
+    KLD_TriggerMode,
+    KLS_TriggerMode,
+    KLD_TrigPolarity,
+    KLS_TrigPolarity]
 
 
 # Gets the Trigger IO parameters.
@@ -219,7 +224,9 @@ LS_GetWavelength.restype = c_long
 LS_GetWavelength.argtypes = [POINTER(c_char)]
 
 
-# Queries if the time since the last message has exceeded the lastMsgTimeout set by LS_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the
+# lastMsgTimeout set by LS_EnableLastMsgTimer(char const * serialNo, bool
+# enable, __int32 lastMsgTimeout ).
 LS_HasLastMsgTimerOverrun = lib.LS_HasLastMsgTimerOverrun
 LS_HasLastMsgTimerOverrun.restype = c_bool
 LS_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -384,7 +391,16 @@ LS_SetPower.argtypes = [POINTER(c_char), c_long]
 # Sets the Trigger IO parameters.
 LS_SetTrigIOParams = lib.LS_SetTrigIOParams
 LS_SetTrigIOParams.restype = c_short
-LS_SetTrigIOParams.argtypes = [POINTER(c_char), KLD_TriggerMode, KLS_TriggerMode, KLD_TrigPolarity, KLS_TrigPolarity, KLD_TriggerMode, KLS_TriggerMode, KLD_TrigPolarity, KLS_TrigPolarity]
+LS_SetTrigIOParams.argtypes = [
+    POINTER(c_char),
+    KLD_TriggerMode,
+    KLS_TriggerMode,
+    KLD_TrigPolarity,
+    KLS_TrigPolarity,
+    KLD_TriggerMode,
+    KLS_TriggerMode,
+    KLD_TrigPolarity,
+    KLS_TrigPolarity]
 
 
 # Ls set trig i/o parameters block.
@@ -463,4 +479,3 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
-
