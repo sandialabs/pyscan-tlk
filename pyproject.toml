@@ -3,7 +3,7 @@ requires = [ "setuptools", "wheel" ]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tlk"
+name = "pyscan_tlk"
 dynamic=["version"]
 requires-python = ">= 3.7"
 description = "Thorlabs Kinesis python wrappers"
