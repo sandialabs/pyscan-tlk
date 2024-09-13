@@ -10,6 +10,8 @@ from ctypes import (
     c_long,
     c_short,
     c_uint,
+    c_ulong,
+    c_void_p,
     cdll)
 from .definitions.enumerations import (
     MOT_JogModes,
