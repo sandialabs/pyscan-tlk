@@ -1,16 +1,18 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = [ "setuptools", "wheel" ]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "tlk"
-version = "0.0.1"
+dynamic=["version"]
 requires-python = ">= 3.7"
-authors = [
-    {name = 'Andy Mounce', email = 'ammounce@gmail.com'}
-    ]
 description = "Thorlabs Kinesis python wrappers"
-keywords = ["thorlabs", "kinesis", "instrument control" , "science"]
-dependencies = ["comtypes"]
+keywords = [ "thorlabs", "kinesis", "instrument control", "science" ]
+dependencies = [ "comtypes" ]
 
-[tool]
+  [[project.authors]]
+  name = "Andy Mounce"
+  email = "ammounce@gmail.com"
+
+[tool.setuptools.dynamic]
+version = {file = "tlk.version.py"}
