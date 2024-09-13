@@ -1,3 +1,12 @@
+## [0.1.4](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.3...v0.1.4) (2024-09-13)
+
+
+### Bug Fixes
+
+* fix file names for build and pypi ([0e71e05](https://github.com/sandialabs/pyscan-tlk/commit/0e71e05f9cb25c82ada3e579a36b237e153e958c))
+
+
+
 ## [0.1.3](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.2...v0.1.3) (2024-09-13)
 
 
