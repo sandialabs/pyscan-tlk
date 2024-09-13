@@ -1,3 +1,12 @@
+## [0.1.3](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.2...v0.1.3) (2024-09-13)
+
+
+### Bug Fixes
+
+* flake8 errors ([d3a8441](https://github.com/sandialabs/pyscan-tlk/commit/d3a8441aa728d92b701baf8bd0c1f1b72e981bf7))
+
+
+
 ## [0.1.2](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.1...v0.1.2) (2024-09-13)
 
 
