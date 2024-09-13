@@ -15,4 +15,4 @@ dependencies = [ "comtypes" ]
   email = "ammounce@gmail.com"
 
 [tool.setuptools.dynamic]
-version = {file = "tlk.version.py"}
+version = {file = "pyscan_tlk.version.py"}
