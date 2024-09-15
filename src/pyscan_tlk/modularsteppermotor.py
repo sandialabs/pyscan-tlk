@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_double,
     c_float,
     c_int,
@@ -10,9 +11,8 @@ from ctypes import (
     c_long,
     c_short,
     c_uint,
-    c_ulong,
-    c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.enumerations import (
     MOT_JogModes,
     MOT_LimitSwitchModes,
@@ -30,6 +30,7 @@ from .definitions.structures import (
     MOT_LimitSwitchParameters,
     MOT_PowerParameters,
     MOT_VelocityParameters)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -157,14 +158,7 @@ SBC_GetJoystickParams.argtypes = [POINTER(c_char), c_short, MOT_JoystickParamete
 # Gets the limit switch parameters.
 SBC_GetLimitSwitchParams = lib.SBC_GetLimitSwitchParams
 SBC_GetLimitSwitchParams.restype = c_short
-SBC_GetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+SBC_GetLimitSwitchParams.argtypes = [POINTER(c_char), c_short, MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Get the limit switch parameters.
@@ -287,9 +281,7 @@ SBC_GetVelParamsBlock.restype = c_short
 SBC_GetVelParamsBlock.argtypes = [POINTER(c_char), c_short, MOT_VelocityParameters, MOT_VelocityParameters]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by SBC_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by SBC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 SBC_HasLastMsgTimerOverrun = lib.SBC_HasLastMsgTimerOverrun
 SBC_HasLastMsgTimerOverrun.restype = c_bool
 SBC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char), c_short]
@@ -478,14 +470,7 @@ SBC_SetJoystickParams.argtypes = [POINTER(c_char), c_short, MOT_JoystickParamete
 # Sets the limit switch parameters.
 SBC_SetLimitSwitchParams = lib.SBC_SetLimitSwitchParams
 SBC_SetLimitSwitchParams.restype = c_short
-SBC_SetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+SBC_SetLimitSwitchParams.argtypes = [POINTER(c_char), c_short, MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Set the limit switch parameters.
@@ -612,3 +597,4 @@ SBC_StopProfiled.argtypes = [POINTER(c_char), c_short]
 SBC_SuspendMoveMessages = lib.SBC_SuspendMoveMessages
 SBC_SuspendMoveMessages.restype = c_short
 SBC_SuspendMoveMessages.argtypes = [POINTER(c_char), c_short]
+

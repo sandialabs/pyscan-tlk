@@ -2,6 +2,7 @@ from ctypes import (
     POINTER,
     c_bool,
     c_char,
+    c_char_p,
     c_double,
     c_float,
     c_int,
@@ -11,7 +12,8 @@ from ctypes import (
     c_short,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KNA_FeedbackSource,
@@ -20,7 +22,6 @@ from .definitions.enumerations import (
     NT_FeedbackSource,
     NT_Mode,
     NT_OddOrEven,
-    NT_SignalState,
     NT_TIARange,
     NT_TIARangeMode)
 from .definitions.structures import (
@@ -35,7 +36,9 @@ from .definitions.structures import (
     NT_LowPassFilterParameters,
     NT_TIARangeParameters,
     NT_TIAReading,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -250,9 +253,7 @@ NT_GetTrackingThresholdSignal.restype = c_float
 NT_GetTrackingThresholdSignal.argtypes = [POINTER(c_char)]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by NT_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by NT_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 NT_HasLastMsgTimerOverrun = lib.NT_HasLastMsgTimerOverrun
 NT_HasLastMsgTimerOverrun.restype = c_bool
 NT_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -604,3 +605,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

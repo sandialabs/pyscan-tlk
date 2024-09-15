@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_double,
     c_float,
     c_int,
@@ -13,7 +14,8 @@ from ctypes import (
     c_uint,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KMOT_TriggerPortMode,
@@ -36,7 +38,9 @@ from .definitions.structures import (
     MOT_JogParameters,
     MOT_LimitSwitchParameters,
     MOT_VelocityParameters,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -212,14 +216,7 @@ BDC_GetJogVelParams.argtypes = [POINTER(c_char), c_short, c_int, c_int]
 # Gets the limit switch parameters.
 BDC_GetLimitSwitchParams = lib.BDC_GetLimitSwitchParams
 BDC_GetLimitSwitchParams.restype = c_short
-BDC_GetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+BDC_GetLimitSwitchParams.argtypes = [POINTER(c_char), c_short, MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Get the limit switch parameters.
@@ -351,13 +348,7 @@ BDC_GetStatusBits.argtypes = [POINTER(c_char), c_short]
 # Gets the trigger configuration parameters.
 BDC_GetTriggerConfigParams = lib.BDC_GetTriggerConfigParams
 BDC_GetTriggerConfigParams.restype = c_short
-BDC_GetTriggerConfigParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity,
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity]
+BDC_GetTriggerConfigParams.argtypes = [POINTER(c_char), c_short, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity]
 
 
 # Gets the trigger configuration parameters block.
@@ -369,17 +360,7 @@ BDC_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), c_short, KMOT_Trigg
 # Gets the trigger parameters.
 BDC_GetTriggerParams = lib.BDC_GetTriggerParams
 BDC_GetTriggerParams.restype = c_short
-BDC_GetTriggerParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32]
+BDC_GetTriggerParams.argtypes = [POINTER(c_char), c_short, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
 
 
 # Gets the trigger parameters block.
@@ -406,9 +387,7 @@ BDC_GetVelParamsBlock.restype = c_short
 BDC_GetVelParamsBlock.argtypes = [POINTER(c_char), c_short, MOT_VelocityParameters]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by BDC_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by BDC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 BDC_HasLastMsgTimerOverrun = lib.BDC_HasLastMsgTimerOverrun
 BDC_HasLastMsgTimerOverrun.restype = c_bool
 BDC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char), c_short]
@@ -735,14 +714,7 @@ BDC_SetJogVelParams.argtypes = [POINTER(c_char), c_short, c_int, c_int]
 # Sets the limit switch parameters.
 BDC_SetLimitSwitchParams = lib.BDC_SetLimitSwitchParams
 BDC_SetLimitSwitchParams.restype = c_short
-BDC_SetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+BDC_SetLimitSwitchParams.argtypes = [POINTER(c_char), c_short, MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Set the limit switch parameters.
@@ -826,13 +798,7 @@ BDC_SetStageAxisLimits.argtypes = [POINTER(c_char), c_short, c_int, c_int]
 # Sets the trigger configuration parameters.
 BDC_SetTriggerConfigParams = lib.BDC_SetTriggerConfigParams
 BDC_SetTriggerConfigParams.restype = c_short
-BDC_SetTriggerConfigParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity,
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity]
+BDC_SetTriggerConfigParams.argtypes = [POINTER(c_char), c_short, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity]
 
 
 # Sets the trigger configuration parameters block.
@@ -844,17 +810,7 @@ BDC_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), c_short, KMOT_Trigg
 # Sets the trigger parameters.
 BDC_SetTriggerParams = lib.BDC_SetTriggerParams
 BDC_SetTriggerParams.restype = c_short
-BDC_SetTriggerParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32]
+BDC_SetTriggerParams.argtypes = [POINTER(c_char), c_short, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
 
 
 # Sets the trigger parameters block.
@@ -969,3 +925,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

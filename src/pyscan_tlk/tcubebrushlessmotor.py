@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_double,
     c_int,
     c_int32,
@@ -12,7 +13,8 @@ from ctypes import (
     c_uint,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     MOT_JogModes,
@@ -33,7 +35,9 @@ from .definitions.structures import (
     MOT_StageAxisParameters,
     MOT_VelocityParameters,
     MOT_VelocityProfileParameters,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -63,9 +67,9 @@ BMC_CanHome.argtypes = [POINTER(c_char), c_short]
 
 
 # Can this device be moved without Homing.
-# BMC_CanMoveWithoutHomingFirst = lib.BMC_CanMoveWithoutHomingFirst
-# BMC_CanMoveWithoutHomingFirst.restype = c_bool
-# BMC_CanMoveWithoutHomingFirst.argtypes = [POINTER(c_char), c_short]
+BMC_CanMoveWithoutHomingFirst = lib.BMC_CanMoveWithoutHomingFirst
+BMC_CanMoveWithoutHomingFirst.restype = c_bool
+BMC_CanMoveWithoutHomingFirst.argtypes = [POINTER(c_char), c_short]
 
 
 # Check connection.
@@ -311,20 +315,7 @@ BMC_GetStageAxisMinPos.argtypes = [POINTER(c_char), c_short]
 # Gets the Brushless Motor stage axis parameters.
 BMC_GetStageAxisParams = lib.BMC_GetStageAxisParams
 BMC_GetStageAxisParams.restype = c_short
-BMC_GetStageAxisParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    c_long,
-    c_long,
-    POINTER(c_char),
-    c_ulong,
-    c_ulong,
-    c_ulong,
-    c_int,
-    c_int,
-    c_int,
-    c_int,
-    c_int]
+BMC_GetStageAxisParams.argtypes = [POINTER(c_char), c_short, c_long, c_long, POINTER(c_char), c_ulong, c_ulong, c_ulong, c_int, c_int, c_int, c_int, c_int]
 
 
 # Gets the Brushless Motor stage axis parameters.
@@ -369,9 +360,7 @@ BMC_GetVelocityProfileParams.restype = c_short
 BMC_GetVelocityProfileParams.argtypes = [POINTER(c_char), c_short, MOT_VelocityProfileParameters]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by BMC_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by BMC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 BMC_HasLastMsgTimerOverrun = lib.BMC_HasLastMsgTimerOverrun
 BMC_HasLastMsgTimerOverrun.restype = c_bool
 BMC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char), c_short]
@@ -885,3 +874,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

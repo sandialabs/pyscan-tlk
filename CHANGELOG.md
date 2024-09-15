@@ -1,3 +1,49 @@
+## [0.1.6](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.5...v0.1.6) (2024-09-15)
+
+
+### Bug Fixes
+
+* fixed versioning? ([84127f0](https://github.com/sandialabs/pyscan-tlk/commit/84127f0d85baf8bddf242b57ffe062023d9de16a))
+
+
+
+## [0.1.5](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.4...v0.1.5) (2024-09-13)
+
+
+### Bug Fixes
+
+* changed project name ([a462c7f](https://github.com/sandialabs/pyscan-tlk/commit/a462c7fec25c86553d50b7cf22eaed831d6e4849))
+
+
+
+## [0.1.4](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.3...v0.1.4) (2024-09-13)
+
+
+### Bug Fixes
+
+* fix file names for build and pypi ([0e71e05](https://github.com/sandialabs/pyscan-tlk/commit/0e71e05f9cb25c82ada3e579a36b237e153e958c))
+
+
+
+## [0.1.3](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.2...v0.1.3) (2024-09-13)
+
+
+### Bug Fixes
+
+* flake8 errors ([d3a8441](https://github.com/sandialabs/pyscan-tlk/commit/d3a8441aa728d92b701baf8bd0c1f1b72e981bf7))
+
+
+
+## [0.1.2](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.1...v0.1.2) (2024-09-13)
+
+
+### Bug Fixes
+
+* Fixed flake8 errors ([3beef0e](https://github.com/sandialabs/pyscan-tlk/commit/3beef0e12c3bf3f74afee28407bbc5b19919fba0))
+* fixed versioning for build ([f080aa2](https://github.com/sandialabs/pyscan-tlk/commit/f080aa2fd61d079eff6641d9c4e74175d675484b))
+
+
+
 ## [0.1.1](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.0...v0.1.1) (2024-09-11)
 
 

@@ -2,6 +2,7 @@ from ctypes import (
     POINTER,
     c_bool,
     c_char,
+    c_char_p,
     c_int,
     c_int32,
     c_int64,
@@ -10,14 +11,17 @@ from ctypes import (
     c_uint,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     TSG_Display_Modes,
     TSG_Hub_Analogue_Modes)
 from .definitions.structures import (
     TLI_DeviceInfo,
+    TLI_HardwareInformation,
     TSG_IOSettings)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -172,9 +176,7 @@ SG_GetStatusBits.restype = c_ulong
 SG_GetStatusBits.argtypes = [POINTER(c_char)]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by SG_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by SG_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 SG_HasLastMsgTimerOverrun = lib.SG_HasLastMsgTimerOverrun
 SG_HasLastMsgTimerOverrun.restype = c_bool
 SG_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -241,15 +243,15 @@ SG_RequestForceCalib.argtypes = [POINTER(c_char)]
 
 
 # Requests the Hub Analog Output.
-# SG_RequestHubAnalogOutput = lib.SG_RequestHubAnalogOutput
-# SG_RequestHubAnalogOutput.restype = c_short
-# SG_RequestHubAnalogOutput.argtypes = [POINTER(c_char)]
+SG_RequestHubAnalogOutput = lib.SG_RequestHubAnalogOutput
+SG_RequestHubAnalogOutput.restype = c_short
+SG_RequestHubAnalogOutput.argtypes = [POINTER(c_char)]
 
 
 # Requests the IO settings.
-# SG_RequestIOsettings = lib.SG_RequestIOsettings
-# SG_RequestIOsettings.restype = c_short
-# SG_RequestIOsettings.argtypes = [POINTER(c_char)]
+SG_RequestIOsettings = lib.SG_RequestIOsettings
+SG_RequestIOsettings.restype = c_short
+SG_RequestIOsettings.argtypes = [POINTER(c_char)]
 
 
 # Requests the LED brightness.
@@ -394,3 +396,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

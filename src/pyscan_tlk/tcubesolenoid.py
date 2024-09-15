@@ -2,22 +2,25 @@ from ctypes import (
     POINTER,
     c_bool,
     c_char,
+    c_char_p,
     c_int,
     c_int32,
     c_int64,
     c_long,
-    c_short,
     c_uint,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     SC_OperatingModes,
     SC_OperatingStates)
 from .definitions.structures import (
     SC_CycleParameters,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -126,7 +129,7 @@ SC_GetSoftwareVersion.argtypes = [POINTER(c_char)]
 
 # Gets the current solenoid state.
 SC_GetSolenoidState = lib.SC_GetSolenoidState
-SC_GetSolenoidState.restype = SC_GetSolenoidState
+SC_GetSolenoidState.restype = SC_SolenoidStates
 SC_GetSolenoidState.argtypes = [POINTER(c_char)]
 
 
@@ -136,9 +139,7 @@ SC_GetStatusBits.restype = c_ulong
 SC_GetStatusBits.argtypes = [POINTER(c_char)]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by SC_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by SC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 SC_HasLastMsgTimerOverrun = lib.SC_HasLastMsgTimerOverrun
 SC_HasLastMsgTimerOverrun.restype = c_bool
 SC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -340,3 +341,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

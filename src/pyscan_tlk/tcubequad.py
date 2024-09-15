@@ -2,6 +2,7 @@ from ctypes import (
     POINTER,
     c_bool,
     c_char,
+    c_char_p,
     c_int,
     c_int32,
     c_int64,
@@ -9,7 +10,8 @@ from ctypes import (
     c_short,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     QD_OperatingMode)
@@ -21,7 +23,9 @@ from .definitions.structures import (
     QD_Position,
     QD_PositionDemandParameters,
     QD_Readings,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -158,9 +162,7 @@ QD_GetStatusBits.restype = c_ulong
 QD_GetStatusBits.argtypes = [POINTER(c_char)]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by QD_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by QD_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 QD_HasLastMsgTimerOverrun = lib.QD_HasLastMsgTimerOverrun
 QD_HasLastMsgTimerOverrun.restype = c_bool
 QD_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -380,3 +382,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

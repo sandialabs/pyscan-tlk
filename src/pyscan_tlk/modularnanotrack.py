@@ -2,6 +2,7 @@ from ctypes import (
     POINTER,
     c_bool,
     c_char,
+    c_char_p,
     c_double,
     c_float,
     c_int,
@@ -11,7 +12,8 @@ from ctypes import (
     c_short,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.enumerations import (
     KNA_FeedbackSource,
     KNA_TIARange,
@@ -29,7 +31,9 @@ from .definitions.structures import (
     NT_HVComponent,
     NT_LowPassFilterParameters,
     NT_TIARangeParameters,
-    NT_TIAReading)
+    NT_TIAReading,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -37,7 +41,7 @@ device_manager = cdll.LoadLibrary(
     lib_path + "Thorlabs.MotionControl.DeviceManager.dll")
 
 lib = cdll.LoadLibrary(
-    lib_path + "Thorlabs.MotionControl.ModularRack.Nanotrak.dll")
+    lib_path + "Thorlabs.MotionControl.Modular.DLL")
 
 
 # Enable / Disable the specified channel.
@@ -186,7 +190,7 @@ NT_GetReading.argtypes = [POINTER(c_char), NT_TIAReading, KNA_TIAReading]
 
 # Gets the NanoTrak signal state.
 NT_GetSignalState = lib.NT_GetSignalState
-NT_GetSignalState.restype = NT_GetSignalState
+NT_GetSignalState.restype = NT_SignalState
 NT_GetSignalState.argtypes = [POINTER(c_char)]
 
 
@@ -226,9 +230,7 @@ NT_GetTrackingThresholdSignal.restype = c_float
 NT_GetTrackingThresholdSignal.argtypes = [POINTER(c_char)]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by NT_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by NT_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 NT_HasLastMsgTimerOverrun = lib.NT_HasLastMsgTimerOverrun
 NT_HasLastMsgTimerOverrun.restype = c_bool
 NT_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -514,3 +516,4 @@ NT_StopPolling.argtypes = [POINTER(c_char)]
 NT_TimeSinceLastMsgReceived = lib.NT_TimeSinceLastMsgReceived
 NT_TimeSinceLastMsgReceived.restype = c_bool
 NT_TimeSinceLastMsgReceived.argtypes = [POINTER(c_char), c_int64]
+

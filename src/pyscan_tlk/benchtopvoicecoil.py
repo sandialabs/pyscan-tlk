@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_double,
     c_float,
     c_int,
@@ -10,11 +11,11 @@ from ctypes import (
     c_int32,
     c_int64,
     c_long,
-    c_short,
     c_uint,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KMOT_TriggerPortMode,
@@ -40,7 +41,9 @@ from .definitions.structures import (
     MOT_JogParameters,
     MOT_LimitSwitchParameters,
     MOT_VelocityParameters,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -216,13 +219,7 @@ BVC_GetLEDswitches.argtypes = [POINTER(c_char)]
 # Gets the limit switch parameters.
 BVC_GetLimitSwitchParams = lib.BVC_GetLimitSwitchParams
 BVC_GetLimitSwitchParams.restype = c_short
-BVC_GetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+BVC_GetLimitSwitchParams.argtypes = [POINTER(c_char), MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Get the limit switch parameters.
@@ -234,15 +231,7 @@ BVC_GetLimitSwitchParamsBlock.argtypes = [POINTER(c_char), MOT_LimitSwitchParame
 # Get the MMI Parameters for the Voice Coil Display Interface.
 BVC_GetMMIParams = lib.BVC_GetMMIParams
 BVC_GetMMIParams.restype = c_short
-BVC_GetMMIParams.argtypes = [
-    POINTER(c_char),
-    KMOT_WheelMode,
-    c_int32,
-    c_int32,
-    KMOT_WheelDirectionSense,
-    c_int32,
-    c_int32,
-    c_int16]
+BVC_GetMMIParams.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16]
 
 
 # Gets the MMI parameters for the device.
@@ -254,17 +243,7 @@ BVC_GetMMIParamsBlock.argtypes = [POINTER(c_char), KMOT_MMIParams]
 # Get the MMI Parameters for the Voice Coil Display Interface.
 BVC_GetMMIParamsExt = lib.BVC_GetMMIParamsExt
 BVC_GetMMIParamsExt.restype = c_short
-BVC_GetMMIParamsExt.argtypes = [
-    POINTER(c_char),
-    KMOT_WheelMode,
-    c_int32,
-    c_int32,
-    KMOT_WheelDirectionSense,
-    c_int32,
-    c_int32,
-    c_int16,
-    c_int16,
-    c_int16]
+BVC_GetMMIParamsExt.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16, c_int16, c_int16]
 
 
 # Gets the motor stage parameters.
@@ -378,12 +357,7 @@ BVC_GetStatusBits.argtypes = [POINTER(c_char)]
 # Get the Trigger Configuration Parameters.
 BVC_GetTriggerConfigParams = lib.BVC_GetTriggerConfigParams
 BVC_GetTriggerConfigParams.restype = c_short
-BVC_GetTriggerConfigParams.argtypes = [
-    POINTER(c_char),
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity,
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity]
+BVC_GetTriggerConfigParams.argtypes = [POINTER(c_char), KMOT_TriggerPortMode, KMOT_TriggerPortPolarity, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity]
 
 
 # Gets the trigger configuration parameters block.
@@ -395,16 +369,7 @@ BVC_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KMOT_TriggerConfig]
 # Get the Trigger Parameters Parameters.
 BVC_GetTriggerParamsParams = lib.BVC_GetTriggerParamsParams
 BVC_GetTriggerParamsParams.restype = c_short
-BVC_GetTriggerParamsParams.argtypes = [
-    POINTER(c_char),
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32]
+BVC_GetTriggerParamsParams.argtypes = [POINTER(c_char), c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
 
 
 # Gets the trigger parameters block.
@@ -425,9 +390,7 @@ BVC_GetVelParamsBlock.restype = c_short
 BVC_GetVelParamsBlock.argtypes = [POINTER(c_char), MOT_VelocityParameters]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by BVC_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by BVC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 BVC_HasLastMsgTimerOverrun = lib.BVC_HasLastMsgTimerOverrun
 BVC_HasLastMsgTimerOverrun.restype = c_bool
 BVC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -754,13 +717,7 @@ BVC_SetLEDswitches.argtypes = [POINTER(c_char), c_long]
 # Sets the limit switch parameters.
 BVC_SetLimitSwitchParams = lib.BVC_SetLimitSwitchParams
 BVC_SetLimitSwitchParams.restype = c_short
-BVC_SetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+BVC_SetLimitSwitchParams.argtypes = [POINTER(c_char), MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Set the limit switch parameters.
@@ -778,15 +735,7 @@ BVC_SetLimitsSoftwareApproachPolicy.argtypes = [POINTER(c_char), MOT_LimitsSoftw
 # Set the MMI Parameters for the Voice Coil Display Interface.
 BVC_SetMMIParams = lib.BVC_SetMMIParams
 BVC_SetMMIParams.restype = c_short
-BVC_SetMMIParams.argtypes = [
-    POINTER(c_char),
-    KMOT_WheelMode,
-    c_int32,
-    c_int32,
-    KMOT_WheelDirectionSense,
-    c_int32,
-    c_int32,
-    c_int16]
+BVC_SetMMIParams.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16]
 
 
 # Sets the MMI parameters for the device.
@@ -798,17 +747,7 @@ BVC_SetMMIParamsBlock.argtypes = [POINTER(c_char), KMOT_MMIParams]
 # Set the MMI Parameters for the Voice Coil Display Interface.
 BVC_SetMMIParamsExt = lib.BVC_SetMMIParamsExt
 BVC_SetMMIParamsExt.restype = c_short
-BVC_SetMMIParamsExt.argtypes = [
-    POINTER(c_char),
-    KMOT_WheelMode,
-    c_int32,
-    c_int32,
-    KMOT_WheelDirectionSense,
-    c_int32,
-    c_int32,
-    c_int16,
-    c_int16,
-    c_int16]
+BVC_SetMMIParamsExt.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16, c_int16, c_int16]
 
 
 # Sets the motor stage parameters.
@@ -880,12 +819,7 @@ BVC_SetStageAxisLimits.argtypes = [POINTER(c_char), c_int, c_int]
 # Set the Trigger Configuration Parameters.
 BVC_SetTriggerConfigParams = lib.BVC_SetTriggerConfigParams
 BVC_SetTriggerConfigParams.restype = c_short
-BVC_SetTriggerConfigParams.argtypes = [
-    POINTER(c_char),
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity,
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity]
+BVC_SetTriggerConfigParams.argtypes = [POINTER(c_char), KMOT_TriggerPortMode, KMOT_TriggerPortPolarity, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity]
 
 
 # Sets the trigger configuration parameters block.
@@ -897,16 +831,7 @@ BVC_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KMOT_TriggerConfig]
 # Set the Trigger Parameters Parameters.
 BVC_SetTriggerParamsParams = lib.BVC_SetTriggerParamsParams
 BVC_SetTriggerParamsParams.restype = c_short
-BVC_SetTriggerParamsParams.argtypes = [
-    POINTER(c_char),
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32]
+BVC_SetTriggerParamsParams.argtypes = [POINTER(c_char), c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
 
 
 # Sets the trigger parameters block.
@@ -1027,3 +952,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

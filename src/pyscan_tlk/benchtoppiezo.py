@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_int,
     c_int32,
     c_int64,
@@ -10,7 +11,8 @@ from ctypes import (
     c_short,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     PZ_ControlModeTypes,
@@ -18,7 +20,9 @@ from .definitions.enumerations import (
 from .definitions.structures import (
     PZ_FeedbackLoopConstants,
     PZ_LUTWaveParameters,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -185,9 +189,7 @@ PBC_GetVoltageSource.restype = PZ_InputSourceFlags
 PBC_GetVoltageSource.argtypes = [POINTER(c_char), c_short]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by PBC_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by PBC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 PBC_HasLastMsgTimerOverrun = lib.PBC_HasLastMsgTimerOverrun
 PBC_HasLastMsgTimerOverrun.restype = c_bool
 PBC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char), c_short]
@@ -491,3 +493,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

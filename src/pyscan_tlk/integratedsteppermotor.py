@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_double,
     c_float,
     c_int,
@@ -13,7 +14,8 @@ from ctypes import (
     c_uint,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     MOT_ButtonModes,
@@ -34,7 +36,9 @@ from .definitions.structures import (
     MOT_PotentiometerSteps,
     MOT_PowerParameters,
     MOT_VelocityParameters,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -204,13 +208,7 @@ ISC_GetLEDswitches.argtypes = [POINTER(c_char)]
 # Gets the limit switch parameters.
 ISC_GetLimitSwitchParams = lib.ISC_GetLimitSwitchParams
 ISC_GetLimitSwitchParams.restype = c_short
-ISC_GetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+ISC_GetLimitSwitchParams.argtypes = [POINTER(c_char), MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Get the limit switch parameters.
@@ -357,9 +355,7 @@ ISC_GetVelParamsBlock.restype = c_short
 ISC_GetVelParamsBlock.argtypes = [POINTER(c_char), MOT_VelocityParameters]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by ISC_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by ISC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 ISC_HasLastMsgTimerOverrun = lib.ISC_HasLastMsgTimerOverrun
 ISC_HasLastMsgTimerOverrun.restype = c_bool
 ISC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -656,13 +652,7 @@ ISC_SetLEDswitches.argtypes = [POINTER(c_char), c_long]
 # Sets the limit switch parameters.
 ISC_SetLimitSwitchParams = lib.ISC_SetLimitSwitchParams
 ISC_SetLimitSwitchParams.restype = c_short
-ISC_SetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+ISC_SetLimitSwitchParams.argtypes = [POINTER(c_char), MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Set the limit switch parameters.
@@ -855,3 +845,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

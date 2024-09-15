@@ -2,27 +2,30 @@ from ctypes import (
     POINTER,
     c_bool,
     c_char,
+    c_char_p,
     c_int,
     c_int32,
     c_int64,
     c_long,
-    c_short,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     MOT_TravelDirection,
     PDXC2_TriggerModes,
     PZ_AmpOutParameters,
-    PZ_ControlModeTypes)
+    PZ_ControlModeTypes,
+    PZ_StageAxisParameters)
 from .definitions.structures import (
     PDXC2_ClosedLoopParameters,
     PDXC2_JogParameters,
     PDXC2_OpenLoopMoveParameters,
-    PZ_StageAxisParameters,
     PDXC2_TriggerParams,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -30,7 +33,7 @@ device_manager = cdll.LoadLibrary(
     lib_path + "Thorlabs.MotionControl.DeviceManager.dll")
 
 lib = cdll.LoadLibrary(
-    lib_path + "Thorlabs.MotionControl.Benchtop.Piezo.dll")
+    lib_path + "MotionControl.Benchtop.Piezo.DLL")
 
 
 # Build the DeviceList.
@@ -195,9 +198,7 @@ PDXC2_GetStatusBits.restype = c_ulong
 PDXC2_GetStatusBits.argtypes = [POINTER(c_char)]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by PDXC2_EnableLastMsgTimer(char const * serialNo,
-# bool enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by PDXC2_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 PDXC2_HasLastMsgTimerOverrun = lib.PDXC2_HasLastMsgTimerOverrun
 PDXC2_HasLastMsgTimerOverrun.restype = c_bool
 PDXC2_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -507,3 +508,4 @@ TLI_GetDeviceListSize.argtypes = []
 TLI_ScanEthernetRange = lib.TLI_ScanEthernetRange
 TLI_ScanEthernetRange.restype = c_short
 TLI_ScanEthernetRange.argtypes = [POINTER(c_char), POINTER(c_char), c_int, c_int, POINTER(c_char), c_ulong]
+

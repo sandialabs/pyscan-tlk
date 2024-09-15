@@ -1,8 +1,8 @@
 from ctypes import (
     POINTER,
     c_bool,
-    c_byte,
     c_char,
+    c_char_p,
     c_int,
     c_int32,
     c_int64,
@@ -10,13 +10,16 @@ from ctypes import (
     c_short,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     LS_DisplayUnits,
     LS_InputSourceFlags)
 from .definitions.structures import (
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -177,9 +180,7 @@ LS_GetWavelength.restype = c_long
 LS_GetWavelength.argtypes = [POINTER(c_char)]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by LS_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by LS_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 LS_HasLastMsgTimerOverrun = lib.LS_HasLastMsgTimerOverrun
 LS_HasLastMsgTimerOverrun.restype = c_bool
 LS_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -246,9 +247,9 @@ LS_RequestDisplayUnits.argtypes = [POINTER(c_char)]
 
 
 # Requests the LED Brightness.
-# LS_RequestLEDBrightness = lib.LS_RequestLEDBrightness
-# LS_RequestLEDBrightness.restype = c_short
-# LS_RequestLEDBrightness.argtypes = [POINTER(c_char)]
+LS_RequestLEDBrightness = lib.LS_RequestLEDBrightness
+LS_RequestLEDBrightness.restype = c_short
+LS_RequestLEDBrightness.argtypes = [POINTER(c_char)]
 
 
 # Requests the limits MaxPower and MaxCurrent.
@@ -387,3 +388,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

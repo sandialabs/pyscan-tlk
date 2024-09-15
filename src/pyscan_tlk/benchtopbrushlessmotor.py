@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_double,
     c_int,
     c_int16,
@@ -13,7 +14,8 @@ from ctypes import (
     c_uint,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     MOD_AuxIOPortMode,
@@ -53,7 +55,9 @@ from .definitions.structures import (
     MOT_TriggerIOConfigParameters,
     MOT_VelocityParameters,
     MOT_VelocityProfileParameters,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -61,7 +65,7 @@ device_manager = cdll.LoadLibrary(
     lib_path + "Thorlabs.MotionControl.DeviceManager.dll")
 
 lib = cdll.LoadLibrary(
-    lib_path + "Thorlabs.MotionControl.Benchtop.BrushlessMotor.dll")
+    lib_path + "Thorlabs.MotionControl.Bencthop.BrushlessMotor.dll")
 
 
 # Build the DeviceList.
@@ -259,9 +263,7 @@ BMC_GetJoystickParams.argtypes = [POINTER(c_char), c_short, MOT_JoystickParamete
 # Get the Parameters for Motion from the LCD Display Interface.
 BMC_GetLCDMoveParams = lib.BMC_GetLCDMoveParams
 BMC_GetLCDMoveParams.restype = c_short
-BMC_GetLCDMoveParams.argtypes = [
-    POINTER(c_char), c_short, MOT_JogModes, c_int32,
-    c_int32, c_int32, MOT_StopModes, c_int32, c_int32, c_int32]
+BMC_GetLCDMoveParams.argtypes = [POINTER(c_char), c_short, MOT_JogModes, c_int32, c_int32, c_int32, MOT_StopModes, c_int32, c_int32, c_int32]
 
 
 # Gets the LCD parameters for the device.
@@ -423,9 +425,7 @@ BMC_GetStageAxisMinPos.argtypes = [POINTER(c_char), c_short]
 # Gets the Brushless Motor stage axis parameters.
 BMC_GetStageAxisParams = lib.BMC_GetStageAxisParams
 BMC_GetStageAxisParams.restype = c_short
-BMC_GetStageAxisParams.argtypes = [
-    POINTER(c_char), c_short, c_long, c_long, POINTER(c_char),
-    c_ulong, c_ulong, c_ulong, c_int, c_int, c_int, c_int, c_int]
+BMC_GetStageAxisParams.argtypes = [POINTER(c_char), c_short, c_long, c_long, POINTER(c_char), c_ulong, c_ulong, c_ulong, c_int, c_int, c_int, c_int, c_int]
 
 
 # Gets the Brushless Motor stage axis parameters.
@@ -449,22 +449,7 @@ BMC_GetTrackSettleParams.argtypes = [POINTER(c_char), c_short, MOT_BrushlessTrac
 # Gets the IO Trigger Config Parameters.
 BMC_GetTriggerIOConfigParams = lib.BMC_GetTriggerIOConfigParams
 BMC_GetTriggerIOConfigParams.restype = c_short
-BMC_GetTriggerIOConfigParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    MOT_TriggerInputConfigModes,
-    MOT_TriggerPolarity,
-    MOT_TriggerInputSource,
-    MOT_TriggerOutputConfigModes,
-    MOT_TriggerPolarity,
-    c_long,
-    c_long,
-    c_long,
-    c_long,
-    c_long,
-    c_long,
-    c_long,
-    c_long]
+BMC_GetTriggerIOConfigParams.argtypes = [POINTER(c_char), c_short, MOT_TriggerInputConfigModes, MOT_TriggerPolarity, MOT_TriggerInputSource, MOT_TriggerOutputConfigModes, MOT_TriggerPolarity, c_long, c_long, c_long, c_long, c_long, c_long, c_long, c_long]
 
 
 # Gets the IO Trigger Config Parameters.
@@ -497,9 +482,7 @@ BMC_GetVelocityProfileParams.restype = c_short
 BMC_GetVelocityProfileParams.argtypes = [POINTER(c_char), c_short, MOT_VelocityProfileParameters]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by BMC_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by BMC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 BMC_HasLastMsgTimerOverrun = lib.BMC_HasLastMsgTimerOverrun
 BMC_HasLastMsgTimerOverrun.restype = c_bool
 BMC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char), c_short]
@@ -946,17 +929,7 @@ BMC_SetJoystickParams.argtypes = [POINTER(c_char), c_short, MOT_JoystickParamete
 # Set the Parameters for Motion from the LCD Display Interface.
 BMC_SetLCDMoveParams = lib.BMC_SetLCDMoveParams
 BMC_SetLCDMoveParams.restype = c_short
-BMC_SetLCDMoveParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    MOT_JogModes,
-    c_int32,
-    c_int32,
-    c_int32,
-    MOT_StopModes,
-    c_int32,
-    c_int32,
-    c_int32]
+BMC_SetLCDMoveParams.argtypes = [POINTER(c_char), c_short, MOT_JogModes, c_int32, c_int32, c_int32, MOT_StopModes, c_int32, c_int32, c_int32]
 
 
 # Sets the LCD parameters for the device.
@@ -1094,22 +1067,7 @@ BMC_SetTrackSettleParams.argtypes = [POINTER(c_char), c_short, MOT_BrushlessTrac
 # Sets the IO Trigger Config Parameters.
 BMC_SetTriggerIOConfigParams = lib.BMC_SetTriggerIOConfigParams
 BMC_SetTriggerIOConfigParams.restype = c_short
-BMC_SetTriggerIOConfigParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    MOT_TriggerInputConfigModes,
-    MOT_TriggerPolarity,
-    MOT_TriggerInputSource,
-    MOT_TriggerOutputConfigModes,
-    MOT_TriggerPolarity,
-    c_long,
-    c_long,
-    c_long,
-    c_long,
-    c_long,
-    c_long,
-    c_long,
-    c_long]
+BMC_SetTriggerIOConfigParams.argtypes = [POINTER(c_char), c_short, MOT_TriggerInputConfigModes, MOT_TriggerPolarity, MOT_TriggerInputSource, MOT_TriggerOutputConfigModes, MOT_TriggerPolarity, c_long, c_long, c_long, c_long, c_long, c_long, c_long, c_long]
 
 
 # Sets the IO Trigger Config Parameters.
@@ -1278,3 +1236,4 @@ TLI_ScanEthernetRange.argtypes = [POINTER(c_char), POINTER(c_char), c_int, c_int
 TLI_UninitializeSimulations = lib.TLI_UninitializeSimulations
 TLI_UninitializeSimulations.restype = c_void_p
 TLI_UninitializeSimulations.argtypes = []
+

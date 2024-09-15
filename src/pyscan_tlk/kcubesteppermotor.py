@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_double,
     c_float,
     c_int,
@@ -14,7 +15,8 @@ from ctypes import (
     c_uint,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KMOT_TriggerPortMode,
@@ -42,7 +44,9 @@ from .definitions.structures import (
     MOT_PIDLoopEncoderParams,
     MOT_PowerParameters,
     MOT_VelocityParameters,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -66,9 +70,9 @@ TLI_InitializeSimulations.argtypes = []
 
 
 # Determine if the device front panel can be locked.
-# SCC_CanDeviceLockFrontPanel = lib.SCC_CanDeviceLockFrontPanel
-# SCC_CanDeviceLockFrontPanel.restype = c_bool
-# SCC_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
+SCC_CanDeviceLockFrontPanel = lib.SCC_CanDeviceLockFrontPanel
+SCC_CanDeviceLockFrontPanel.restype = c_bool
+SCC_CanDeviceLockFrontPanel.argtypes = [POINTER(c_char)]
 
 
 # Can the device perform a Home.
@@ -156,9 +160,9 @@ SCC_GetEncoderCounter.argtypes = [POINTER(c_char)]
 
 
 # Query if the device front panel locked.
-# SCC_GetFrontPanelLocked = lib.SCC_GetFrontPanelLocked
-# SCC_GetFrontPanelLocked.restype = c_bool
-# SCC_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
+SCC_GetFrontPanelLocked = lib.SCC_GetFrontPanelLocked
+SCC_GetFrontPanelLocked.restype = c_bool
+SCC_GetFrontPanelLocked.argtypes = [POINTER(c_char)]
 
 
 # Gets the hardware information from the device.
@@ -218,13 +222,7 @@ SCC_GetJogVelParams.argtypes = [POINTER(c_char), c_int, c_int]
 # Gets the limit switch parameters.
 SCC_GetLimitSwitchParams = lib.SCC_GetLimitSwitchParams
 SCC_GetLimitSwitchParams.restype = c_short
-SCC_GetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+SCC_GetLimitSwitchParams.argtypes = [POINTER(c_char), MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Get the limit switch parameters.
@@ -236,15 +234,7 @@ SCC_GetLimitSwitchParamsBlock.argtypes = [POINTER(c_char), MOT_LimitSwitchParame
 # Get the MMI Parameters for the KCube Display Interface.
 SCC_GetMMIParams = lib.SCC_GetMMIParams
 SCC_GetMMIParams.restype = c_short
-SCC_GetMMIParams.argtypes = [
-    POINTER(c_char),
-    KMOT_WheelMode,
-    c_int32,
-    c_int32,
-    KMOT_WheelDirectionSense,
-    c_int32,
-    c_int32,
-    c_int16]
+SCC_GetMMIParams.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16]
 
 
 # Gets the MMI parameters for the device.
@@ -256,17 +246,7 @@ SCC_GetMMIParamsBlock.argtypes = [POINTER(c_char), KMOT_MMIParams]
 # Get the MMI Parameters for the KCube Display Interface.
 SCC_GetMMIParamsExt = lib.SCC_GetMMIParamsExt
 SCC_GetMMIParamsExt.restype = c_short
-SCC_GetMMIParamsExt.argtypes = [
-    POINTER(c_char),
-    KMOT_WheelMode,
-    c_int32,
-    c_int32,
-    KMOT_WheelDirectionSense,
-    c_int32,
-    c_int32,
-    c_int16,
-    c_int16,
-    c_int16]
+SCC_GetMMIParamsExt.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16, c_int16, c_int16]
 
 
 # Gets the motor stage parameters.
@@ -392,12 +372,7 @@ SCC_GetStatusBits.argtypes = [POINTER(c_char)]
 # Get the Trigger Configuration Parameters.
 SCC_GetTriggerConfigParams = lib.SCC_GetTriggerConfigParams
 SCC_GetTriggerConfigParams.restype = c_short
-SCC_GetTriggerConfigParams.argtypes = [
-    POINTER(c_char),
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity,
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity]
+SCC_GetTriggerConfigParams.argtypes = [POINTER(c_char), KMOT_TriggerPortMode, KMOT_TriggerPortPolarity, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity]
 
 
 # Gets the trigger configuration parameters block.
@@ -409,16 +384,7 @@ SCC_GetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KMOT_TriggerConfig]
 # Get the Trigger Parameters Parameters.
 SCC_GetTriggerParamsParams = lib.SCC_GetTriggerParamsParams
 SCC_GetTriggerParamsParams.restype = c_short
-SCC_GetTriggerParamsParams.argtypes = [
-    POINTER(c_char),
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32]
+SCC_GetTriggerParamsParams.argtypes = [POINTER(c_char), c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
 
 
 # Gets the trigger parameters block.
@@ -439,9 +405,7 @@ SCC_GetVelParamsBlock.restype = c_short
 SCC_GetVelParamsBlock.argtypes = [POINTER(c_char), MOT_VelocityParameters]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by SCC_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by SCC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 SCC_HasLastMsgTimerOverrun = lib.SCC_HasLastMsgTimerOverrun
 SCC_HasLastMsgTimerOverrun.restype = c_bool
 SCC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -574,9 +538,9 @@ SCC_RequestEncoderCounter.argtypes = [POINTER(c_char)]
 
 
 # Ask the device if its front panel is locked.
-# SCC_RequestFrontPanelLocked = lib.SCC_RequestFrontPanelLocked
-# SCC_RequestFrontPanelLocked.restype = c_short
-# SCC_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
+SCC_RequestFrontPanelLocked = lib.SCC_RequestFrontPanelLocked
+SCC_RequestFrontPanelLocked.restype = c_short
+SCC_RequestFrontPanelLocked.argtypes = [POINTER(c_char)]
 
 
 # Requests the homing parameters.
@@ -712,9 +676,9 @@ SCC_SetEncoderCounter.argtypes = [POINTER(c_char), c_long]
 
 
 # Sets the device front panel lock state.
-# SCC_SetFrontPanelLock = lib.SCC_SetFrontPanelLock
-# SCC_SetFrontPanelLock.restype = c_short
-# SCC_SetFrontPanelLock.argtypes = [POINTER(c_char), c_bool]
+SCC_SetFrontPanelLock = lib.SCC_SetFrontPanelLock
+SCC_SetFrontPanelLock.restype = c_short
+SCC_SetFrontPanelLock.argtypes = [POINTER(c_char), c_bool]
 
 
 # Set the homing parameters.
@@ -756,13 +720,7 @@ SCC_SetJogVelParams.argtypes = [POINTER(c_char), c_int, c_int]
 # Sets the limit switch parameters.
 SCC_SetLimitSwitchParams = lib.SCC_SetLimitSwitchParams
 SCC_SetLimitSwitchParams.restype = c_short
-SCC_SetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+SCC_SetLimitSwitchParams.argtypes = [POINTER(c_char), MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Set the limit switch parameters.
@@ -780,15 +738,7 @@ SCC_SetLimitsSoftwareApproachPolicy.argtypes = [POINTER(c_char), MOT_LimitsSoftw
 # Set the MMI Parameters for the KCube Display Interface.
 SCC_SetMMIParams = lib.SCC_SetMMIParams
 SCC_SetMMIParams.restype = c_short
-SCC_SetMMIParams.argtypes = [
-    POINTER(c_char),
-    KMOT_WheelMode,
-    c_int32,
-    c_int32,
-    KMOT_WheelDirectionSense,
-    c_int32,
-    c_int32,
-    c_int16]
+SCC_SetMMIParams.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16]
 
 
 # Sets the MMI parameters for the device.
@@ -800,17 +750,7 @@ SCC_SetMMIParamsBlock.argtypes = [POINTER(c_char), KMOT_MMIParams]
 # Set the MMI Parameters for the KCube Display Interface.
 SCC_SetMMIParamsExt = lib.SCC_SetMMIParamsExt
 SCC_SetMMIParamsExt.restype = c_short
-SCC_SetMMIParamsExt.argtypes = [
-    POINTER(c_char),
-    KMOT_WheelMode,
-    c_int32,
-    c_int32,
-    KMOT_WheelDirectionSense,
-    c_int32,
-    c_int32,
-    c_int16,
-    c_int16,
-    c_int16]
+SCC_SetMMIParamsExt.argtypes = [POINTER(c_char), KMOT_WheelMode, c_int32, c_int32, KMOT_WheelDirectionSense, c_int32, c_int32, c_int16, c_int16, c_int16]
 
 
 # Sets the motor stage parameters.
@@ -900,12 +840,7 @@ SCC_SetStageType.argtypes = [POINTER(c_char), KST_Stages, TST_Stages]
 # Set the Trigger Configuration Parameters.
 SCC_SetTriggerConfigParams = lib.SCC_SetTriggerConfigParams
 SCC_SetTriggerConfigParams.restype = c_short
-SCC_SetTriggerConfigParams.argtypes = [
-    POINTER(c_char),
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity,
-    KMOT_TriggerPortMode,
-    KMOT_TriggerPortPolarity]
+SCC_SetTriggerConfigParams.argtypes = [POINTER(c_char), KMOT_TriggerPortMode, KMOT_TriggerPortPolarity, KMOT_TriggerPortMode, KMOT_TriggerPortPolarity]
 
 
 # Sets the trigger configuration parameters block.
@@ -917,16 +852,7 @@ SCC_SetTriggerConfigParamsBlock.argtypes = [POINTER(c_char), KMOT_TriggerConfig]
 # Set the Trigger Parameters Parameters.
 SCC_SetTriggerParamsParams = lib.SCC_SetTriggerParamsParams
 SCC_SetTriggerParamsParams.restype = c_short
-SCC_SetTriggerParamsParams.argtypes = [
-    POINTER(c_char),
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32]
+SCC_SetTriggerParamsParams.argtypes = [POINTER(c_char), c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
 
 
 # Sets the trigger parameters block.
@@ -1041,3 +967,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

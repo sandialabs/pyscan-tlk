@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_int,
     c_int16,
     c_int32,
@@ -11,7 +12,8 @@ from ctypes import (
     c_short,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KPC_HubAnalogueModes,
@@ -29,7 +31,9 @@ from .definitions.structures import (
     KPC_TriggerConfig,
     PZ_FeedbackLoopConstants,
     PZ_LUTWaveParameters,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -169,18 +173,7 @@ KPC_GetLEDBrightness.argtypes = [POINTER(c_char)]
 # Get the MMI Parameters for the KCube Display Interface.
 KPC_GetMMIParams = lib.KPC_GetMMIParams
 KPC_GetMMIParams.restype = c_short
-KPC_GetMMIParams.argtypes = [
-    POINTER(c_char),
-    KPZ_WheelMode,
-    KPZ_WheelChangeRate,
-    c_int16,
-    c_int16,
-    KPZ_WheelDirectionSense,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16]
+KPC_GetMMIParams.argtypes = [POINTER(c_char), KPZ_WheelMode, KPZ_WheelChangeRate, c_int16, c_int16, KPZ_WheelDirectionSense, c_int16, c_int16, c_int16, c_int16, c_int16]
 
 
 # Gets the MMI parameters for the device.
@@ -192,20 +185,7 @@ KPC_GetMMIParamsBlock.argtypes = [POINTER(c_char), KPC_MMIParams]
 # Get the MMI Parameters for the KCube Display Interface.
 KPC_GetMMIParamsExt = lib.KPC_GetMMIParamsExt
 KPC_GetMMIParamsExt.restype = c_short
-KPC_GetMMIParamsExt.argtypes = [
-    POINTER(c_char),
-    KPZ_WheelMode,
-    KPZ_WheelChangeRate,
-    c_int16,
-    c_int16,
-    KPZ_WheelDirectionSense,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16]
+KPC_GetMMIParamsExt.argtypes = [POINTER(c_char), KPZ_WheelMode, KPZ_WheelChangeRate, c_int16, c_int16, KPZ_WheelDirectionSense, c_int16, c_int16, c_int16, c_int16, c_int16, c_int16, c_int16]
 
 
 # Gets the maximum output voltage.
@@ -259,18 +239,7 @@ KPC_GetStatusBits.argtypes = [POINTER(c_char)]
 # Get the Trigger Configuration Parameters.
 KPC_GetTriggerConfigParams = lib.KPC_GetTriggerConfigParams
 KPC_GetTriggerConfigParams.restype = c_short
-KPC_GetTriggerConfigParams.argtypes = [
-    POINTER(c_char),
-    KPC_TriggerPortMode,
-    KPC_TriggerPortPolarity,
-    KPC_TriggerPortMode,
-    KPC_TriggerPortPolarity,
-    c_int32,
-    c_int32,
-    c_int16,
-    KPC_MonitorOutputMode,
-    c_int16,
-    c_int16]
+KPC_GetTriggerConfigParams.argtypes = [POINTER(c_char), KPC_TriggerPortMode, KPC_TriggerPortPolarity, KPC_TriggerPortMode, KPC_TriggerPortPolarity, c_int32, c_int32, c_int16, KPC_MonitorOutputMode, c_int16, c_int16]
 
 
 # Gets the trigger configuration parameters block.
@@ -285,9 +254,7 @@ KPC_GetVoltageSource.restype = PZ_InputSourceFlags
 KPC_GetVoltageSource.argtypes = [POINTER(c_char)]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by KPC_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by KPC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 KPC_HasLastMsgTimerOverrun = lib.KPC_HasLastMsgTimerOverrun
 KPC_HasLastMsgTimerOverrun.restype = c_bool
 KPC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -518,18 +485,7 @@ KPC_SetLUTwaveSample.argtypes = [POINTER(c_char), c_short, c_long]
 # Set the MMI Parameters for the KCube Display Interface.
 KPC_SetMMIParams = lib.KPC_SetMMIParams
 KPC_SetMMIParams.restype = c_short
-KPC_SetMMIParams.argtypes = [
-    POINTER(c_char),
-    KPZ_WheelMode,
-    KPZ_WheelChangeRate,
-    c_int16,
-    c_int16,
-    KPZ_WheelDirectionSense,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16]
+KPC_SetMMIParams.argtypes = [POINTER(c_char), KPZ_WheelMode, KPZ_WheelChangeRate, c_int16, c_int16, KPZ_WheelDirectionSense, c_int16, c_int16, c_int16, c_int16, c_int16]
 
 
 # Sets the MMI parameters for the device.
@@ -541,20 +497,7 @@ KPC_SetMMIParamsBlock.argtypes = [POINTER(c_char), KPC_MMIParams]
 # Set the MMI Parameters for the KCube Display Interface.
 KPC_SetMMIParamsExt = lib.KPC_SetMMIParamsExt
 KPC_SetMMIParamsExt.restype = c_short
-KPC_SetMMIParamsExt.argtypes = [
-    POINTER(c_char),
-    KPZ_WheelMode,
-    KPZ_WheelChangeRate,
-    c_int16,
-    c_int16,
-    KPZ_WheelDirectionSense,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16,
-    c_int16]
+KPC_SetMMIParamsExt.argtypes = [POINTER(c_char), KPZ_WheelMode, KPZ_WheelChangeRate, c_int16, c_int16, KPZ_WheelDirectionSense, c_int16, c_int16, c_int16, c_int16, c_int16, c_int16, c_int16]
 
 
 # Sets the maximum output voltage.
@@ -590,18 +533,7 @@ KPC_SetPositionToTolerance.argtypes = [POINTER(c_char), c_long, c_long]
 # Set the Trigger Configuration Parameters.
 KPC_SetTriggerConfigParams = lib.KPC_SetTriggerConfigParams
 KPC_SetTriggerConfigParams.restype = c_short
-KPC_SetTriggerConfigParams.argtypes = [
-    POINTER(c_char),
-    KPC_TriggerPortMode,
-    KPC_TriggerPortPolarity,
-    KPC_TriggerPortMode,
-    KPC_TriggerPortPolarity,
-    c_int32,
-    c_int32,
-    c_int16,
-    KPC_MonitorOutputMode,
-    c_int16,
-    c_int16]
+KPC_SetTriggerConfigParams.argtypes = [POINTER(c_char), KPC_TriggerPortMode, KPC_TriggerPortPolarity, KPC_TriggerPortMode, KPC_TriggerPortPolarity, c_int32, c_int32, c_int16, KPC_MonitorOutputMode, c_int16, c_int16]
 
 
 # Sets the trigger configuration parameters block.
@@ -704,3 +636,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

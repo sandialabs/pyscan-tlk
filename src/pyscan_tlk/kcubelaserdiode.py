@@ -1,8 +1,8 @@
 from ctypes import (
     POINTER,
     c_bool,
-    c_byte,
     c_char,
+    c_char_p,
     c_float,
     c_int,
     c_int32,
@@ -11,7 +11,8 @@ from ctypes import (
     c_short,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KLD_RAMPUP,
@@ -27,7 +28,9 @@ from .definitions.structures import (
     KLD_TrigIOParams,
     KLS_MMIParams,
     KLS_TrigIOParams,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -189,9 +192,9 @@ LD_GetLaserSetPoint.argtypes = [POINTER(c_char)]
 
 
 # Gets the maximum current dig pot position.
-# LD_GetMaxCurrentDigPot = lib.LD_GetMaxCurrentDigPot
-# LD_GetMaxCurrentDigPot.restype = c_long
-# LD_GetMaxCurrentDigPot.argtypes = [POINTER(c_char)]
+LD_GetMaxCurrentDigPot = lib.LD_GetMaxCurrentDigPot
+LD_GetMaxCurrentDigPot.restype = c_long
+LD_GetMaxCurrentDigPot.argtypes = [POINTER(c_char)]
 
 
 # Get the next MessageQueue item.
@@ -236,9 +239,7 @@ LD_GetWACalibFactor.restype = c_float
 LD_GetWACalibFactor.argtypes = [POINTER(c_char)]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by LD_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by LD_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 LD_HasLastMsgTimerOverrun = lib.LD_HasLastMsgTimerOverrun
 LD_HasLastMsgTimerOverrun.restype = c_bool
 LD_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -461,9 +462,9 @@ LD_WaitForMessage.argtypes = [POINTER(c_char), c_long, c_long, c_ulong]
 
 
 # Gets the MMI parameters.
-# LS_GetMMIParams = lib.LS_GetMMIParams
-# LS_GetMMIParams.restype = c_short
-# LS_GetMMIParams.argtypes = [POINTER(c_char)]
+LS_GetMMIParams = lib.LS_GetMMIParams
+LS_GetMMIParams.restype = c_short
+LS_GetMMIParams.argtypes = [POINTER(c_char)]
 
 
 # Gets the MMI parameters.
@@ -475,16 +476,7 @@ LS_GetMMIParamsBlock.argtypes = [POINTER(c_char), KLD_MMIParams, KLS_MMIParams]
 # Gets the Trigger IO parameters.
 LS_GetTrigIOParams = lib.LS_GetTrigIOParams
 LS_GetTrigIOParams.restype = c_short
-LS_GetTrigIOParams.argtypes = [
-    POINTER(c_char),
-    KLD_TriggerMode,
-    KLS_TriggerMode,
-    KLD_TrigPolarity,
-    KLS_TrigPolarity,
-    KLD_TriggerMode,
-    KLS_TriggerMode,
-    KLD_TrigPolarity,
-    KLS_TrigPolarity]
+LS_GetTrigIOParams.argtypes = [POINTER(c_char), KLD_TriggerMode, KLS_TriggerMode, KLD_TrigPolarity, KLS_TrigPolarity, KLD_TriggerMode, KLS_TriggerMode, KLD_TrigPolarity, KLS_TrigPolarity]
 
 
 # Gets the Trigger IO parameters.
@@ -506,9 +498,9 @@ LS_RequestTrigIOParams.argtypes = [POINTER(c_char)]
 
 
 # Sets the MMI parameters.
-# LS_SetMMIParams = lib.LS_SetMMIParams
-# LS_SetMMIParams.restype = c_short
-# LS_SetMMIParams.argtypes = [POINTER(c_char), c_short]
+LS_SetMMIParams = lib.LS_SetMMIParams
+LS_SetMMIParams.restype = c_short
+LS_SetMMIParams.argtypes = [POINTER(c_char), c_short]
 
 
 # Sets the MMI parameters.
@@ -520,16 +512,7 @@ LS_SetMMIParamsBlock.argtypes = [POINTER(c_char), KLD_MMIParams, KLS_MMIParams]
 # Sets the Trigger IO parameters.
 LS_SetTrigIOParams = lib.LS_SetTrigIOParams
 LS_SetTrigIOParams.restype = c_short
-LS_SetTrigIOParams.argtypes = [
-    POINTER(c_char),
-    KLD_TriggerMode,
-    KLS_TriggerMode,
-    KLD_TrigPolarity,
-    KLS_TrigPolarity,
-    KLD_TriggerMode,
-    KLS_TriggerMode,
-    KLD_TrigPolarity,
-    KLS_TrigPolarity]
+LS_SetTrigIOParams.argtypes = [POINTER(c_char), KLD_TriggerMode, KLS_TriggerMode, KLD_TrigPolarity, KLS_TrigPolarity, KLD_TriggerMode, KLS_TriggerMode, KLD_TrigPolarity, KLS_TrigPolarity]
 
 
 # Ls set trig i/o parameters block.
@@ -584,3 +567,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

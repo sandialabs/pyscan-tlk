@@ -3,6 +3,7 @@ from ctypes import (
     c_bool,
     c_byte,
     c_char,
+    c_char_p,
     c_double,
     c_float,
     c_int,
@@ -13,7 +14,8 @@ from ctypes import (
     c_uint,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     MOT_JogModes,
@@ -33,7 +35,9 @@ from .definitions.structures import (
     MOT_PIDLoopEncoderParams,
     MOT_PowerParameters,
     MOT_VelocityParameters,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -209,14 +213,7 @@ SBC_GetJoystickParams.argtypes = [POINTER(c_char), c_short, MOT_JoystickParamete
 # Gets the limit switch parameters.
 SBC_GetLimitSwitchParams = lib.SBC_GetLimitSwitchParams
 SBC_GetLimitSwitchParams.restype = c_short
-SBC_GetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+SBC_GetLimitSwitchParams.argtypes = [POINTER(c_char), c_short, MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Get the limit switch parameters.
@@ -381,9 +378,7 @@ SBC_GetVelParamsBlock.restype = c_short
 SBC_GetVelParamsBlock.argtypes = [POINTER(c_char), c_short, MOT_VelocityParameters, MOT_VelocityParameters]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by SBC_EnableLastMsgTimer(char const * serialNo, bool
-# enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by SBC_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
 SBC_HasLastMsgTimerOverrun = lib.SBC_HasLastMsgTimerOverrun
 SBC_HasLastMsgTimerOverrun.restype = c_bool
 SBC_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char), c_short]
@@ -612,9 +607,9 @@ SBC_RequestStatusBits.argtypes = [POINTER(c_char), c_short]
 
 
 # Requests the trigger switch parameter.
-# SBC_RequestTriggerSwitches = lib.SBC_RequestTriggerSwitches
-# SBC_RequestTriggerSwitches.restype = c_short
-# SBC_RequestTriggerSwitches.argtypes = [POINTER(c_char), c_short]
+SBC_RequestTriggerSwitches = lib.SBC_RequestTriggerSwitches
+SBC_RequestTriggerSwitches.restype = c_short
+SBC_RequestTriggerSwitches.argtypes = [POINTER(c_char), c_short]
 
 
 # Requests the velocity parameters.
@@ -716,14 +711,7 @@ SBC_SetJoystickParams.argtypes = [POINTER(c_char), c_short, MOT_JoystickParamete
 # Sets the limit switch parameters.
 SBC_SetLimitSwitchParams = lib.SBC_SetLimitSwitchParams
 SBC_SetLimitSwitchParams.restype = c_short
-SBC_SetLimitSwitchParams.argtypes = [
-    POINTER(c_char),
-    c_short,
-    MOT_LimitSwitchModes,
-    MOT_LimitSwitchModes,
-    c_uint,
-    c_uint,
-    MOT_LimitSwitchSWModes]
+SBC_SetLimitSwitchParams.argtypes = [POINTER(c_char), c_short, MOT_LimitSwitchModes, MOT_LimitSwitchModes, c_uint, c_uint, MOT_LimitSwitchSWModes]
 
 
 # Set the limit switch parameters.
@@ -934,3 +922,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+

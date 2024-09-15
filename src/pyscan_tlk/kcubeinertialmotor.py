@@ -2,15 +2,16 @@ from ctypes import (
     POINTER,
     c_bool,
     c_char,
+    c_char_p,
     c_int,
     c_int16,
     c_int32,
     c_int64,
     c_long,
-    c_short,
     c_ulong,
     c_void_p,
-    cdll)
+    cdll,
+    pointer)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
     KIM_Channels,
@@ -33,7 +34,9 @@ from .definitions.structures import (
     KIM_MMIParameters,
     KIM_TrigIOConfig,
     KIM_TrigParamsParameters,
-    TLI_DeviceInfo)
+    TLI_DeviceInfo,
+    TLI_HardwareInformation)
+from .definitions.kinesisexception import KinesisException
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -41,7 +44,7 @@ device_manager = cdll.LoadLibrary(
     lib_path + "Thorlabs.MotionControl.DeviceManager.dll")
 
 lib = cdll.LoadLibrary(
-    lib_path + "Thorlabs.MotionControl.KCube.InertialMotor.dll")
+    lib_path + "Thorlabs.MotionControl.KCube.DCServo.dll")
 
 
 # Build the DeviceList.
@@ -179,13 +182,7 @@ KIM_GetHardwareInfoBlock.argtypes = [POINTER(c_char)]
 # Gets a home parameters.
 KIM_GetHomeParameters = lib.KIM_GetHomeParameters
 KIM_GetHomeParameters.restype = c_short
-KIM_GetHomeParameters.argtypes = [
-    POINTER(c_char),
-    KIM_Channels,
-    KIM_TravelDirection,
-    KIM_TravelDirection,
-    c_int32,
-    c_int32]
+KIM_GetHomeParameters.argtypes = [POINTER(c_char), KIM_Channels, KIM_TravelDirection, KIM_TravelDirection, c_int32, c_int32]
 
 
 # Gets a home parameters.
@@ -209,12 +206,7 @@ KIM_GetJogParametersStruct.argtypes = [POINTER(c_char), KIM_Channels, KIM_JogPar
 # Gets a limit switch parameters.
 KIM_GetLimitSwitchParameters = lib.KIM_GetLimitSwitchParameters
 KIM_GetLimitSwitchParameters.restype = c_short
-KIM_GetLimitSwitchParameters.argtypes = [
-    POINTER(c_char),
-    KIM_Channels,
-    KIM_LimitSwitchModes,
-    KIM_LimitSwitchModes,
-    c_int16]
+KIM_GetLimitSwitchParameters.argtypes = [POINTER(c_char), KIM_Channels, KIM_LimitSwitchModes, KIM_LimitSwitchModes, c_int16]
 
 
 # Gets a limit switch parameters.
@@ -238,15 +230,7 @@ KIM_GetMMIChannelParametersStruct.argtypes = [POINTER(c_char), KIM_Channels, KIM
 # Gets a mmi parameters.
 KIM_GetMMIDeviceParameters = lib.KIM_GetMMIDeviceParameters
 KIM_GetMMIDeviceParameters.restype = c_short
-KIM_GetMMIDeviceParameters.argtypes = [
-    POINTER(c_char),
-    KIM_Channels,
-    KIM_JoysticModes,
-    c_int32,
-    KIM_DirectionSense,
-    c_int32,
-    c_int32,
-    c_int32]
+KIM_GetMMIDeviceParameters.argtypes = [POINTER(c_char), KIM_Channels, KIM_JoysticModes, c_int32, KIM_DirectionSense, c_int32, c_int32, c_int32]
 
 
 # Gets a mmi parameters.
@@ -288,14 +272,7 @@ KIM_GetStatusBits.argtypes = [POINTER(c_char), KIM_Channels]
 # Gets a trig IO parameters.
 KIM_GetTrigIOParameters = lib.KIM_GetTrigIOParameters
 KIM_GetTrigIOParameters.restype = c_short
-KIM_GetTrigIOParameters.argtypes = [
-    POINTER(c_char),
-    KIM_TrigModes,
-    KIM_TrigPolarities,
-    KIM_Channels,
-    KIM_TrigModes,
-    KIM_TrigPolarities,
-    KIM_Channels]
+KIM_GetTrigIOParameters.argtypes = [POINTER(c_char), KIM_TrigModes, KIM_TrigPolarities, KIM_Channels, KIM_TrigModes, KIM_TrigPolarities, KIM_Channels]
 
 
 # Gets a trig IO parameters.
@@ -307,17 +284,7 @@ KIM_GetTrigIOParametersStruct.argtypes = [POINTER(c_char), KIM_TrigIOConfig]
 # Gets a trigger parameters.
 KIM_GetTrigParamsParameters = lib.KIM_GetTrigParamsParameters
 KIM_GetTrigParamsParameters.restype = c_short
-KIM_GetTrigParamsParameters.argtypes = [
-    POINTER(c_char),
-    KIM_Channels,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32,
-    c_int32]
+KIM_GetTrigParamsParameters.argtypes = [POINTER(c_char), KIM_Channels, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
 
 
 # Gets a trigger parameters.
@@ -326,9 +293,7 @@ KIM_GetTrigParamsParametersStruct.restype = c_short
 KIM_GetTrigParamsParametersStruct.argtypes = [POINTER(c_char), KIM_Channels, KIM_TrigParamsParameters]
 
 
-# Queries if the time since the last message has exceeded the
-# lastMsgTimeout set by KIM_EnableLastMsgTimer(char const * serialNumber,
-# bool enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the lastMsgTimeout set by KIM_EnableLastMsgTimer(char const * serialNumber, bool enable, __int32 lastMsgTimeout ).
 KIM_HasLastMsgTimerOverrun = lib.KIM_HasLastMsgTimerOverrun
 KIM_HasLastMsgTimerOverrun.restype = c_bool
 KIM_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -565,13 +530,7 @@ KIM_SetFrontPanelLock.argtypes = [POINTER(c_char), c_bool]
 # Sets the home parameters.
 KIM_SetHomeParameters = lib.KIM_SetHomeParameters
 KIM_SetHomeParameters.restype = c_short
-KIM_SetHomeParameters.argtypes = [
-    POINTER(c_char),
-    KIM_Channels,
-    KIM_TravelDirection,
-    KIM_TravelDirection,
-    c_int32,
-    c_int32]
+KIM_SetHomeParameters.argtypes = [POINTER(c_char), KIM_Channels, KIM_TravelDirection, KIM_TravelDirection, c_int32, c_int32]
 
 
 # Sets the home parameters.
@@ -595,12 +554,7 @@ KIM_SetJogParametersStruct.argtypes = [POINTER(c_char), KIM_Channels, KIM_JogPar
 # Sets the limit switch parameters.
 KIM_SetLimitSwitchParameters = lib.KIM_SetLimitSwitchParameters
 KIM_SetLimitSwitchParameters.restype = c_short
-KIM_SetLimitSwitchParameters.argtypes = [
-    POINTER(c_char),
-    KIM_Channels,
-    KIM_LimitSwitchModes,
-    KIM_LimitSwitchModes,
-    c_int16]
+KIM_SetLimitSwitchParameters.argtypes = [POINTER(c_char), KIM_Channels, KIM_LimitSwitchModes, KIM_LimitSwitchModes, c_int16]
 
 
 # Sets the limit switch parameters.
@@ -654,14 +608,7 @@ KIM_SetStageType.argtypes = [POINTER(c_char), KIM_Stages]
 # Sets the limit switch parameters.
 KIM_SetTrigIOParameters = lib.KIM_SetTrigIOParameters
 KIM_SetTrigIOParameters.restype = c_short
-KIM_SetTrigIOParameters.argtypes = [
-    POINTER(c_char),
-    KIM_TrigModes,
-    KIM_TrigPolarities,
-    KIM_Channels,
-    KIM_TrigModes,
-    KIM_TrigPolarities,
-    KIM_Channels]
+KIM_SetTrigIOParameters.argtypes = [POINTER(c_char), KIM_TrigModes, KIM_TrigPolarities, KIM_Channels, KIM_TrigModes, KIM_TrigPolarities, KIM_Channels]
 
 
 # Sets the limit switch parameters.
@@ -671,10 +618,9 @@ KIM_SetTrigIOParametersStruct.argtypes = [POINTER(c_char), KIM_TrigIOConfig]
 
 
 # Sets the trigger parameters.
-# KIM_SetTrigParamsParameters = lib.KIM_SetTrigParamsParameters
-# KIM_SetTrigParamsParameters.restype = c_short
-# KIM_SetTrigParamsParameters.argtypes = [POINTER(c_char), KIM_Channels,
-# KIM_TrigParamsParameters, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
+KIM_SetTrigParamsParameters = lib.KIM_SetTrigParamsParameters
+KIM_SetTrigParamsParameters.restype = c_short
+KIM_SetTrigParamsParameters.argtypes = [POINTER(c_char), KIM_Channels, KIM_TrigParamsParameters, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32, c_int32]
 
 
 # Sets the trigger parameters.
@@ -771,3 +717,4 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
+
