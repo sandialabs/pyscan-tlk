@@ -1,3 +1,12 @@
+## [0.1.6](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.5...v0.1.6) (2024-09-15)
+
+
+### Bug Fixes
+
+* fixed versioning? ([84127f0](https://github.com/sandialabs/pyscan-tlk/commit/84127f0d85baf8bddf242b57ffe062023d9de16a))
+
+
+
 ## [0.1.5](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.4...v0.1.5) (2024-09-13)
 
 
