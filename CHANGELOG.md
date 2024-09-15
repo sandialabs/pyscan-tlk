@@ -1,3 +1,12 @@
+## [0.1.8](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.7...v0.1.8) (2024-09-15)
+
+
+### Bug Fixes
+
+* fixed versioning again ([2cdfab8](https://github.com/sandialabs/pyscan-tlk/commit/2cdfab881eb6c0e83a0647ed6a714d1f91e77c48))
+
+
+
 ## [0.1.7](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.6...v0.1.7) (2024-09-15)
 
 
@@ -6,6 +15,7 @@
 * changed package name for pypi upload ([f2a7e15](https://github.com/sandialabs/pyscan-tlk/commit/f2a7e15aa170eea206eed6c459a006d4c8957289))
 * fixed version name ([486399f](https://github.com/sandialabs/pyscan-tlk/commit/486399fd9c5c4d0ee07cb41bd1a606e0128e116e))
 * Update version.json ([2bef4e5](https://github.com/sandialabs/pyscan-tlk/commit/2bef4e55d84d0ea26495a19b1cdcad57cd8fdeba))
+* Update version.json [skip ci] ([299e694](https://github.com/sandialabs/pyscan-tlk/commit/299e694a083e2b2027262e51b3218d9613d2703b))
 * updated version ([1eb3ac7](https://github.com/sandialabs/pyscan-tlk/commit/1eb3ac72ee24b5b32832bf88c66827094978894d))
 
 
