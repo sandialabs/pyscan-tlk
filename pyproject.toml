@@ -1,5 +1,5 @@
 [build-system]
-requires = [ "setuptools", "wheel" ]
+requires = ["setuptools >= 61.0", "setuptools-scm>=8.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -15,4 +15,4 @@ dependencies = [ "comtypes" ]
   email = "ammounce@gmail.com"
 
 [tool.setuptools.dynamic]
-version = {file = "pyscan_tlk.version.py"}
+version = {attr = "pyscan_tlk.__version__"}
