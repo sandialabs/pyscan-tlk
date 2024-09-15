@@ -1,5 +1,5 @@
 [build-system]
-requires = [ "setuptools", "wheel" ]
+requires = ["setuptools >= 61.0", "setuptools-scm>=8.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -9,11 +9,14 @@ requires-python = ">= 3.7"
 description = "Thorlabs Kinesis python wrappers"
 keywords = [ "thorlabs", "kinesis", "instrument control", "science" ]
 dependencies = [ "comtypes" ]
-readme = "README.md"
+readme = {file = "README.md", content-type = "text/markdown"}
 
   [[project.authors]]
   name = "Andy Mounce"
-  email = "ammounce@gmail.com"
+  email = "amounce@sandia.gov"
+
+[tools.setuptools]
+packages = ["pyscan_tlk"]
 
 [tool.setuptools.dynamic]
-version = {file = "pyscan_tlk.version.py"}
+version = {attr = "pyscan_tlk.__version__"}
