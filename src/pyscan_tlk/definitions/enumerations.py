@@ -610,6 +610,9 @@ smaOnly = c_long()
 smaAndHub = c_long()
 
 NT_SignalState = c_short
+NT_BadSignal = c_short(0x00)
+NT_GoodSignal = c_short(0x01)
+
 
 NT_TIARange = c_long
 i5nA = c_long()
@@ -665,7 +668,11 @@ FixedStepFalling = c_uint16(0x04)
 TwoPositionRising = c_uint16(0x05)
 TwoPositionFalling = c_uint16(0x06)
 
-POL_PaddleBits = None
+POL_PaddleBits = c_ushort
+PattleBit1 = c_ushort(0x01)
+PattleBit1 = c_ushort(0x02)
+PattleBit1 = c_ushort(0x04)
+AllPaddlees = c_ushort(0x07)
 
 POL_Paddles = c_short
 
@@ -742,10 +749,6 @@ inputTrigSenseHigh = c_short()
 outputGated = c_short()
 outputTrigRepeated = c_short()
 
-PZ_StageAxisParameters = None
-
-PolarizerParameters = None
-
 QD_FilterEnable = c_long
 QD_Undefined = c_long(0)
 QD_Enabled = c_long(1)
@@ -805,19 +808,23 @@ TC_Transducer = c_ushort(0x00)
 TC_TH20kOhm = c_ushort(0x01)
 TC_TH200kOhm = c_ushort(0x02)
 
-TIM_ButtonParameters = None
+TIM_ButtonsMode = c_uint16
+Jog = c_uint16(0x01)
+Position = c_uint16(0x02)
 
-TIM_ButtonsMode = None
+TIM_Channels = c_ushort
+Channel1 = 1
+Channel2 = 2
+Channel3 = 3
+Channel4 = 4
 
-TIM_Channels = None
+TIM_Direction = c_byte
+Forward = c_byte(0x01)
+Reverse = c_byte(0x02)
 
-TIM_Direction = None
-
-TIM_DriveOPParameters = None
-
-TIM_JogMode = None
-
-TIM_JogParameters = None
+TIM_JogMode = c_uint16
+JogContinuous = 0x01
+JogStep = 0x02
 
 TSG_DisplayModes = c_long
 
@@ -831,4 +838,28 @@ TSG_Hub_Analogue_Modes = c_short
 TSG_HubChannel1 = c_short(1)
 TSG_HubChannel2 = c_short(2)
 
-TST_Stages = None
+TST_Stages = c_short
+ZST6 = c_short(0x20)
+ZST13 = c_short(0x21)
+ZST25 = c_short(0x22)
+ZST206 = c_short(0x30)
+ZST213 = c_short(0x31)
+ZST225 = c_short(0x32)
+ZFS206 = c_short(0x40)
+ZFS213 = c_short(0x41)
+ZFS225 = c_short(0x42)
+TBD1 = c_short(0x60)
+TBD2 = c_short(0x61)
+TBD3 = c_short(0x62)
+TBD4 = c_short(0x63)
+NR360 = c_short(0x70)
+MVS025 = c_short(0x71)
+PLS_X25MM = c_short(0x72)
+PLS_X25MM_HiRes = c_short(0x73)
+FW103 = c_short(0x75)
+NEWZFS06 = c_short(10006)
+NEWZFS13 = c_short(10013)
+NEWZFS25 = c_short(10025)
+NEWZST06 = c_short(11006)
+NEWZST13 = c_short(11013)
+NEWZST25 = c_short(12025)

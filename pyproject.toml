@@ -9,14 +9,10 @@ requires-python = ">= 3.7"
 description = "Thorlabs Kinesis python wrappers"
 keywords = [ "thorlabs", "kinesis", "instrument control", "science" ]
 dependencies = [ "comtypes" ]
-readme = {file = "README.md", content-type = "text/markdown"}
 
   [[project.authors]]
   name = "Andy Mounce"
-  email = "amounce@sandia.gov"
-
-[tools.setuptools]
-packages = ["pyscan_tlk"]
+  email = "ammounce@gmail.com"
 
 [tool.setuptools.dynamic]
 version = {file = "pyscan_tlk.version.py"}

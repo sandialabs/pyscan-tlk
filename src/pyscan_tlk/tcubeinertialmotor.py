@@ -2,7 +2,6 @@ from ctypes import (
     POINTER,
     c_bool,
     c_char,
-    c_char_p,
     c_int,
     c_int16,
     c_int32,
@@ -11,21 +10,18 @@ from ctypes import (
     c_short,
     c_ulong,
     c_void_p,
-    cdll,
-    pointer)
+    cdll)
 from .definitions.safearray import SafeArray
 from .definitions.enumerations import (
-    TIM_ButtonParameters,
     TIM_ButtonsMode,
     TIM_Channels,
     TIM_Direction,
-    TIM_DriveOPParameters,
-    TIM_JogMode,
-    TIM_JogParameters)
+    TIM_JogMode)
 from .definitions.structures import (
-    TLI_DeviceInfo,
-    TLI_HardwareInformation)
-from .definitions.kinesisexception import KinesisException
+    TIM_ButtonParameters,
+    TIM_DriveOPParameters,
+    TIM_JogParameters,
+    TLI_DeviceInfo)
 
 
 lib_path = "C:/Program Files/Thorlabs/Kinesis/"
@@ -180,7 +176,9 @@ TIM_GetStatusBits.restype = c_ulong
 TIM_GetStatusBits.argtypes = [POINTER(c_char), TIM_Channels]
 
 
-# Queries if the time since the last message has exceeded the lastMsgTimeout set by TIM_EnableLastMsgTimer(char const * serialNo, bool enable, __int32 lastMsgTimeout ).
+# Queries if the time since the last message has exceeded the
+# lastMsgTimeout set by TIM_EnableLastMsgTimer(char const * serialNo, bool
+# enable, __int32 lastMsgTimeout ).
 TIM_HasLastMsgTimerOverrun = lib.TIM_HasLastMsgTimerOverrun
 TIM_HasLastMsgTimerOverrun.restype = c_bool
 TIM_HasLastMsgTimerOverrun.argtypes = [POINTER(c_char)]
@@ -436,4 +434,3 @@ TLI_GetDeviceListExt.argtypes = [POINTER(c_char), c_ulong]
 TLI_GetDeviceListSize = lib.TLI_GetDeviceListSize
 TLI_GetDeviceListSize.restype = c_short
 TLI_GetDeviceListSize.argtypes = []
-
