@@ -3,7 +3,7 @@ Python wrappers for Thorlabs Kinesis dlls.
 
 # Contents
 
-This package consists of 33 different python wrapper files for thorlabs kinesis instruments. Each wrapper file consists of nearly all c functions for the instrument, with the exception of those that require `SafeArray` types or filed to import.  Examples of using these wrappers is shown in ./test_wrappers/ along with a simulation file. 
+This package consists of 33 different python wrapper files for thorlabs kinesis instruments. Each wrapper file consists of nearly all c functions for the instrument, with the exception of those that require `SafeArray` types or failed to import from the dll files.  Examples of using these wrappers is shown in ./test_wrappers/ along with a simulation file. 
 
 # Installation
 
