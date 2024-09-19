@@ -1,9 +1,20 @@
+## [0.1.9](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.8...v0.1.9) (2024-09-19)
+
+
+### Bug Fixes
+
+* Update README.md ([53d13ac](https://github.com/sandialabs/pyscan-tlk/commit/53d13ac06e3d2db91ebe425dd2bd14cd980cf9de))
+* Update README.md ([83113a7](https://github.com/sandialabs/pyscan-tlk/commit/83113a767d02ad8ae458f5aa40f9aa1d66140a49))
+
+
+
 ## [0.1.8](https://github.com/sandialabs/pyscan-tlk/compare/v0.1.7...v0.1.8) (2024-09-15)
 
 
 ### Bug Fixes
 
 * fixed versioning again ([2cdfab8](https://github.com/sandialabs/pyscan-tlk/commit/2cdfab881eb6c0e83a0647ed6a714d1f91e77c48))
+* fixed versioning again [skip ci] ([448ebfd](https://github.com/sandialabs/pyscan-tlk/commit/448ebfd002cb6752b4dcd7aac844a4a4a051bc9d))
 
 
 
